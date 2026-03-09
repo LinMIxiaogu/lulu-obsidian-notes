@@ -4,67 +4,24 @@
     "type": "split",
     "children": [
       {
-        "id": "033b03ae39200fe5",
+        "id": "b5c49b55669eed78",
         "type": "tabs",
         "children": [
           {
-            "id": "18022dfcc3ec6a4f",
+            "id": "96b3ea0793b5cdd1",
             "type": "leaf",
             "state": {
-              "type": "bases",
+              "type": "split-diff-view",
               "state": {
-                "file": "未命名.base",
-                "viewName": "表格"
+                "aFile": ".obsidian/workspace.json",
+                "bFile": ".obsidian/workspace.json",
+                "aRef": ""
               },
-              "icon": "lucide-table",
-              "title": "未命名"
+              "icon": "diff",
+              "title": "Diff: workspace.json  (Working Tree)"
             }
           }
         ]
-      },
-      {
-        "id": "9988f591fdffc267",
-        "type": "tabs",
-        "children": [
-          {
-            "id": "54969093b3518f5a",
-            "type": "leaf",
-            "state": {
-              "type": "graph",
-              "state": {},
-              "icon": "lucide-git-fork",
-              "title": "关系图谱"
-            }
-          },
-          {
-            "id": "ded110a2df8284a5",
-            "type": "leaf",
-            "state": {
-              "type": "bases",
-              "state": {
-                "file": "未命名 1.base",
-                "viewName": "表格"
-              },
-              "icon": "lucide-table",
-              "title": "未命名 1"
-            }
-          },
-          {
-            "id": "9994ad30108ae2a2",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "2026-03-09.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "2026-03-09"
-            }
-          }
-        ],
-        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -199,21 +156,30 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "欢迎.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "欢迎 的大纲"
+              "title": "大纲"
+            }
+          },
+          {
+            "id": "887fa00387b6a4bd",
+            "type": "leaf",
+            "state": {
+              "type": "git-view",
+              "state": {},
+              "icon": "git-pull-request",
+              "title": "Source Control"
             }
           }
-        ]
+        ],
+        "currentTab": 5
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 412.5
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -223,20 +189,21 @@
       "daily-notes:打开/创建今天的日记": false,
       "templates:插入模板": false,
       "command-palette:打开命令面板": false,
-      "bases:新建数据库": false
+      "bases:新建数据库": false,
+      "obsidian-git:Open Git source control": false
     }
   },
-  "active": "9994ad30108ae2a2",
+  "active": "96b3ea0793b5cdd1",
   "lastOpenFiles": [
+    "test.md.canvas",
+    "欢迎.md",
+    "未命名.base",
+    "2026-03-09.md",
     "未命名 2.base",
     "未命名 1.md",
     "未命名 1.base",
     "未命名.md",
     "未命名 1",
-    "未命名",
-    "未命名.base",
-    "2026-03-09.md",
-    "未命名.canvas",
-    "欢迎.md"
+    "未命名"
   ]
 }
