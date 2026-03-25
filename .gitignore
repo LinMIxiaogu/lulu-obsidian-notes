@@ -1,0 +1,15 @@
+# Obsidian local state
+.obsidian/workspace.json
+.obsidian/hotkeys.json
+
+# Obsidian community plugin runtime data and installed plugin bundles
+.obsidian/plugins/**/data.json
+.obsidian/plugins/**
+
+# Keep selected vault-level settings if needed
+!.obsidian/plugins/
+
+# OS/editor noise
+Thumbs.db
+Desktop.ini
+
