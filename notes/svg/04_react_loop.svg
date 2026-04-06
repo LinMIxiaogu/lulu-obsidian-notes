@@ -1,0 +1,137 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 550">
+  <style>
+    text { font-family: 'Segoe UI','Microsoft YaHei',system-ui,sans-serif; }
+  </style>
+
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#94a3b8"/>
+    </marker>
+    <marker id="arr-back" markerWidth="8" markerHeight="6" refX="0" refY="3" orient="auto">
+      <path d="M8,0 L0,3 L8,6 Z" fill="#94a3b8"/>
+    </marker>
+  </defs>
+
+  <!-- 背景 -->
+  <rect x="0" y="0" width="1000" height="550" rx="12" fill="#ffffff" stroke="#d1d5db" stroke-width="1.5"/>
+
+  <!-- 标题 -->
+  <rect x="320" y="16" width="360" height="40" rx="8" fill="#1e293b"/>
+  <text x="500" y="42" text-anchor="middle" fill="#ffffff" font-size="18" font-weight="bold">ReAct 循环与 Agent 执行流程</text>
+
+  <!-- ===== 中央 ReAct 循环 ===== -->
+  <rect x="200" y="75" width="600" height="240" rx="10" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.2"/>
+  <text x="220" y="97" fill="#475569" font-size="13" font-weight="bold">ReAct 循环 (Reason + Act)</text>
+
+  <!-- Thought -->
+  <rect x="230" y="110" width="120" height="42" rx="6" fill="#1e293b"/>
+  <text x="290" y="136" text-anchor="middle" fill="#ffffff" font-size="13" font-weight="bold">Thought</text>
+  <text x="290" y="168" text-anchor="middle" fill="#475569" font-size="11">推理/分析</text>
+
+  <!-- Arrow: Thought → Action -->
+  <line x1="350" y1="131" x2="400" y2="131" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- Action -->
+  <rect x="410" y="110" width="120" height="42" rx="6" fill="#1e293b"/>
+  <text x="470" y="136" text-anchor="middle" fill="#ffffff" font-size="13" font-weight="bold">Action</text>
+  <text x="470" y="168" text-anchor="middle" fill="#475569" font-size="11">选择并调用工具</text>
+
+  <!-- Arrow: Action → Observation -->
+  <line x1="530" y1="131" x2="580" y2="131" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- Observation -->
+  <rect x="590" y="110" width="140" height="42" rx="6" fill="#1e293b"/>
+  <text x="660" y="136" text-anchor="middle" fill="#ffffff" font-size="13" font-weight="bold">Observation</text>
+  <text x="660" y="168" text-anchor="middle" fill="#475569" font-size="11">工具返回结果</text>
+
+  <!-- 循环回路箭头 -->
+  <path d="M660,152 L660,195 L290,195 L290,152" stroke="#94a3b8" stroke-width="1.5" fill="none" marker-end="url(#arr)"/>
+  <text x="475" y="212" text-anchor="middle" fill="#475569" font-size="11">循环迭代直到满足终止条件</text>
+
+  <!-- Final Answer -->
+  <rect x="410" y="235" width="180" height="42" rx="6" fill="#1e293b"/>
+  <text x="500" y="261" text-anchor="middle" fill="#ffffff" font-size="13" font-weight="bold">Final Answer</text>
+  <line x1="500" y1="212" x2="500" y2="235" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="500" y="293" text-anchor="middle" fill="#475569" font-size="11">输出最终答案给用户</text>
+
+  <!-- 中间：工具调用详情 -->
+  <rect x="260" y="310" width="480" height="80" rx="8" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="500" y="332" text-anchor="middle" fill="#1e293b" font-size="12" font-weight="bold">工具调用流程 (Function Calling)</text>
+  <text x="280" y="352" fill="#475569" font-size="11">LLM 输出结构化 JSON（工具名 + 参数）</text>
+  <text x="280" y="368" fill="#475569" font-size="11">框架解析 JSON，执行对应工具函数，将结果注入上下文继续推理</text>
+  <text x="280" y="384" fill="#475569" font-size="11">stop_reason = "tool_use" 触发，stop_reason = "end_turn" 终止</text>
+
+  <!-- ===== 左侧：Plan-and-Execute ===== -->
+  <rect x="15" y="75" width="170" height="240" rx="10" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.2"/>
+  <text x="25" y="97" fill="#475569" font-size="12" font-weight="bold">Plan-and-Execute</text>
+
+  <rect x="30" y="110" width="140" height="32" rx="5" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="100" y="131" text-anchor="middle" fill="#1e293b" font-size="11">Step 1: 全局规划</text>
+
+  <line x1="100" y1="142" x2="100" y2="155" stroke="#94a3b8" stroke-width="1" marker-end="url(#arr)"/>
+
+  <rect x="30" y="155" width="140" height="32" rx="5" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="100" y="176" text-anchor="middle" fill="#1e293b" font-size="11">Step 2: 分步执行</text>
+
+  <line x1="100" y1="187" x2="100" y2="200" stroke="#94a3b8" stroke-width="1" marker-end="url(#arr)"/>
+
+  <rect x="30" y="200" width="140" height="32" rx="5" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="100" y="221" text-anchor="middle" fill="#1e293b" font-size="11">Step 3: 动态重规划</text>
+
+  <line x1="100" y1="232" x2="100" y2="245" stroke="#94a3b8" stroke-width="1" marker-end="url(#arr)"/>
+
+  <rect x="30" y="245" width="140" height="32" rx="5" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="100" y="266" text-anchor="middle" fill="#1e293b" font-size="11">Step 4: 合并输出</text>
+
+  <text x="25" y="296" fill="#475569" font-size="10">Planner + Executor</text>
+  <text x="25" y="308" fill="#475569" font-size="10">双模块分离架构</text>
+
+  <!-- ===== 右侧：Reflexion ===== -->
+  <rect x="815" y="75" width="170" height="240" rx="10" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.2"/>
+  <text x="825" y="97" fill="#475569" font-size="12" font-weight="bold">Reflexion</text>
+
+  <rect x="830" y="112" width="140" height="30" rx="5" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="900" y="132" text-anchor="middle" fill="#1e293b" font-size="11">执行任务</text>
+
+  <line x1="900" y1="142" x2="900" y2="155" stroke="#94a3b8" stroke-width="1" marker-end="url(#arr)"/>
+
+  <rect x="830" y="155" width="140" height="30" rx="5" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="900" y="175" text-anchor="middle" fill="#1e293b" font-size="11">评估结果</text>
+
+  <line x1="900" y1="185" x2="900" y2="198" stroke="#94a3b8" stroke-width="1" marker-end="url(#arr)"/>
+
+  <rect x="830" y="198" width="140" height="30" rx="5" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="900" y="218" text-anchor="middle" fill="#1e293b" font-size="11">生成自我反思</text>
+
+  <line x1="900" y1="228" x2="900" y2="241" stroke="#94a3b8" stroke-width="1" marker-end="url(#arr)"/>
+
+  <rect x="830" y="241" width="140" height="30" rx="5" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="900" y="261" text-anchor="middle" fill="#1e293b" font-size="11">写入长期记忆</text>
+
+  <!-- 回路 -->
+  <path d="M970,256 L985,256 L985,127 L970,127" stroke="#94a3b8" stroke-width="1" fill="none" marker-end="url(#arr)"/>
+  <text x="825" y="296" fill="#475569" font-size="10">带反思的增强循环</text>
+  <text x="825" y="308" fill="#475569" font-size="10">经验存入记忆库</text>
+
+  <!-- ===== 底部标注 ===== -->
+  <rect x="30" y="410" width="940" height="125" rx="10" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.2"/>
+  <text x="50" y="435" fill="#475569" font-size="13" font-weight="bold">三种模式对比与适用场景</text>
+
+  <rect x="50" y="448" width="280" height="72" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="190" y="468" text-anchor="middle" fill="#1e293b" font-size="12" font-weight="bold">ReAct</text>
+  <text x="190" y="486" text-anchor="middle" fill="#475569" font-size="11">适合简单任务（少于5步）</text>
+  <text x="190" y="502" text-anchor="middle" fill="#475569" font-size="11">边想边做，快速迭代</text>
+  <text x="190" y="516" text-anchor="middle" fill="#475569" font-size="11">论文: Yao et al. 2022</text>
+
+  <rect x="360" y="448" width="280" height="72" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="500" y="468" text-anchor="middle" fill="#1e293b" font-size="12" font-weight="bold">Plan-and-Execute</text>
+  <text x="500" y="486" text-anchor="middle" fill="#475569" font-size="11">适合复杂任务（多步骤、多工具）</text>
+  <text x="500" y="502" text-anchor="middle" fill="#475569" font-size="11">先规划后执行，全局最优</text>
+  <text x="500" y="516" text-anchor="middle" fill="#475569" font-size="11">LangGraph 原生支持</text>
+
+  <rect x="670" y="448" width="280" height="72" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="810" y="468" text-anchor="middle" fill="#1e293b" font-size="12" font-weight="bold">Reflexion</text>
+  <text x="810" y="486" text-anchor="middle" fill="#475569" font-size="11">适合需要自我改进的场景</text>
+  <text x="810" y="502" text-anchor="middle" fill="#475569" font-size="11">失败后反思，经验积累</text>
+  <text x="810" y="516" text-anchor="middle" fill="#475569" font-size="11">论文: Shinn et al. 2023</text>
+</svg>

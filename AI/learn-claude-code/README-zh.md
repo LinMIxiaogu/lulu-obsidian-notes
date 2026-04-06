@@ -1,5 +1,6 @@
 # 学习笔记资料来源:
-	`github地址：https://github.com/shareAI-lab/learn-claude-code`
+
+[github地址：learn-claude-code](https://github.com/shareAI-lab/learn-claude-code)
 # Learn Claude Code -- 真正的 Agent Harness 工程
 
 ## 模型就是 Agent

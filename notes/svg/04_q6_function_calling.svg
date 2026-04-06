@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 320" font-family="'Segoe UI','Microsoft YaHei',system-ui,sans-serif">
+  <rect width="600" height="320" fill="#ffffff" rx="12" stroke="#d1d5db"/>
+
+  <text x="300" y="28" text-anchor="middle" font-size="18" font-weight="bold" fill="#1e293b">Function Calling 完整生命周期</text>
+
+  <!-- 步骤 1: 工具定义 -->
+  <rect x="20" y="50" width="115" height="44" rx="8" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="77" y="68" text-anchor="middle" font-size="11" fill="#1e293b" font-weight="bold">1. 工具定义</text>
+  <text x="77" y="84" text-anchor="middle" font-size="10" fill="#475569">JSON Schema</text>
+
+  <line x1="135" y1="72" x2="155" y2="72" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#a3)"/>
+
+  <!-- 步骤 2: 用户提问 -->
+  <rect x="160" y="50" width="115" height="44" rx="8" fill="#1e293b"/>
+  <text x="217" y="68" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="bold">2. 用户提问</text>
+  <text x="217" y="84" text-anchor="middle" font-size="10" fill="#e2e8f0">+ 工具定义</text>
+
+  <line x1="275" y1="72" x2="295" y2="72" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#a3)"/>
+
+  <!-- 步骤 3: LLM 推理 -->
+  <rect x="300" y="50" width="130" height="44" rx="8" fill="#1e293b"/>
+  <text x="365" y="68" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="bold">3. LLM 推理</text>
+  <text x="365" y="84" text-anchor="middle" font-size="10" fill="#e2e8f0">判断是否调用工具</text>
+
+  <!-- 分支: 不需要工具 -->
+  <line x1="430" y1="60" x2="470" y2="60" stroke="#94a3b8" stroke-width="1.5"/>
+  <line x1="470" y1="60" x2="540" y2="60" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#a3)"/>
+  <text x="500" y="54" text-anchor="middle" font-size="9" fill="#475569">不需要</text>
+
+  <rect x="465" y="48" width="120" height="28" rx="6" fill="#f8fafc" stroke="#e2e8f0"/>
+  <text x="525" y="67" text-anchor="middle" font-size="10" fill="#475569">直接回答用户</text>
+
+  <!-- 分支: 需要工具 -->
+  <line x1="365" y1="94" x2="365" y2="112" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#a3)"/>
+  <text x="395" y="106" font-size="9" fill="#475569">需要</text>
+
+  <!-- 步骤 3b: 输出 tool_call -->
+  <rect x="290" y="115" width="150" height="44" rx="8" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="365" y="133" text-anchor="middle" font-size="11" fill="#1e293b" font-weight="bold">输出 tool_calls</text>
+  <text x="365" y="149" text-anchor="middle" font-size="10" fill="#475569">函数名 + 参数 JSON</text>
+
+  <line x1="365" y1="159" x2="365" y2="177" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#a3)"/>
+
+  <!-- 步骤 4: 工具执行 -->
+  <rect x="290" y="180" width="150" height="44" rx="8" fill="#1e293b"/>
+  <text x="365" y="198" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="bold">4. 应用层执行工具</text>
+  <text x="365" y="214" text-anchor="middle" font-size="10" fill="#e2e8f0">调用 API / 函数</text>
+
+  <line x1="365" y1="224" x2="365" y2="242" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#a3)"/>
+
+  <!-- 步骤 5: 结果返回 -->
+  <rect x="290" y="245" width="150" height="44" rx="8" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="365" y="263" text-anchor="middle" font-size="11" fill="#1e293b" font-weight="bold">5. 结果返回 LLM</text>
+  <text x="365" y="279" text-anchor="middle" font-size="10" fill="#475569">工具执行结果</text>
+
+  <!-- 循环箭头 (可能多次调用) -->
+  <path d="M 440 260 Q 480 260 480 195 Q 480 140 445 140" fill="none" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#a3)"/>
+  <text x="505" y="200" font-size="9" fill="#475569" transform="rotate(90 505 200)">可能多次</text>
+
+  <!-- 步骤 6: 最终响应 -->
+  <line x1="290" y1="267" x2="200" y2="267" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#a3)"/>
+
+  <rect x="50" y="245" width="150" height="44" rx="8" fill="#1e293b"/>
+  <text x="125" y="263" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="bold">6. 最终响应</text>
+  <text x="125" y="279" text-anchor="middle" font-size="10" fill="#e2e8f0">自然语言回答用户</text>
+
+  <!-- 关键要点 -->
+  <rect x="20" y="120" width="250" height="95" rx="8" fill="#f8fafc" stroke="#e2e8f0"/>
+  <text x="145" y="140" text-anchor="middle" font-size="11" fill="#1e293b" font-weight="bold">关键设计要点</text>
+  <text x="30" y="157" font-size="10" fill="#475569">- 工具描述质量直接影响调用准确率</text>
+  <text x="30" y="173" font-size="10" fill="#475569">- 需做参数校验和错误处理</text>
+  <text x="30" y="189" font-size="10" fill="#475569">- 支持并行工具调用（parallel）</text>
+  <text x="30" y="205" font-size="10" fill="#475569">- 防止工具注入攻击</text>
+
+  <defs>
+    <marker id="a3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8"/>
+    </marker>
+  </defs>
+</svg>

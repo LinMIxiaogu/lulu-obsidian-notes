@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 950 520" font-family="'Segoe UI','Microsoft YaHei',system-ui,sans-serif">
+  <rect width="950" height="520" rx="12" fill="#ffffff" stroke="#d1d5db"/>
+  <text x="475" y="35" text-anchor="middle" font-size="18" font-weight="bold" fill="#1e293b">RLHF 三阶段训练流程</text>
+
+  <!-- Stage 1: SFT -->
+  <g transform="translate(30,60)">
+    <rect width="270" height="200" rx="8" fill="#f8fafc" stroke="#e2e8f0"/>
+    <rect x="0" y="0" width="270" height="32" rx="8" fill="#1e293b"/>
+    <text x="135" y="22" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">阶段 1: SFT 监督微调</text>
+    <rect x="20" y="48" width="230" height="28" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+    <text x="135" y="67" text-anchor="middle" font-size="12" fill="#1e293b">预训练模型 (Base Model)</text>
+    <text x="135" y="98" text-anchor="middle" font-size="12" fill="#94a3b8">+ 人工标注指令-回复对</text>
+    <line x1="135" y1="105" x2="135" y2="125" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <rect x="40" y="125" width="190" height="28" rx="6" fill="#1e293b"/>
+    <text x="135" y="144" text-anchor="middle" font-size="12" fill="#ffffff">SFT 模型</text>
+    <text x="135" y="175" text-anchor="middle" font-size="11" fill="#475569">学会按指令格式回答</text>
+    <text x="135" y="192" text-anchor="middle" font-size="11" fill="#475569">数据: 几万~几十万条</text>
+  </g>
+
+  <!-- Arrow 1->2 -->
+  <line x1="305" y1="160" x2="340" y2="160" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Stage 2: RM -->
+  <g transform="translate(345,60)">
+    <rect width="270" height="200" rx="8" fill="#f8fafc" stroke="#e2e8f0"/>
+    <rect x="0" y="0" width="270" height="32" rx="8" fill="#1e293b"/>
+    <text x="135" y="22" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">阶段 2: RM 奖励模型</text>
+    <rect x="20" y="48" width="230" height="28" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+    <text x="135" y="67" text-anchor="middle" font-size="12" fill="#1e293b">SFT 模型生成多个回复</text>
+    <text x="135" y="98" text-anchor="middle" font-size="12" fill="#94a3b8">+ 人工偏好排序</text>
+    <line x1="135" y1="105" x2="135" y2="125" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <rect x="40" y="125" width="190" height="28" rx="6" fill="#1e293b"/>
+    <text x="135" y="144" text-anchor="middle" font-size="12" fill="#ffffff">奖励模型 (RM)</text>
+    <text x="135" y="175" text-anchor="middle" font-size="11" fill="#475569">(prompt, response) -> 分数</text>
+    <text x="135" y="192" text-anchor="middle" font-size="11" fill="#475569">Pairwise Ranking Loss</text>
+  </g>
+
+  <!-- Arrow 2->3 -->
+  <line x1="620" y1="160" x2="655" y2="160" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Stage 3: PPO -->
+  <g transform="translate(660,60)">
+    <rect width="270" height="200" rx="8" fill="#f8fafc" stroke="#e2e8f0"/>
+    <rect x="0" y="0" width="270" height="32" rx="8" fill="#1e293b"/>
+    <text x="135" y="22" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">阶段 3: PPO 强化学习</text>
+    <text x="135" y="58" text-anchor="middle" font-size="11" fill="#475569">同时涉及 4 个模型:</text>
+    <rect x="15" y="68" width="115" height="24" rx="4" fill="#1e293b"/><text x="72" y="85" text-anchor="middle" font-size="11" fill="#ffffff">Actor (策略)</text>
+    <rect x="140" y="68" width="115" height="24" rx="4" fill="#1e293b"/><text x="197" y="85" text-anchor="middle" font-size="11" fill="#ffffff">Critic (价值)</text>
+    <rect x="15" y="100" width="115" height="24" rx="4" fill="#f1f5f9" stroke="#cbd5e1"/><text x="72" y="117" text-anchor="middle" font-size="11" fill="#1e293b">RM (冻结)</text>
+    <rect x="140" y="100" width="115" height="24" rx="4" fill="#f1f5f9" stroke="#cbd5e1"/><text x="197" y="117" text-anchor="middle" font-size="11" fill="#1e293b">Ref (冻结)</text>
+    <line x1="135" y1="132" x2="135" y2="150" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <rect x="20" y="150" width="230" height="28" rx="6" fill="#1e293b"/>
+    <text x="135" y="169" text-anchor="middle" font-size="12" fill="#ffffff">对齐模型 (Aligned)</text>
+    <text x="135" y="195" text-anchor="middle" font-size="10" fill="#475569">max E[R(x,y)] - B*KL(pi||pi_ref)</text>
+  </g>
+
+  <!-- Bottom: DPO comparison -->
+  <g transform="translate(30,290)">
+    <rect width="890" height="210" rx="8" fill="#f8fafc" stroke="#e2e8f0"/>
+    <rect x="0" y="0" width="890" height="32" rx="8" fill="#1e293b"/>
+    <text x="445" y="22" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">DPO 简化方案对比</text>
+
+    <!-- RLHF flow -->
+    <text x="30" y="60" font-size="13" font-weight="bold" fill="#1e293b">RLHF:</text>
+    <rect x="100" y="46" width="130" height="26" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+    <text x="165" y="64" text-anchor="middle" font-size="11" fill="#1e293b">SFT</text>
+    <line x1="235" y1="59" x2="265" y2="59" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <rect x="270" y="46" width="130" height="26" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+    <text x="335" y="64" text-anchor="middle" font-size="11" fill="#1e293b">训练 RM</text>
+    <line x1="405" y1="59" x2="435" y2="59" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <rect x="440" y="46" width="130" height="26" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+    <text x="505" y="64" text-anchor="middle" font-size="11" fill="#1e293b">PPO 优化</text>
+    <text x="620" y="64" font-size="11" fill="#475569">4 个模型, 训练不稳定</text>
+
+    <!-- DPO flow -->
+    <text x="30" y="110" font-size="13" font-weight="bold" fill="#1e293b">DPO:</text>
+    <rect x="100" y="96" width="130" height="26" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+    <text x="165" y="114" text-anchor="middle" font-size="11" fill="#1e293b">SFT</text>
+    <line x1="235" y1="109" x2="265" y2="109" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <rect x="270" y="96" width="180" height="26" rx="6" fill="#1e293b"/>
+    <text x="360" y="114" text-anchor="middle" font-size="11" fill="#ffffff">直接偏好优化</text>
+    <text x="500" y="114" font-size="11" fill="#475569">2 个模型, 更稳定</text>
+
+    <!-- ORPO flow -->
+    <text x="30" y="155" font-size="13" font-weight="bold" fill="#1e293b">ORPO:</text>
+    <rect x="100" y="141" width="250" height="26" rx="6" fill="#1e293b"/>
+    <text x="225" y="159" text-anchor="middle" font-size="11" fill="#ffffff">SFT + 偏好优化 (一阶段)</text>
+    <text x="400" y="159" font-size="11" fill="#475569">1 个模型, 最简管线</text>
+
+    <text x="445" y="195" text-anchor="middle" font-size="12" fill="#475569" font-style="italic">趋势: 从 4 模型 -> 2 模型 -> 1 模型, 越来越简单</text>
+  </g>
+
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8"/>
+    </marker>
+  </defs>
+</svg>

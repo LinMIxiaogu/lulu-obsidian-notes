@@ -1,0 +1,120 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 950 400" font-family="'Segoe UI','Microsoft YaHei',system-ui,sans-serif">
+  <rect width="950" height="400" rx="12" fill="#ffffff" stroke="#d1d5db"/>
+  <text x="475" y="35" text-anchor="middle" font-size="18" font-weight="bold" fill="#1e293b">LLM 完整训练链路: 预训练 -> SFT -> 对齐 -> 部署</text>
+
+  <!-- Stage 0 -->
+  <g transform="translate(20,60)">
+    <rect width="170" height="140" rx="8" fill="#f8fafc" stroke="#e2e8f0"/>
+    <rect x="0" y="0" width="170" height="28" rx="8" fill="#1e293b"/>
+    <text x="85" y="20" text-anchor="middle" font-size="12" font-weight="bold" fill="#ffffff">阶段 0: 数据准备</text>
+    <text x="15" y="50" font-size="10" fill="#475569">语料收集</text>
+    <text x="15" y="67" font-size="10" fill="#475569">数据清洗去重</text>
+    <text x="15" y="84" font-size="10" fill="#475569">数据配比混合</text>
+    <text x="15" y="101" font-size="10" fill="#475569">Tokenizer 训练</text>
+    <rect x="20" y="112" width="130" height="20" rx="4" fill="#f1f5f9" stroke="#cbd5e1"/>
+    <text x="85" y="126" text-anchor="middle" font-size="10" fill="#1e293b">数万亿 tokens</text>
+  </g>
+
+  <line x1="195" y1="130" x2="215" y2="130" stroke="#94a3b8" stroke-width="2" marker-end="url(#arr3)"/>
+
+  <!-- Stage 1 -->
+  <g transform="translate(220,60)">
+    <rect width="170" height="140" rx="8" fill="#f8fafc" stroke="#e2e8f0"/>
+    <rect x="0" y="0" width="170" height="28" rx="8" fill="#1e293b"/>
+    <text x="85" y="20" text-anchor="middle" font-size="12" font-weight="bold" fill="#ffffff">阶段 1: 预训练</text>
+    <text x="15" y="50" font-size="10" fill="#475569">Next Token Prediction</text>
+    <text x="15" y="67" font-size="10" fill="#475569">数千 GPU x 数月</text>
+    <text x="15" y="84" font-size="10" fill="#475569">分布式训练 (ZeRO)</text>
+    <rect x="20" y="98" width="130" height="30" rx="4" fill="#1e293b"/>
+    <text x="85" y="118" text-anchor="middle" font-size="11" fill="#ffffff">Base Model</text>
+    <text x="85" y="137" text-anchor="middle" font-size="9" fill="#475569">有知识, 不会对话</text>
+  </g>
+
+  <line x1="395" y1="130" x2="415" y2="130" stroke="#94a3b8" stroke-width="2" marker-end="url(#arr3)"/>
+
+  <!-- Stage 2 -->
+  <g transform="translate(420,60)">
+    <rect width="170" height="140" rx="8" fill="#f8fafc" stroke="#e2e8f0"/>
+    <rect x="0" y="0" width="170" height="28" rx="8" fill="#1e293b"/>
+    <text x="85" y="20" text-anchor="middle" font-size="12" font-weight="bold" fill="#ffffff">阶段 2: SFT</text>
+    <text x="15" y="50" font-size="10" fill="#475569">人工标注指令-回复对</text>
+    <text x="15" y="67" font-size="10" fill="#475569">全量微调 / LoRA</text>
+    <text x="15" y="84" font-size="10" fill="#475569">质量 > 数量 (LIMA)</text>
+    <rect x="20" y="98" width="130" height="30" rx="4" fill="#1e293b"/>
+    <text x="85" y="118" text-anchor="middle" font-size="11" fill="#ffffff">Chat Model</text>
+    <text x="85" y="137" text-anchor="middle" font-size="9" fill="#475569">会对话, 未对齐</text>
+  </g>
+
+  <line x1="595" y1="130" x2="615" y2="130" stroke="#94a3b8" stroke-width="2" marker-end="url(#arr3)"/>
+
+  <!-- Stage 3 -->
+  <g transform="translate(620,60)">
+    <rect width="170" height="140" rx="8" fill="#f8fafc" stroke="#e2e8f0"/>
+    <rect x="0" y="0" width="170" height="28" rx="8" fill="#1e293b"/>
+    <text x="85" y="20" text-anchor="middle" font-size="12" font-weight="bold" fill="#ffffff">阶段 3: 对齐</text>
+    <text x="15" y="50" font-size="10" fill="#475569">RLHF (PPO) 或 DPO</text>
+    <text x="15" y="67" font-size="10" fill="#475569">偏好数据 + 人类反馈</text>
+    <text x="15" y="84" font-size="10" fill="#475569">有用/无害/诚实</text>
+    <rect x="20" y="98" width="130" height="30" rx="4" fill="#1e293b"/>
+    <text x="85" y="118" text-anchor="middle" font-size="11" fill="#ffffff">Aligned Model</text>
+    <text x="85" y="137" text-anchor="middle" font-size="9" fill="#475569">安全可靠</text>
+  </g>
+
+  <line x1="795" y1="130" x2="815" y2="130" stroke="#94a3b8" stroke-width="2" marker-end="url(#arr3)"/>
+
+  <!-- Stage 4 -->
+  <g transform="translate(820,60)">
+    <rect width="110" height="140" rx="8" fill="#f8fafc" stroke="#e2e8f0"/>
+    <rect x="0" y="0" width="110" height="28" rx="8" fill="#1e293b"/>
+    <text x="55" y="20" text-anchor="middle" font-size="11" font-weight="bold" fill="#ffffff">阶段 4: 优化</text>
+    <text x="10" y="50" font-size="10" fill="#475569">长上下文</text>
+    <text x="10" y="67" font-size="10" fill="#475569">工具调用</text>
+    <text x="10" y="84" font-size="10" fill="#475569">多模态</text>
+    <text x="10" y="101" font-size="10" fill="#475569">领域特化</text>
+  </g>
+
+  <!-- Bottom detail: data & compute requirements -->
+  <g transform="translate(20,230)">
+    <rect width="910" height="150" rx="8" fill="#f8fafc" stroke="#e2e8f0"/>
+    <text x="455" y="25" text-anchor="middle" font-size="14" font-weight="bold" fill="#1e293b">各阶段关键参数对比</text>
+
+    <!-- Headers -->
+    <text x="40" y="55" font-size="11" font-weight="bold" fill="#1e293b">阶段</text>
+    <text x="190" y="55" font-size="11" font-weight="bold" fill="#1e293b">数据量</text>
+    <text x="370" y="55" font-size="11" font-weight="bold" fill="#1e293b">计算量</text>
+    <text x="560" y="55" font-size="11" font-weight="bold" fill="#1e293b">方法</text>
+    <text x="760" y="55" font-size="11" font-weight="bold" fill="#1e293b">产出</text>
+
+    <line x1="30" y1="62" x2="880" y2="62" stroke="#e2e8f0" stroke-width="1"/>
+
+    <text x="40" y="82" font-size="11" fill="#475569">预训练</text>
+    <text x="190" y="82" font-size="11" fill="#475569">数万亿 tokens</text>
+    <text x="370" y="82" font-size="11" fill="#475569">数千 GPU x 数月</text>
+    <text x="560" y="82" font-size="11" fill="#475569">NTP 自回归</text>
+    <text x="760" y="82" font-size="11" fill="#475569">Base Model</text>
+
+    <text x="40" y="102" font-size="11" fill="#475569">SFT</text>
+    <text x="190" y="102" font-size="11" fill="#475569">几万~几十万条</text>
+    <text x="370" y="102" font-size="11" fill="#475569">几天~几周</text>
+    <text x="560" y="102" font-size="11" fill="#475569">全量/LoRA/QLoRA</text>
+    <text x="760" y="102" font-size="11" fill="#475569">Chat Model</text>
+
+    <text x="40" y="122" font-size="11" fill="#475569">对齐</text>
+    <text x="190" y="122" font-size="11" fill="#475569">偏好对数据</text>
+    <text x="370" y="122" font-size="11" fill="#475569">几天 (DPO更快)</text>
+    <text x="560" y="122" font-size="11" fill="#475569">RLHF/DPO/ORPO</text>
+    <text x="760" y="122" font-size="11" fill="#475569">Aligned Model</text>
+
+    <text x="40" y="142" font-size="11" fill="#475569">优化</text>
+    <text x="190" y="142" font-size="11" fill="#475569">任务特定</text>
+    <text x="370" y="142" font-size="11" fill="#475569">视任务而定</text>
+    <text x="560" y="142" font-size="11" fill="#475569">继续训练/扩展</text>
+    <text x="760" y="142" font-size="11" fill="#475569">Production Model</text>
+  </g>
+
+  <defs>
+    <marker id="arr3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8"/>
+    </marker>
+  </defs>
+</svg>

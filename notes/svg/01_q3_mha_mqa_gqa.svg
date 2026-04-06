@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 420" font-family="'Segoe UI','Microsoft YaHei',system-ui,sans-serif">
+  <rect width="900" height="420" rx="12" fill="#ffffff" stroke="#d1d5db"/>
+  <text x="450" y="35" text-anchor="middle" font-size="18" font-weight="bold" fill="#1e293b">MHA / MQA / GQA 注意力机制对比</text>
+
+  <!-- MHA -->
+  <g transform="translate(30,60)">
+    <rect width="260" height="330" rx="8" fill="#f8fafc" stroke="#e2e8f0"/>
+    <rect x="0" y="0" width="260" height="32" rx="8" fill="#1e293b"/>
+    <text x="130" y="22" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">MHA (Multi-Head)</text>
+    <!-- Q heads -->
+    <text x="20" y="60" font-size="11" fill="#475569">Q 头</text>
+    <rect x="60" y="48" width="30" height="20" rx="4" fill="#f1f5f9" stroke="#cbd5e1"/><text x="75" y="62" text-anchor="middle" font-size="10" fill="#1e293b">Q1</text>
+    <rect x="95" y="48" width="30" height="20" rx="4" fill="#f1f5f9" stroke="#cbd5e1"/><text x="110" y="62" text-anchor="middle" font-size="10" fill="#1e293b">Q2</text>
+    <rect x="130" y="48" width="30" height="20" rx="4" fill="#f1f5f9" stroke="#cbd5e1"/><text x="145" y="62" text-anchor="middle" font-size="10" fill="#1e293b">Q3</text>
+    <rect x="165" y="48" width="30" height="20" rx="4" fill="#f1f5f9" stroke="#cbd5e1"/><text x="180" y="62" text-anchor="middle" font-size="10" fill="#1e293b">Q4</text>
+    <!-- K heads -->
+    <text x="20" y="95" font-size="11" fill="#475569">K 头</text>
+    <rect x="60" y="83" width="30" height="20" rx="4" fill="#1e293b"/><text x="75" y="97" text-anchor="middle" font-size="10" fill="#ffffff">K1</text>
+    <rect x="95" y="83" width="30" height="20" rx="4" fill="#1e293b"/><text x="110" y="97" text-anchor="middle" font-size="10" fill="#ffffff">K2</text>
+    <rect x="130" y="83" width="30" height="20" rx="4" fill="#1e293b"/><text x="145" y="97" text-anchor="middle" font-size="10" fill="#ffffff">K3</text>
+    <rect x="165" y="83" width="30" height="20" rx="4" fill="#1e293b"/><text x="180" y="97" text-anchor="middle" font-size="10" fill="#ffffff">K4</text>
+    <!-- V heads -->
+    <text x="20" y="130" font-size="11" fill="#475569">V 头</text>
+    <rect x="60" y="118" width="30" height="20" rx="4" fill="#1e293b"/><text x="75" y="132" text-anchor="middle" font-size="10" fill="#ffffff">V1</text>
+    <rect x="95" y="118" width="30" height="20" rx="4" fill="#1e293b"/><text x="110" y="132" text-anchor="middle" font-size="10" fill="#ffffff">V2</text>
+    <rect x="130" y="118" width="30" height="20" rx="4" fill="#1e293b"/><text x="145" y="132" text-anchor="middle" font-size="10" fill="#ffffff">V3</text>
+    <rect x="165" y="118" width="30" height="20" rx="4" fill="#1e293b"/><text x="180" y="132" text-anchor="middle" font-size="10" fill="#ffffff">V4</text>
+    <!-- connections -->
+    <line x1="75" y1="68" x2="75" y2="83" stroke="#94a3b8" stroke-width="1"/>
+    <line x1="110" y1="68" x2="110" y2="83" stroke="#94a3b8" stroke-width="1"/>
+    <line x1="145" y1="68" x2="145" y2="83" stroke="#94a3b8" stroke-width="1"/>
+    <line x1="180" y1="68" x2="180" y2="83" stroke="#94a3b8" stroke-width="1"/>
+    <!-- info -->
+    <text x="130" y="168" text-anchor="middle" font-size="11" fill="#475569">H 组 Q, H 组 K, H 组 V</text>
+    <rect x="20" y="180" width="220" height="130" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+    <text x="130" y="200" text-anchor="middle" font-size="11" fill="#1e293b" font-weight="bold">特点</text>
+    <text x="30" y="220" font-size="11" fill="#475569">KV Cache = H x d_k</text>
+    <text x="30" y="240" font-size="11" fill="#475569">参数量最多</text>
+    <text x="30" y="260" font-size="11" fill="#475569">质量最好</text>
+    <text x="30" y="280" font-size="11" fill="#475569">推理最慢</text>
+    <text x="30" y="300" font-size="11" fill="#475569">GPT-3, BERT</text>
+  </g>
+
+  <!-- MQA -->
+  <g transform="translate(320,60)">
+    <rect width="260" height="330" rx="8" fill="#f8fafc" stroke="#e2e8f0"/>
+    <rect x="0" y="0" width="260" height="32" rx="8" fill="#1e293b"/>
+    <text x="130" y="22" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">MQA (Multi-Query)</text>
+    <!-- Q heads -->
+    <text x="20" y="60" font-size="11" fill="#475569">Q 头</text>
+    <rect x="60" y="48" width="30" height="20" rx="4" fill="#f1f5f9" stroke="#cbd5e1"/><text x="75" y="62" text-anchor="middle" font-size="10" fill="#1e293b">Q1</text>
+    <rect x="95" y="48" width="30" height="20" rx="4" fill="#f1f5f9" stroke="#cbd5e1"/><text x="110" y="62" text-anchor="middle" font-size="10" fill="#1e293b">Q2</text>
+    <rect x="130" y="48" width="30" height="20" rx="4" fill="#f1f5f9" stroke="#cbd5e1"/><text x="145" y="62" text-anchor="middle" font-size="10" fill="#1e293b">Q3</text>
+    <rect x="165" y="48" width="30" height="20" rx="4" fill="#f1f5f9" stroke="#cbd5e1"/><text x="180" y="62" text-anchor="middle" font-size="10" fill="#1e293b">Q4</text>
+    <!-- K head - shared -->
+    <text x="20" y="95" font-size="11" fill="#475569">K 头</text>
+    <rect x="100" y="83" width="60" height="20" rx="4" fill="#1e293b"/><text x="130" y="97" text-anchor="middle" font-size="10" fill="#ffffff">K (共享)</text>
+    <!-- V head - shared -->
+    <text x="20" y="130" font-size="11" fill="#475569">V 头</text>
+    <rect x="100" y="118" width="60" height="20" rx="4" fill="#1e293b"/><text x="130" y="132" text-anchor="middle" font-size="10" fill="#ffffff">V (共享)</text>
+    <!-- connections -->
+    <line x1="75" y1="68" x2="130" y2="83" stroke="#94a3b8" stroke-width="1"/>
+    <line x1="110" y1="68" x2="130" y2="83" stroke="#94a3b8" stroke-width="1"/>
+    <line x1="145" y1="68" x2="130" y2="83" stroke="#94a3b8" stroke-width="1"/>
+    <line x1="180" y1="68" x2="130" y2="83" stroke="#94a3b8" stroke-width="1"/>
+    <!-- info -->
+    <text x="130" y="168" text-anchor="middle" font-size="11" fill="#475569">H 组 Q, 1 组 K, 1 组 V</text>
+    <rect x="20" y="180" width="220" height="130" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+    <text x="130" y="200" text-anchor="middle" font-size="11" fill="#1e293b" font-weight="bold">特点</text>
+    <text x="30" y="220" font-size="11" fill="#475569">KV Cache = 1 x d_k</text>
+    <text x="30" y="240" font-size="11" fill="#475569">参数量最少</text>
+    <text x="30" y="260" font-size="11" fill="#475569">质量可能下降</text>
+    <text x="30" y="280" font-size="11" fill="#475569">推理最快</text>
+    <text x="30" y="300" font-size="11" fill="#475569">PaLM, StarCoder</text>
+  </g>
+
+  <!-- GQA -->
+  <g transform="translate(610,60)">
+    <rect width="260" height="330" rx="8" fill="#f8fafc" stroke="#e2e8f0"/>
+    <rect x="0" y="0" width="260" height="32" rx="8" fill="#1e293b"/>
+    <text x="130" y="22" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">GQA (Grouped-Query)</text>
+    <!-- Q heads -->
+    <text x="20" y="60" font-size="11" fill="#475569">Q 头</text>
+    <rect x="60" y="48" width="30" height="20" rx="4" fill="#f1f5f9" stroke="#cbd5e1"/><text x="75" y="62" text-anchor="middle" font-size="10" fill="#1e293b">Q1</text>
+    <rect x="95" y="48" width="30" height="20" rx="4" fill="#f1f5f9" stroke="#cbd5e1"/><text x="110" y="62" text-anchor="middle" font-size="10" fill="#1e293b">Q2</text>
+    <rect x="130" y="48" width="30" height="20" rx="4" fill="#f1f5f9" stroke="#cbd5e1"/><text x="145" y="62" text-anchor="middle" font-size="10" fill="#1e293b">Q3</text>
+    <rect x="165" y="48" width="30" height="20" rx="4" fill="#f1f5f9" stroke="#cbd5e1"/><text x="180" y="62" text-anchor="middle" font-size="10" fill="#1e293b">Q4</text>
+    <!-- K heads - grouped -->
+    <text x="20" y="95" font-size="11" fill="#475569">K 头</text>
+    <rect x="68" y="83" width="50" height="20" rx="4" fill="#1e293b"/><text x="93" y="97" text-anchor="middle" font-size="10" fill="#ffffff">K_G1</text>
+    <rect x="143" y="83" width="50" height="20" rx="4" fill="#1e293b"/><text x="168" y="97" text-anchor="middle" font-size="10" fill="#ffffff">K_G2</text>
+    <!-- V heads - grouped -->
+    <text x="20" y="130" font-size="11" fill="#475569">V 头</text>
+    <rect x="68" y="118" width="50" height="20" rx="4" fill="#1e293b"/><text x="93" y="132" text-anchor="middle" font-size="10" fill="#ffffff">V_G1</text>
+    <rect x="143" y="118" width="50" height="20" rx="4" fill="#1e293b"/><text x="168" y="132" text-anchor="middle" font-size="10" fill="#ffffff">V_G2</text>
+    <!-- connections -->
+    <line x1="75" y1="68" x2="93" y2="83" stroke="#94a3b8" stroke-width="1"/>
+    <line x1="110" y1="68" x2="93" y2="83" stroke="#94a3b8" stroke-width="1"/>
+    <line x1="145" y1="68" x2="168" y2="83" stroke="#94a3b8" stroke-width="1"/>
+    <line x1="180" y1="68" x2="168" y2="83" stroke="#94a3b8" stroke-width="1"/>
+    <!-- info -->
+    <text x="130" y="168" text-anchor="middle" font-size="11" fill="#475569">H 组 Q, G 组 K, G 组 V</text>
+    <rect x="20" y="180" width="220" height="130" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+    <text x="130" y="200" text-anchor="middle" font-size="11" fill="#1e293b" font-weight="bold">特点</text>
+    <text x="30" y="220" font-size="11" fill="#475569">KV Cache = G x d_k</text>
+    <text x="30" y="240" font-size="11" fill="#475569">参数量中等</text>
+    <text x="30" y="260" font-size="11" fill="#475569">质量接近 MHA</text>
+    <text x="30" y="280" font-size="11" fill="#475569">速度与质量平衡</text>
+    <text x="30" y="300" font-size="11" fill="#475569">LLaMA 2/3, Mistral</text>
+  </g>
+</svg>

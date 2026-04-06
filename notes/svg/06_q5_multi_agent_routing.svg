@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 620" font-family="'Segoe UI','Microsoft YaHei',system-ui,sans-serif">
+  <rect width="820" height="620" fill="#ffffff" rx="12" stroke="#d1d5db"/>
+
+  <!-- Title -->
+  <text x="410" y="36" text-anchor="middle" font-size="18" font-weight="bold" fill="#1e293b">多 Agent 路由系统架构</text>
+
+  <!-- User Request -->
+  <rect x="340" y="56" width="140" height="38" rx="8" fill="#1e293b"/>
+  <text x="410" y="80" text-anchor="middle" font-size="13" fill="#ffffff">用户请求</text>
+
+  <!-- Arrow down -->
+  <line x1="410" y1="94" x2="410" y2="118" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Gateway -->
+  <rect x="320" y="118" width="180" height="38" rx="8" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="410" y="142" text-anchor="middle" font-size="13" fill="#1e293b">Gateway (鉴权/限流/预处理)</text>
+
+  <!-- Arrow down -->
+  <line x1="410" y1="156" x2="410" y2="180" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Intent Classifier -->
+  <rect x="300" y="180" width="220" height="38" rx="8" fill="#1e293b"/>
+  <text x="410" y="204" text-anchor="middle" font-size="13" fill="#ffffff">Intent Classifier (意图识别)</text>
+
+  <!-- Output labels from classifier -->
+  <text x="540" y="200" font-size="10" fill="#475569">意图 + 置信度 + 实体</text>
+
+  <!-- Arrow down -->
+  <line x1="410" y1="218" x2="410" y2="248" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Router (core) -->
+  <rect x="280" y="248" width="260" height="50" rx="10" fill="#1e293b"/>
+  <text x="410" y="270" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">Router (路由决策中枢)</text>
+  <text x="410" y="288" text-anchor="middle" font-size="11" fill="#94a3b8">意图匹配 | 负载均衡 | SLA 约束</text>
+
+  <!-- Agent Registry on the right -->
+  <rect x="610" y="248" width="170" height="50" rx="8" fill="#f8fafc" stroke="#e2e8f0"/>
+  <text x="695" y="268" text-anchor="middle" font-size="12" fill="#475569">Agent Registry</text>
+  <text x="695" y="284" text-anchor="middle" font-size="10" fill="#475569">能力 | 状态 | 负载 | SLA</text>
+  <line x1="540" y1="273" x2="610" y2="273" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arrow)"/>
+
+  <!-- Three routing layers -->
+  <line x1="410" y1="298" x2="410" y2="328" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Routing layers box -->
+  <rect x="100" y="328" width="620" height="90" rx="8" fill="#f8fafc" stroke="#e2e8f0"/>
+  <text x="410" y="348" text-anchor="middle" font-size="12" font-weight="bold" fill="#475569">三层混合路由</text>
+
+  <!-- L1 -->
+  <rect x="120" y="358" width="180" height="48" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="210" y="376" text-anchor="middle" font-size="12" font-weight="bold" fill="#1e293b">L1 规则路由</text>
+  <text x="210" y="396" text-anchor="middle" font-size="10" fill="#475569">确定性高频意图 (&lt;1ms)</text>
+
+  <!-- L2 -->
+  <rect x="320" y="358" width="180" height="48" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="410" y="376" text-anchor="middle" font-size="12" font-weight="bold" fill="#1e293b">L2 Embedding 匹配</text>
+  <text x="410" y="396" text-anchor="middle" font-size="10" fill="#475569">语义能力匹配 (~10ms)</text>
+
+  <!-- L3 -->
+  <rect x="520" y="358" width="180" height="48" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="610" y="376" text-anchor="middle" font-size="12" font-weight="bold" fill="#1e293b">L3 LLM 动态路由</text>
+  <text x="610" y="396" text-anchor="middle" font-size="10" fill="#475569">复杂/模糊兜底 (~1s)</text>
+
+  <!-- Arrows between layers -->
+  <text x="305" y="390" font-size="10" fill="#94a3b8">未命中</text>
+  <line x1="300" y1="382" x2="320" y2="382" stroke="#94a3b8" stroke-width="1" marker-end="url(#arrow)"/>
+  <text x="505" y="390" font-size="10" fill="#94a3b8">不足</text>
+  <line x1="500" y1="382" x2="520" y2="382" stroke="#94a3b8" stroke-width="1" marker-end="url(#arrow)"/>
+
+  <!-- Arrow down to Agent Pool -->
+  <line x1="410" y1="418" x2="410" y2="448" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Agent Pool -->
+  <rect x="80" y="448" width="660" height="80" rx="8" fill="#f8fafc" stroke="#e2e8f0"/>
+  <text x="410" y="468" text-anchor="middle" font-size="12" font-weight="bold" fill="#475569">Agent Pool</text>
+
+  <rect x="100" y="478" width="130" height="38" rx="6" fill="#1e293b"/>
+  <text x="165" y="502" text-anchor="middle" font-size="11" fill="#ffffff">客服 Agent</text>
+
+  <rect x="250" y="478" width="130" height="38" rx="6" fill="#1e293b"/>
+  <text x="315" y="502" text-anchor="middle" font-size="11" fill="#ffffff">数据分析 Agent</text>
+
+  <rect x="400" y="478" width="130" height="38" rx="6" fill="#1e293b"/>
+  <text x="465" y="502" text-anchor="middle" font-size="11" fill="#ffffff">工具调用 Agent</text>
+
+  <rect x="550" y="478" width="130" height="38" rx="6" fill="#1e293b"/>
+  <text x="615" y="502" text-anchor="middle" font-size="11" fill="#ffffff">通用兜底 Agent</text>
+
+  <!-- Arrow down -->
+  <line x1="410" y1="528" x2="410" y2="552" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Response Aggregator -->
+  <rect x="290" y="552" width="240" height="38" rx="8" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="410" y="576" text-anchor="middle" font-size="13" fill="#1e293b">Response Aggregator (结果聚合)</text>
+
+  <!-- Arrow down -->
+  <line x1="410" y1="590" x2="410" y2="610" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Selection paradigms annotation -->
+  <rect x="40" y="448" width="30" height="80" rx="4" fill="#f8fafc" stroke="#e2e8f0"/>
+  <text x="55" y="475" font-size="9" fill="#475569" transform="rotate(-90,55,488)">Query/Response Pairing</text>
+
+  <!-- Arrow marker -->
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8"/>
+    </marker>
+  </defs>
+</svg>

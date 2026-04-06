@@ -1,0 +1,250 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700">
+  <style>
+    text { font-family: 'Segoe UI','Microsoft YaHei',system-ui,sans-serif; }
+  </style>
+
+  <!-- 背景 -->
+  <rect x="0" y="0" width="1200" height="700" rx="12" fill="#ffffff" stroke="#d1d5db" stroke-width="1.5"/>
+
+  <!-- 标题 -->
+  <text x="600" y="32" text-anchor="middle" font-size="18" font-weight="bold" fill="#1e293b">RAG 系统架构与检索流程</text>
+
+  <!-- ===== 上半部分：文档处理流水线 ===== -->
+  <rect x="20" y="50" width="1160" height="110" rx="8" fill="#f8fafc" stroke="#e2e8f0"/>
+  <text x="600" y="70" text-anchor="middle" font-size="13" font-weight="bold" fill="#475569">离线索引流水线 (Indexing Pipeline)</text>
+
+  <!-- 文档源 -->
+  <rect x="40" y="85" width="110" height="56" rx="6" fill="#1e293b"/>
+  <text x="95" y="108" text-anchor="middle" font-size="12" fill="#ffffff">文档源</text>
+  <text x="95" y="124" text-anchor="middle" font-size="10" fill="#ffffff">PDF/HTML/DB</text>
+
+  <line x1="150" y1="113" x2="180" y2="113" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- 文档解析 -->
+  <rect x="183" y="85" width="120" height="56" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="243" y="108" text-anchor="middle" font-size="12" fill="#1e293b">文档解析</text>
+  <text x="243" y="124" text-anchor="middle" font-size="10" fill="#475569">OCR/表格提取</text>
+
+  <line x1="303" y1="113" x2="330" y2="113" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- 分块 -->
+  <rect x="333" y="85" width="140" height="56" rx="6" fill="#1e293b"/>
+  <text x="403" y="104" text-anchor="middle" font-size="12" fill="#ffffff">文本分块</text>
+  <text x="403" y="120" text-anchor="middle" font-size="10" fill="#ffffff">固定/语义/递归分块</text>
+  <text x="403" y="134" text-anchor="middle" font-size="9" fill="#ffffff">Overlap + Metadata</text>
+
+  <line x1="473" y1="113" x2="500" y2="113" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- Embedding -->
+  <rect x="503" y="85" width="140" height="56" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="573" y="104" text-anchor="middle" font-size="12" fill="#1e293b">Embedding</text>
+  <text x="573" y="120" text-anchor="middle" font-size="10" fill="#475569">BGE/E5/OpenAI</text>
+  <text x="573" y="134" text-anchor="middle" font-size="10" fill="#475569">768-1536 维</text>
+
+  <line x1="643" y1="113" x2="670" y2="113" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- 向量库 -->
+  <rect x="673" y="85" width="130" height="56" rx="6" fill="#1e293b"/>
+  <text x="738" y="104" text-anchor="middle" font-size="12" fill="#ffffff">向量数据库</text>
+  <text x="738" y="120" text-anchor="middle" font-size="10" fill="#ffffff">Milvus/Qdrant</text>
+  <text x="738" y="134" text-anchor="middle" font-size="9" fill="#ffffff">Pinecone/Weaviate</text>
+
+  <line x1="803" y1="113" x2="830" y2="113" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- 同时入 BM25 -->
+  <rect x="833" y="85" width="120" height="56" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="893" y="104" text-anchor="middle" font-size="12" fill="#1e293b">倒排索引</text>
+  <text x="893" y="120" text-anchor="middle" font-size="10" fill="#475569">BM25/Elastic</text>
+  <text x="893" y="134" text-anchor="middle" font-size="10" fill="#475569">稀疏检索</text>
+
+  <!-- KG 构建 -->
+  <rect x="980" y="85" width="120" height="56" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="1040" y="104" text-anchor="middle" font-size="12" fill="#1e293b">知识图谱</text>
+  <text x="1040" y="120" text-anchor="middle" font-size="10" fill="#475569">实体/关系抽取</text>
+  <text x="1040" y="134" text-anchor="middle" font-size="10" fill="#475569">Neo4j/图查询</text>
+
+  <!-- 分块到KG的连线 -->
+  <line x1="473" y1="130" x2="980" y2="113" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4,2"/>
+
+  <!-- ===== 中间部分：查询流程 ===== -->
+  <text x="600" y="190" text-anchor="middle" font-size="14" font-weight="bold" fill="#1e293b">在线查询流程 (Query Pipeline)</text>
+
+  <!-- 用户 Query -->
+  <rect x="30" y="210" width="110" height="50" rx="6" fill="#1e293b"/>
+  <text x="85" y="232" text-anchor="middle" font-size="13" fill="#ffffff">用户 Query</text>
+  <text x="85" y="248" text-anchor="middle" font-size="10" fill="#ffffff">自然语言问题</text>
+
+  <line x1="140" y1="235" x2="170" y2="235" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- Query 改写 -->
+  <rect x="173" y="210" width="130" height="50" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="238" y="230" text-anchor="middle" font-size="12" fill="#1e293b">Query 改写</text>
+  <text x="238" y="246" text-anchor="middle" font-size="10" fill="#475569">HyDE/扩展/分解</text>
+
+  <line x1="303" y1="235" x2="330" y2="235" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- 多路召回 大框 -->
+  <rect x="333" y="200" width="300" height="80" rx="8" fill="#f8fafc" stroke="#e2e8f0" stroke-dasharray="6,3"/>
+  <text x="483" y="218" text-anchor="middle" font-size="12" font-weight="bold" fill="#475569">多路召回</text>
+
+  <rect x="345" y="228" width="85" height="36" rx="4" fill="#1e293b"/>
+  <text x="387" y="251" text-anchor="middle" font-size="11" fill="#ffffff">Dense</text>
+
+  <rect x="440" y="228" width="85" height="36" rx="4" fill="#1e293b"/>
+  <text x="482" y="251" text-anchor="middle" font-size="11" fill="#ffffff">Sparse</text>
+
+  <rect x="535" y="228" width="85" height="36" rx="4" fill="#1e293b"/>
+  <text x="577" y="251" text-anchor="middle" font-size="11" fill="#ffffff">KG</text>
+
+  <!-- 向量库连到 Dense -->
+  <line x1="738" y1="141" x2="387" y2="228" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4,2"/>
+  <!-- BM25 连到 Sparse -->
+  <line x1="893" y1="141" x2="482" y2="228" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4,2"/>
+  <!-- KG 连到 KG 召回 -->
+  <line x1="1040" y1="141" x2="577" y2="228" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4,2"/>
+
+  <line x1="633" y1="245" x2="660" y2="245" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- 融合排序 RRF -->
+  <rect x="663" y="215" width="120" height="50" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="723" y="236" text-anchor="middle" font-size="12" fill="#1e293b">融合排序</text>
+  <text x="723" y="252" text-anchor="middle" font-size="10" fill="#475569">RRF / 加权融合</text>
+
+  <line x1="783" y1="240" x2="810" y2="240" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- Rerank -->
+  <rect x="813" y="215" width="120" height="50" rx="6" fill="#1e293b"/>
+  <text x="873" y="236" text-anchor="middle" font-size="12" fill="#ffffff">Rerank</text>
+  <text x="873" y="252" text-anchor="middle" font-size="10" fill="#ffffff">BGE-Reranker/Cohere</text>
+
+  <line x1="933" y1="240" x2="960" y2="240" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- LLM 生成 -->
+  <rect x="963" y="210" width="130" height="60" rx="6" fill="#1e293b"/>
+  <text x="1028" y="234" text-anchor="middle" font-size="13" fill="#ffffff">LLM 生成</text>
+  <text x="1028" y="252" text-anchor="middle" font-size="10" fill="#ffffff">Context + Query</text>
+  <text x="1028" y="264" text-anchor="middle" font-size="9" fill="#ffffff">引用追溯 / 答案</text>
+
+  <!-- 反馈循环虚线 -->
+  <path d="M 1028 270 L 1028 310 L 85 310 L 85 260" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="6,3" fill="none" marker-end="url(#arr)"/>
+  <text x="556" y="305" text-anchor="middle" font-size="10" fill="#475569">反馈循环：答案质量评估 / Query 重写 / 自适应检索</text>
+
+  <!-- ===== 中间补充：关键策略 ===== -->
+  <rect x="30" y="335" width="550" height="110" rx="8" fill="#f8fafc" stroke="#e2e8f0"/>
+  <text x="305" y="358" text-anchor="middle" font-size="13" font-weight="bold" fill="#1e293b">RAG 关键优化策略</text>
+
+  <text x="50" y="380" font-size="11" fill="#1e293b" font-weight="bold">分块策略</text>
+  <text x="130" y="380" font-size="10" fill="#475569">固定窗口(512) / 语义分块 / 递归字符分块 / Parent-Child</text>
+
+  <text x="50" y="400" font-size="11" fill="#1e293b" font-weight="bold">检索优化</text>
+  <text x="130" y="400" font-size="10" fill="#475569">HyDE(假设文档) / Query分解 / Step-back提问 / Multi-Query</text>
+
+  <text x="50" y="420" font-size="11" fill="#1e293b" font-weight="bold">上下文压缩</text>
+  <text x="140" y="420" font-size="10" fill="#475569">LongContext Reorder / Lost-in-Middle / 冗余去除 / 摘要压缩</text>
+
+  <text x="50" y="440" font-size="11" fill="#1e293b" font-weight="bold">评估指标</text>
+  <text x="130" y="440" font-size="10" fill="#475569">Faithfulness / Answer Relevancy / Context Recall / RAGAS</text>
+
+  <!-- ===== Advanced RAG 模式 ===== -->
+  <rect x="600" y="335" width="290" height="110" rx="8" fill="#f8fafc" stroke="#e2e8f0"/>
+  <text x="745" y="358" text-anchor="middle" font-size="13" font-weight="bold" fill="#1e293b">RAG 架构模式</text>
+
+  <text x="620" y="380" font-size="11" fill="#1e293b" font-weight="bold">Naive RAG</text>
+  <text x="700" y="380" font-size="10" fill="#475569">基础检索+生成</text>
+
+  <text x="620" y="400" font-size="11" fill="#1e293b" font-weight="bold">Advanced RAG</text>
+  <text x="720" y="400" font-size="10" fill="#475569">预检索/后检索优化</text>
+
+  <text x="620" y="420" font-size="11" fill="#1e293b" font-weight="bold">Modular RAG</text>
+  <text x="720" y="420" font-size="10" fill="#475569">可编排的模块化管道</text>
+
+  <text x="620" y="440" font-size="11" fill="#1e293b" font-weight="bold">Agentic RAG</text>
+  <text x="720" y="440" font-size="10" fill="#475569">Agent驱动自适应检索</text>
+
+  <!-- ===== Embedding 选型 ===== -->
+  <rect x="910" y="335" width="270" height="110" rx="8" fill="#f8fafc" stroke="#e2e8f0"/>
+  <text x="1045" y="358" text-anchor="middle" font-size="13" font-weight="bold" fill="#1e293b">Embedding 模型选型</text>
+
+  <text x="930" y="380" font-size="11" fill="#1e293b" font-weight="bold">BGE-large</text>
+  <text x="1010" y="380" font-size="10" fill="#475569">1024维 中文优秀</text>
+
+  <text x="930" y="400" font-size="11" fill="#1e293b" font-weight="bold">E5-large</text>
+  <text x="1010" y="400" font-size="10" fill="#475569">1024维 指令微调</text>
+
+  <text x="930" y="420" font-size="11" fill="#1e293b" font-weight="bold">text-embed-3</text>
+  <text x="1030" y="420" font-size="10" fill="#475569">OpenAI 3072维</text>
+
+  <text x="930" y="440" font-size="11" fill="#1e293b" font-weight="bold">GTE-Qwen2</text>
+  <text x="1020" y="440" font-size="10" fill="#475569">阿里 多语言</text>
+
+  <!-- ===== 下半部分标注区：向量索引类型对比 ===== -->
+  <rect x="20" y="465" width="1160" height="220" rx="8" fill="#f8fafc" stroke="#e2e8f0"/>
+  <text x="600" y="490" text-anchor="middle" font-size="14" font-weight="bold" fill="#1e293b">向量索引类型对比</text>
+
+  <!-- HNSW -->
+  <rect x="40" y="510" width="340" height="155" rx="6" fill="#ffffff" stroke="#cbd5e1"/>
+  <rect x="40" y="510" width="340" height="30" rx="6" fill="#1e293b"/>
+  <text x="210" y="530" text-anchor="middle" font-size="13" fill="#ffffff">HNSW (分层可导航小世界图)</text>
+
+  <text x="60" y="558" font-size="11" fill="#1e293b" font-weight="bold">原理</text>
+  <text x="100" y="558" font-size="10" fill="#475569">多层跳表+近邻图，从高层粗搜到底层精搜</text>
+
+  <text x="60" y="578" font-size="11" fill="#1e293b" font-weight="bold">优点</text>
+  <text x="100" y="578" font-size="10" fill="#475569">查询速度极快，召回率高</text>
+
+  <text x="60" y="598" font-size="11" fill="#1e293b" font-weight="bold">缺点</text>
+  <text x="100" y="598" font-size="10" fill="#475569">内存占用大 (全量驻内存)</text>
+
+  <text x="60" y="618" font-size="11" fill="#1e293b" font-weight="bold">适用</text>
+  <text x="100" y="618" font-size="10" fill="#475569">百万级数据，对延迟要求极高</text>
+
+  <text x="60" y="642" font-size="11" fill="#1e293b" font-weight="bold">参数</text>
+  <text x="100" y="642" font-size="10" fill="#475569">M(连接数), ef(搜索宽度)</text>
+
+  <!-- IVF-PQ -->
+  <rect x="420" y="510" width="340" height="155" rx="6" fill="#ffffff" stroke="#cbd5e1"/>
+  <rect x="420" y="510" width="340" height="30" rx="6" fill="#1e293b"/>
+  <text x="590" y="530" text-anchor="middle" font-size="13" fill="#ffffff">IVF-PQ (倒排+乘积量化)</text>
+
+  <text x="440" y="558" font-size="11" fill="#1e293b" font-weight="bold">原理</text>
+  <text x="480" y="558" font-size="10" fill="#475569">IVF聚类分桶 + PQ压缩向量</text>
+
+  <text x="440" y="578" font-size="11" fill="#1e293b" font-weight="bold">优点</text>
+  <text x="480" y="578" font-size="10" fill="#475569">内存友好，支持超大规模数据</text>
+
+  <text x="440" y="598" font-size="11" fill="#1e293b" font-weight="bold">缺点</text>
+  <text x="480" y="598" font-size="10" fill="#475569">量化损失导致召回率下降</text>
+
+  <text x="440" y="618" font-size="11" fill="#1e293b" font-weight="bold">适用</text>
+  <text x="480" y="618" font-size="10" fill="#475569">千万~亿级，内存受限场景</text>
+
+  <text x="440" y="642" font-size="11" fill="#1e293b" font-weight="bold">参数</text>
+  <text x="480" y="642" font-size="10" fill="#475569">nlist(聚类数), m(子向量数), nprobe</text>
+
+  <!-- DiskANN -->
+  <rect x="800" y="510" width="360" height="155" rx="6" fill="#ffffff" stroke="#cbd5e1"/>
+  <rect x="800" y="510" width="360" height="30" rx="6" fill="#1e293b"/>
+  <text x="980" y="530" text-anchor="middle" font-size="13" fill="#ffffff">DiskANN (磁盘ANN)</text>
+
+  <text x="820" y="558" font-size="11" fill="#1e293b" font-weight="bold">原理</text>
+  <text x="860" y="558" font-size="10" fill="#475569">Vamana图索引 + SSD存储，内存仅放PQ</text>
+
+  <text x="820" y="578" font-size="11" fill="#1e293b" font-weight="bold">优点</text>
+  <text x="860" y="578" font-size="10" fill="#475569">十亿级别仅需少量内存 + SSD</text>
+
+  <text x="820" y="598" font-size="11" fill="#1e293b" font-weight="bold">缺点</text>
+  <text x="860" y="598" font-size="10" fill="#475569">依赖SSD性能，延迟高于纯内存方案</text>
+
+  <text x="820" y="618" font-size="11" fill="#1e293b" font-weight="bold">适用</text>
+  <text x="860" y="618" font-size="10" fill="#475569">超大规模+低成本部署，Azure AI Search</text>
+
+  <text x="820" y="642" font-size="11" fill="#1e293b" font-weight="bold">参数</text>
+  <text x="860" y="642" font-size="10" fill="#475569">R(图度数), L(搜索列表大小), PQ压缩比</text>
+
+  <!-- 箭头 marker -->
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8"/>
+    </marker>
+  </defs>
+</svg>

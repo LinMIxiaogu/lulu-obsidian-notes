@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 420" font-family="'Segoe UI','Microsoft YaHei',system-ui,sans-serif">
+  <rect width="900" height="420" rx="12" fill="#ffffff" stroke="#d1d5db"/>
+  <text x="450" y="35" text-anchor="middle" font-size="18" font-weight="bold" fill="#1e293b">MLA (Multi-head Latent Attention) 原理对比</text>
+
+  <!-- MHA -->
+  <g transform="translate(20,55)">
+    <rect width="270" height="230" rx="8" fill="#f8fafc" stroke="#e2e8f0"/>
+    <rect x="0" y="0" width="270" height="28" rx="8" fill="#1e293b"/>
+    <text x="135" y="20" text-anchor="middle" font-size="13" font-weight="bold" fill="#ffffff">MHA / GQA</text>
+    <!-- X input -->
+    <rect x="95" y="40" width="80" height="24" rx="4" fill="#f1f5f9" stroke="#cbd5e1"/>
+    <text x="135" y="57" text-anchor="middle" font-size="11" fill="#1e293b">X (输入)</text>
+    <line x1="105" y1="64" x2="70" y2="82" stroke="#94a3b8" stroke-width="1.2" marker-end="url(#arr7)"/>
+    <line x1="135" y1="64" x2="135" y2="82" stroke="#94a3b8" stroke-width="1.2" marker-end="url(#arr7)"/>
+    <line x1="165" y1="64" x2="200" y2="82" stroke="#94a3b8" stroke-width="1.2" marker-end="url(#arr7)"/>
+    <!-- Q K V projections -->
+    <rect x="30" y="84" width="80" height="24" rx="4" fill="#1e293b"/>
+    <text x="70" y="101" text-anchor="middle" font-size="11" fill="#ffffff">W_Q -> Q</text>
+    <rect x="95" y="84" width="80" height="24" rx="4" fill="#1e293b"/>
+    <text x="135" y="101" text-anchor="middle" font-size="11" fill="#ffffff">W_K -> K</text>
+    <rect x="160" y="84" width="80" height="24" rx="4" fill="#1e293b"/>
+    <text x="200" y="101" text-anchor="middle" font-size="11" fill="#ffffff">W_V -> V</text>
+    <!-- Cache -->
+    <line x1="135" y1="108" x2="135" y2="125" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,2"/>
+    <line x1="200" y1="108" x2="200" y2="125" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,2"/>
+    <rect x="90" y="125" width="150" height="28" rx="4" fill="#f1f5f9" stroke="#cbd5e1"/>
+    <text x="165" y="144" text-anchor="middle" font-size="11" fill="#1e293b">KV Cache (完整)</text>
+    <!-- Size -->
+    <text x="135" y="175" text-anchor="middle" font-size="11" fill="#475569">缓存大小:</text>
+    <text x="135" y="192" text-anchor="middle" font-size="11" font-weight="bold" fill="#1e293b">n_heads x d_head</text>
+    <text x="135" y="215" text-anchor="middle" font-size="10" fill="#475569">GQA: n_groups x d_head</text>
+    <text x="135" y="232" text-anchor="middle" font-size="10" fill="#475569">减头数 -> 压缩但可能损质量</text>
+  </g>
+
+  <!-- Arrow -->
+  <text x="320" y="175" text-anchor="middle" font-size="20" fill="#94a3b8">vs</text>
+
+  <!-- MLA -->
+  <g transform="translate(350,55)">
+    <rect width="530" height="230" rx="8" fill="#f8fafc" stroke="#e2e8f0"/>
+    <rect x="0" y="0" width="530" height="28" rx="8" fill="#1e293b"/>
+    <text x="265" y="20" text-anchor="middle" font-size="13" font-weight="bold" fill="#ffffff">MLA (DeepSeek-V2/V3)</text>
+
+    <!-- X input -->
+    <rect x="30" y="40" width="80" height="24" rx="4" fill="#f1f5f9" stroke="#cbd5e1"/>
+    <text x="70" y="57" text-anchor="middle" font-size="11" fill="#1e293b">X (输入)</text>
+
+    <!-- Down projection -->
+    <line x1="70" y1="64" x2="70" y2="82" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arr7)"/>
+    <rect x="20" y="84" width="100" height="28" rx="4" fill="#1e293b"/>
+    <text x="70" y="103" text-anchor="middle" font-size="10" fill="#ffffff">W_down 压缩</text>
+    <text x="70" y="128" text-anchor="middle" font-size="10" fill="#475569">d_model -> d_c</text>
+
+    <!-- Compressed representation -->
+    <line x1="70" y1="135" x2="70" y2="148" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arr7)"/>
+    <rect x="20" y="150" width="100" height="28" rx="4" fill="#1e293b"/>
+    <text x="70" y="168" text-anchor="middle" font-size="11" fill="#ffffff">c (低维)</text>
+
+    <!-- Cache the compressed c -->
+    <line x1="120" y1="164" x2="155" y2="164" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3,2"/>
+    <rect x="158" y="150" width="130" height="28" rx="4" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="2"/>
+    <text x="223" y="168" text-anchor="middle" font-size="11" font-weight="bold" fill="#1e293b">KV Cache = d_c</text>
+
+    <!-- Restore at inference -->
+    <text x="360" y="50" font-size="11" font-weight="bold" fill="#1e293b">推理时恢复:</text>
+    <rect x="310" y="60" width="95" height="28" rx="4" fill="#1e293b"/>
+    <text x="357" y="79" text-anchor="middle" font-size="10" fill="#ffffff">c * W_UK</text>
+    <rect x="420" y="60" width="95" height="28" rx="4" fill="#1e293b"/>
+    <text x="467" y="79" text-anchor="middle" font-size="10" fill="#ffffff">c * W_UV</text>
+    <line x1="223" y1="150" x2="357" y2="88" stroke="#94a3b8" stroke-width="1.2" marker-end="url(#arr7)"/>
+    <line x1="223" y1="150" x2="467" y2="88" stroke="#94a3b8" stroke-width="1.2" marker-end="url(#arr7)"/>
+    <text x="357" y="105" text-anchor="middle" font-size="10" fill="#475569">完整 K</text>
+    <text x="467" y="105" text-anchor="middle" font-size="10" fill="#475569">完整 V</text>
+
+    <!-- Key insight -->
+    <rect x="300" y="120" width="220" height="55" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+    <text x="410" y="140" text-anchor="middle" font-size="11" font-weight="bold" fill="#1e293b">关键: 矩阵吸收技巧</text>
+    <text x="410" y="158" text-anchor="middle" font-size="10" fill="#475569">恢复计算合并到 Q/K 投影中</text>
+    <text x="410" y="172" text-anchor="middle" font-size="10" fill="#475569">实际无额外推理开销</text>
+
+    <!-- Advantage -->
+    <text x="265" y="205" text-anchor="middle" font-size="11" fill="#475569">缓存极小 (d_c << n_heads*d_head), 但保持完整多头表达能力</text>
+    <text x="265" y="225" text-anchor="middle" font-size="11" font-weight="bold" fill="#1e293b">压缩比可达 10x+, 质量不损失</text>
+  </g>
+
+  <!-- Bottom comparison -->
+  <g transform="translate(20,300)">
+    <rect width="860" height="100" rx="8" fill="#f8fafc" stroke="#e2e8f0"/>
+    <text x="430" y="22" text-anchor="middle" font-size="13" font-weight="bold" fill="#1e293b">核心区别总结</text>
+    <text x="40" y="48" font-size="11" font-weight="bold" fill="#1e293b">维度</text>
+    <text x="200" y="48" font-size="11" font-weight="bold" fill="#1e293b">GQA</text>
+    <text x="500" y="48" font-size="11" font-weight="bold" fill="#1e293b">MLA</text>
+    <line x1="30" y1="55" x2="830" y2="55" stroke="#e2e8f0" stroke-width="1"/>
+    <text x="40" y="72" font-size="11" fill="#475569">压缩方式</text>
+    <text x="200" y="72" font-size="11" fill="#475569">减少 KV 头数 (结构压缩)</text>
+    <text x="500" y="72" font-size="11" fill="#475569">低秩投影到隐空间 (信息压缩)</text>
+    <text x="40" y="90" font-size="11" fill="#475569">表达能力</text>
+    <text x="200" y="90" font-size="11" fill="#475569">头数减少可能下降</text>
+    <text x="500" y="90" font-size="11" fill="#475569">推理时恢复完整多头, 不损失</text>
+  </g>
+
+  <defs>
+    <marker id="arr7" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8"/>
+    </marker>
+  </defs>
+</svg>

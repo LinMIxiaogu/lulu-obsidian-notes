@@ -1,0 +1,824 @@
+/* ===========================
+ * Claude Theme for Obsidian
+ * Inspired by claude.ai
+ * =========================== */
+
+
+/* -------------------------------------------
+ * Section 1: 设计令牌 — 共享变量
+ * ------------------------------------------- */
+
+body {
+  /* 字体栈 */
+  --font-text-theme: "Source Serif 4", "Source Serif Pro", "Iowan Old Style",
+    "Palatino Linotype", Georgia, "Noto Serif SC", "Noto Serif CJK SC", serif;
+  --font-monospace-theme: "JetBrains Mono", "Fira Code", "SF Mono",
+    "Cascadia Code", Consolas, "Source Code Pro", monospace;
+  --font-interface-override: Inter, "SF Pro Display", -apple-system,
+    BlinkMacSystemFont, "Segoe UI", "Noto Sans SC", sans-serif;
+
+  /* 标题 */
+  --h1-font: var(--font-text-theme);
+  --h2-font: var(--font-text-theme);
+  --h3-font: var(--font-text-theme);
+  --h4-font: var(--font-text-theme);
+  --h1-size: 1.75em;
+  --h2-size: 1.5em;
+  --h3-size: 1.3em;
+  --h4-size: 1.15em;
+  --h5-size: 1.05em;
+  --h6-size: 1em;
+  --h1-weight: 700;
+  --h2-weight: 650;
+  --h3-weight: 600;
+  --h4-weight: 600;
+  --h5-weight: 600;
+  --h6-weight: 600;
+
+  /* 圆角 */
+  --radius-s: 6px;
+  --radius-m: 8px;
+  --radius-l: 12px;
+
+  /* 排版 */
+  --line-height-normal: 1.7;
+  --font-size-code: 16px;
+
+  /* 代码块 */
+  --code-radius: var(--radius-l);
+
+  /* 引用块 */
+  --blockquote-border-thickness: 3px;
+  --blockquote-border-color: #d97757;
+  --blockquote-font-style: normal;
+
+  /* 强调色 HSL (Terracotta #d97757) */
+  --accent-h: 15;
+  --accent-s: 63%;
+  --accent-l: 60%;
+}
+
+
+/* -------------------------------------------
+ * Section 2: 设计令牌 — 浅色模式
+ * ------------------------------------------- */
+
+.theme-light {
+  /* 背景 */
+  --background-primary: #f5f4ef;
+  --background-primary-alt: #f5f4ef;
+  --background-secondary: #f5f4ef;
+  --background-secondary-alt: #f5f4ef;
+  --background-modifier-border: rgba(180, 178, 170, 0.45);
+  --background-modifier-form-field: #f5f4ef;
+  --background-modifier-form-field-highlighted: #faf9f6;
+  --background-modifier-box-shadow: rgba(20, 20, 19, 0.06);
+  --background-modifier-success: #a8c7a0;
+  --background-modifier-error: #d9826b;
+  --background-modifier-error-rgb: 217, 130, 107;
+
+  /* 文字 */
+  --text-normal: #30302e;
+  --text-muted: #87867f;
+  --text-faint: #a8a69e;
+  --text-accent: #c46a4b;
+  --text-accent-hover: #b55a3d;
+  --text-on-accent: #ffffff;
+  --text-error: #c95e4a;
+  --text-error-hover: #b5503e;
+  --text-selection: rgba(204, 120, 92, 0.2);
+  --text-highlight-bg: rgba(204, 120, 92, 0.25);
+  --bold-color: #0d0d0c;
+
+  /* 交互 */
+  --interactive-normal: #eceae4;
+  --interactive-hover: #e5e3dd;
+  --interactive-accent: #d97757;
+  --interactive-accent-hover: #c46a4b;
+  --interactive-accent-rgb: 217, 119, 87;
+
+  /* 边框 & 面板 */
+  --panel-border-color: rgba(180, 178, 170, 0.4);
+  --divider-color: rgba(180, 178, 170, 0.3);
+  --tab-outline-color: transparent;
+
+  /* Tab */
+  --tab-text-color-active: #30302e;
+  --tab-text-color: #87867f;
+  --tab-text-color-focused-active: #30302e;
+
+  /* 滚动条 */
+  --scrollbar-thumb-bg: rgba(135, 134, 127, 0.3);
+  --scrollbar-active-thumb-bg: rgba(135, 134, 127, 0.5);
+
+  /* 代码 */
+  --code-normal: #1f2328;
+  --code-background: #ffffff;
+  --code-border-width: 1px;
+  --code-border-color: rgba(10, 10, 10, 0.1);
+
+  /* 标题颜色 — terracotta 渐变 */
+  --h1-color: #9c4a2e;
+  --h2-color: #a85636;
+  --h3-color: #b4623f;
+  --h4-color: #bf6d48;
+  --h5-color: #c47a56;
+  --h6-color: #c98764;
+
+  /* 引用块 */
+  --blockquote-background-color: rgba(217, 119, 87, 0.04);
+
+  /* 标签 */
+  --tag-background: rgba(217, 119, 87, 0.12);
+  --tag-color: #b05a3a;
+
+  /* 表格 */
+  --table-border-color: rgba(180, 178, 170, 0.3);
+  --table-header-background: transparent;
+  --table-header-background-hover: transparent;
+  --table-border-width: 0px;
+
+  /* 图形视图 */
+  --graph-text-color: #87867f;
+  --graph-line: rgba(194, 192, 182, 0.6);
+  --graph-node: #d97757;
+  --graph-node-unresolved: #c2c0b6;
+  --graph-node-focused: #b55a3d;
+
+  /* 全局背景覆盖 */
+  --titlebar-background: #f5f4ef;
+  --titlebar-background-focused: #f5f4ef;
+  --ribbon-background: #f5f4ef;
+  --ribbon-background-collapsed: #f5f4ef;
+  --tab-container-background: #f5f4ef;
+  --tab-background-active: #f5f4ef;
+}
+
+
+/* -------------------------------------------
+ * Section 3: 设计令牌 — 深色模式
+ * ------------------------------------------- */
+
+.theme-dark {
+  /* 背景 */
+  --background-primary: #191816;
+  --background-primary-alt: #191816;
+  --background-secondary: #191816;
+  --background-secondary-alt: #191816;
+  --background-modifier-border: rgba(55, 54, 49, 0.8);
+  --background-modifier-form-field: #23221f;
+  --background-modifier-form-field-highlighted: #2d2c27;
+  --background-modifier-box-shadow: rgba(0, 0, 0, 0.3);
+  --background-modifier-success: #5a7a4a;
+  --background-modifier-error: #a04a3a;
+  --background-modifier-error-rgb: 160, 74, 58;
+
+  /* 文字 */
+  --text-normal: #d2d0c8;
+  --text-muted: #8c8a82;
+  --text-faint: #64635d;
+  --text-accent: #d97757;
+  --text-accent-hover: #e58a6a;
+  --text-on-accent: #f5f4ed;
+  --text-error: #d97757;
+  --text-error-hover: #e58a6a;
+  --text-selection: rgba(204, 120, 92, 0.25);
+  --text-highlight-bg: rgba(204, 120, 92, 0.3);
+  --bold-color: #f5f5f3;
+
+  /* 交互 */
+  --interactive-normal: #282723;
+  --interactive-hover: #32312c;
+  --interactive-accent: #d97757;
+  --interactive-accent-hover: #e58a6a;
+  --interactive-accent-rgb: 217, 119, 87;
+
+  /* 边框 & 面板 */
+  --panel-border-color: #2a2925;
+  --divider-color: #2a2925;
+  --tab-outline-color: transparent;
+
+  /* Tab */
+  --tab-text-color-active: #d2d0c8;
+  --tab-text-color: #8c8a82;
+  --tab-text-color-focused-active: #d2d0c8;
+
+  /* 滚动条 */
+  --scrollbar-thumb-bg: rgba(100, 99, 93, 0.3);
+  --scrollbar-active-thumb-bg: rgba(100, 99, 93, 0.5);
+
+  /* 代码 */
+  --code-normal: #d2d0c8;
+  --code-background: #1e1d19;
+  --code-border-width: 1px;
+  --code-border-color: rgba(255, 255, 255, 0.08);
+
+  /* 标题颜色 — terracotta 渐变 */
+  --h1-color: #e5956f;
+  --h2-color: #d98b67;
+  --h3-color: #cc7f5c;
+  --h4-color: #c07452;
+  --h5-color: #b56a4a;
+  --h6-color: #a96042;
+
+  /* 引用块 */
+  --blockquote-background-color: rgba(217, 119, 87, 0.06);
+
+  /* 标签 */
+  --tag-background: rgba(217, 119, 87, 0.15);
+  --tag-color: #d97757;
+
+  /* 表格 */
+  --table-border-color: rgba(55, 54, 49, 0.5);
+  --table-header-background: transparent;
+  --table-header-background-hover: transparent;
+  --table-border-width: 0px;
+
+  /* 图形视图 */
+  --graph-text-color: #8c8a82;
+  --graph-line: rgba(55, 54, 49, 0.8);
+  --graph-node: #d97757;
+  --graph-node-unresolved: #64635d;
+  --graph-node-focused: #e58a6a;
+
+  /* 全局背景覆盖 */
+  --titlebar-background: #191816;
+  --titlebar-background-focused: #191816;
+  --ribbon-background: #191816;
+  --ribbon-background-collapsed: #191816;
+  --tab-container-background: #191816;
+  --tab-background-active: #191816;
+}
+
+
+/* -------------------------------------------
+ * Section 4: 排版
+ * ------------------------------------------- */
+
+.markdown-source-view,
+.markdown-preview-view {
+  font-family: var(--font-text-theme);
+  line-height: var(--line-height-normal);
+}
+
+/* 确保编辑模式 (CM6) 也使用主题字体 */
+.markdown-source-view .cm-editor,
+.markdown-source-view .cm-content,
+.markdown-source-view .cm-line {
+  font-family: var(--font-text-theme);
+}
+
+.markdown-preview-view p {
+  margin-block-start: 0.8em;
+  margin-block-end: 0.8em;
+}
+
+.cm-strong,
+strong {
+  font-weight: 700;
+  color: var(--bold-color);
+  font-family: var(--font-monospace-theme);
+}
+
+
+/* -------------------------------------------
+ * Section 5: 标题
+ * ------------------------------------------- */
+
+.markdown-preview-view h1,
+.cm-header-1 {
+  border-bottom: none;
+  padding-bottom: 0.2em;
+  margin-top: 1.5em;
+}
+
+.markdown-preview-view h2,
+.cm-header-2 {
+  border-bottom: 1px solid var(--background-modifier-border);
+  padding-bottom: 0.15em;
+  margin-top: 1.3em;
+}
+
+.markdown-preview-view h3,
+.cm-header-3 {
+  margin-top: 1.2em;
+}
+
+
+/* -------------------------------------------
+ * Section 6: 链接
+ * ------------------------------------------- */
+
+.internal-link {
+  text-decoration-line: underline;
+  text-decoration-style: solid;
+  text-decoration-color: rgba(var(--interactive-accent-rgb), 0.3);
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1.5px;
+}
+
+.internal-link:hover {
+  text-decoration-color: rgba(var(--interactive-accent-rgb), 0.8);
+  color: var(--text-accent-hover);
+}
+
+.external-link {
+  text-decoration-line: underline;
+  text-decoration-style: dotted;
+  text-decoration-color: rgba(var(--interactive-accent-rgb), 0.4);
+  text-underline-offset: 3px;
+}
+
+.external-link:hover {
+  text-decoration-color: rgba(var(--interactive-accent-rgb), 0.8);
+  color: var(--text-accent-hover);
+}
+
+
+/* -------------------------------------------
+ * Section 7: 代码块
+ * ------------------------------------------- */
+
+.cm-inline-code,
+code:not(pre code) {
+  font-family: var(--font-monospace-theme);
+  font-size: var(--font-size-code);
+  padding: 2px 5px;
+  border-radius: 4px;
+  background: var(--code-background);
+  color: var(--code-normal);
+}
+
+pre code,
+.markdown-preview-view pre {
+  font-family: var(--font-monospace-theme);
+  font-size: var(--font-size-code);
+  padding: 14px 16px;
+  line-height: 1.2;
+}
+
+
+/* -------------------------------------------
+ * Section 8: 引用块
+ * ------------------------------------------- */
+
+.markdown-preview-view blockquote {
+  padding: 0.5em 1em;
+  margin: 1em 0;
+  border-radius: 0 var(--radius-s) var(--radius-s) 0;
+}
+
+.theme-light .markdown-preview-view blockquote {
+  color: #4a4a48;
+}
+
+.theme-dark .markdown-preview-view blockquote {
+  color: #b8b6ae;
+}
+
+
+/* -------------------------------------------
+ * Section 9: 表格
+ * ------------------------------------------- */
+
+.markdown-preview-view table {
+  border-collapse: collapse;
+  width: 100%;
+  border: none;
+}
+
+.markdown-preview-view thead {
+  border-bottom: 1px solid var(--background-modifier-border);
+}
+
+.markdown-preview-view th {
+  background: transparent !important;
+  font-weight: 600;
+  text-align: left;
+  padding: 0 8px 8px 0;
+  border: none;
+}
+
+.markdown-preview-view td {
+  padding: 8px 8px 8px 0;
+  border: none;
+}
+
+.markdown-preview-view tbody tr {
+  border-bottom: 1px solid var(--divider-color);
+}
+
+.markdown-preview-view tbody tr:last-child {
+  border-bottom: none;
+}
+
+
+/* -------------------------------------------
+ * Section 10: 标签
+ * ------------------------------------------- */
+
+.tag {
+  background: var(--tag-background);
+  color: var(--tag-color);
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-size: 0.85em;
+  font-family: var(--font-interface-override);
+  border: none;
+}
+
+.tag:hover {
+  background: rgba(var(--interactive-accent-rgb), 0.2);
+}
+
+
+/* -------------------------------------------
+ * Section 11: Callout
+ * ------------------------------------------- */
+
+.callout {
+  border-radius: var(--radius-m);
+  border: 1px solid var(--background-modifier-border);
+  padding: 0;
+  overflow: hidden;
+  mix-blend-mode: normal;
+}
+
+.callout-title {
+  padding: 8px 14px;
+  font-weight: 600;
+  font-family: var(--font-interface-override);
+  font-size: 0.9em;
+  gap: 6px;
+}
+
+.callout-content {
+  padding: 4px 14px 12px 14px;
+}
+
+/* Note — 暖灰 */
+.callout[data-callout="note"] {
+  --callout-color: 135, 134, 127;
+}
+
+/* Info — 柔和蓝 */
+.callout[data-callout="info"] {
+  --callout-color: 110, 140, 160;
+}
+
+/* Tip — terracotta */
+.callout[data-callout="tip"],
+.callout[data-callout="hint"] {
+  --callout-color: 217, 119, 87;
+}
+
+/* Warning — 暖琥珀 */
+.callout[data-callout="warning"],
+.callout[data-callout="caution"] {
+  --callout-color: 200, 150, 60;
+}
+
+/* Error / Danger */
+.callout[data-callout="danger"],
+.callout[data-callout="error"] {
+  --callout-color: 190, 80, 60;
+}
+
+/* Success */
+.callout[data-callout="success"],
+.callout[data-callout="check"],
+.callout[data-callout="done"] {
+  --callout-color: 100, 140, 90;
+}
+
+/* Example — 柔和紫 */
+.callout[data-callout="example"] {
+  --callout-color: 140, 110, 160;
+}
+
+/* Quote */
+.callout[data-callout="quote"],
+.callout[data-callout="cite"] {
+  --callout-color: 135, 134, 127;
+}
+
+
+/* -------------------------------------------
+ * Section 12: 侧边栏 & 导航
+ * ------------------------------------------- */
+
+.workspace-split:is(.mod-left-split, .mod-right-split),
+.workspace-split:is(.mod-left-split, .mod-right-split) :is(
+  .workspace-leaf,
+  .workspace-tabs,
+  .workspace-leaf-content,
+  .workspace-tab-header-container,
+  .view-content,
+  .view-header
+) {
+  background-color: var(--background-secondary);
+}
+
+.nav-file-title,
+.nav-folder-title {
+  border-radius: var(--radius-s);
+  padding: 4px 10px;
+}
+
+.nav-file-title:hover,
+.nav-folder-title:hover {
+  background: var(--interactive-hover);
+}
+
+.nav-file-title.is-active {
+  background: rgba(var(--interactive-accent-rgb), 0.1);
+  color: var(--text-accent);
+}
+
+.workspace-drawer-vault {
+  font-family: var(--font-text-theme);
+  font-weight: 600;
+}
+
+.workspace-split:is(.mod-left-split, .mod-right-split) .nav-header {
+  background-color: var(--background-primary);
+}
+
+
+/* -------------------------------------------
+ * Section 13: 全局背景覆盖
+ * ------------------------------------------- */
+
+/* 根容器 */
+body,
+.app-container,
+.workspace,
+.workspace-split,
+.workspace-split.mod-root {
+  background-color: var(--background-primary);
+}
+
+/* 标题栏 */
+.titlebar,
+.titlebar-inner {
+  background-color: var(--background-primary) !important;
+  border: none;
+}
+
+/* Tab 栏 */
+.workspace-tab-header-container,
+.workspace-tab-header-container-inner,
+.workspace-tabs,
+.workspace-tabs.mod-top .workspace-tab-header-container {
+  background-color: var(--background-primary) !important;
+}
+
+/* Ribbon 图标栏 */
+.workspace-ribbon,
+.workspace-ribbon.mod-left,
+.workspace-ribbon.mod-right {
+  background-color: var(--background-primary) !important;
+  border: none;
+}
+
+.workspace-ribbon.mod-left::before {
+  background: var(--background-primary) !important;
+}
+
+.sidebar-toggle-button {
+  background-color: var(--background-primary) !important;
+}
+
+/* 标题栏按钮区域（红绿灯 & 右侧按钮） */
+.titlebar-button-container,
+.titlebar-button-container.mod-left,
+.titlebar-button-container.mod-right {
+  background-color: var(--background-primary) !important;
+}
+
+/* frameless 模式 */
+.is-hidden-frameless .titlebar-button-container.mod-right,
+.is-hidden-frameless .titlebar-button-container.mod-left {
+  background-color: transparent !important;
+}
+
+/* 状态栏 */
+.status-bar {
+  background-color: var(--background-primary) !important;
+  border-top: none;
+}
+
+/* Ribbon 底部区域 */
+.workspace-ribbon.mod-left .side-dock-actions,
+.workspace-ribbon.mod-left .side-dock-settings {
+  background-color: var(--background-primary) !important;
+}
+
+/* 顶栏左侧与 ribbon 交界处 */
+.workspace-tabs.mod-top-left-space .workspace-tab-header-container {
+  background-color: var(--background-primary) !important;
+}
+
+.workspace-leaf-resize-handle {
+  background-color: var(--background-modifier-border);
+}
+
+.view-header {
+  background-color: var(--background-primary);
+  border-bottom: 1px solid var(--background-modifier-border);
+}
+
+.view-header-title {
+  font-family: var(--font-text-theme);
+  font-weight: 600;
+}
+
+
+/* -------------------------------------------
+ * Section 14: 滚动条
+ * ------------------------------------------- */
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb-bg);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-active-thumb-bg);
+}
+
+
+/* -------------------------------------------
+ * Section 15: 图形视图
+ * ------------------------------------------- */
+
+.graph-view.color-fill {
+  color: var(--graph-node);
+}
+
+.graph-view.color-line {
+  color: var(--graph-line);
+}
+
+.graph-view.color-text {
+  color: var(--graph-text-color);
+}
+
+.graph-view.color-fill-unresolved {
+  color: var(--graph-node-unresolved);
+}
+
+.graph-view.color-fill-highlight {
+  color: var(--graph-node-focused);
+}
+
+
+/* -------------------------------------------
+ * Section 16: 复选框
+ * ------------------------------------------- */
+
+input[type="checkbox"] {
+  border-radius: 3px;
+  border: 1.5px solid var(--text-muted);
+}
+
+input[type="checkbox"]:checked {
+  background-color: var(--interactive-accent);
+  border-color: var(--interactive-accent);
+}
+
+.task-list-item.is-checked .task-list-item-checkbox ~ * {
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+
+
+/* -------------------------------------------
+ * Section 17: 搜索
+ * ------------------------------------------- */
+
+.search-result-file-matched-text {
+  background: rgba(var(--interactive-accent-rgb), 0.2);
+  border-bottom: 2px solid rgba(var(--interactive-accent-rgb), 0.5);
+}
+
+
+/* -------------------------------------------
+ * Section 18: 弹窗
+ * ------------------------------------------- */
+
+.modal {
+  border-radius: var(--radius-l);
+  border: 1px solid var(--background-modifier-border);
+}
+
+.prompt {
+  border-radius: var(--radius-l);
+  border: 1px solid var(--background-modifier-border);
+}
+
+
+/* -------------------------------------------
+ * Section 19: 其他润色
+ * ------------------------------------------- */
+
+.markdown-preview-view hr {
+  border: none;
+  border-top: 1px solid var(--background-modifier-border);
+  margin: 2em 0;
+}
+
+.footnotes {
+  font-size: 0.85em;
+  color: var(--text-muted);
+}
+
+.markdown-embed {
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--radius-m);
+  padding: 10px 16px;
+}
+
+.workspace-tab-header {
+  border-radius: var(--radius-s) var(--radius-s) 0 0;
+}
+
+.workspace-tab-header.is-active {
+  background: var(--background-primary);
+}
+
+.vertical-tab-nav-item.is-active {
+  color: var(--text-accent);
+  border-right: 2px solid var(--interactive-accent);
+}
+
+button.mod-cta {
+  background: var(--interactive-accent);
+  color: var(--text-on-accent);
+  border-radius: var(--radius-s);
+  font-family: var(--font-interface-override);
+  border: none;
+  padding: 6px 16px;
+  font-weight: 500;
+}
+
+button.mod-cta:hover {
+  background: var(--interactive-accent-hover);
+}
+
+
+/* -------------------------------------------
+ * Section 20: 视图模式图标互换
+ * ------------------------------------------- */
+
+/* Obsidian 默认显示"目标模式"图标（编辑时显示书本，阅读时显示铅笔）
+   以下 CSS 改为显示"当前模式"图标（编辑时显示铅笔，阅读时显示书本） */
+
+/* 编辑模式 → 显示铅笔图标 */
+.workspace-leaf-content[data-mode="source"] .view-action[aria-label*="阅读"] svg,
+.workspace-leaf-content[data-mode="source"] .view-action[aria-label*="Reading"] svg {
+  display: none;
+}
+
+.workspace-leaf-content[data-mode="source"] .view-action[aria-label*="阅读"]::after,
+.workspace-leaf-content[data-mode="source"] .view-action[aria-label*="Reading"]::after {
+  content: "";
+  display: block;
+  width: var(--icon-size);
+  height: var(--icon-size);
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M17 3a2.83 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z'/%3E%3Cpath d='m15 5 4 4'/%3E%3C/svg%3E");
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  background-color: currentColor;
+}
+
+/* 阅读模式 → 显示书本图标 */
+.workspace-leaf-content[data-mode="preview"] .view-action[aria-label*="编辑"] svg,
+.workspace-leaf-content[data-mode="preview"] .view-action[aria-label*="Edit"] svg,
+.workspace-leaf-content[data-mode="preview"] .view-action[aria-label*="Source"] svg {
+  display: none;
+}
+
+.workspace-leaf-content[data-mode="preview"] .view-action[aria-label*="编辑"]::after,
+.workspace-leaf-content[data-mode="preview"] .view-action[aria-label*="Edit"]::after,
+.workspace-leaf-content[data-mode="preview"] .view-action[aria-label*="Source"]::after {
+  content: "";
+  display: block;
+  width: var(--icon-size);
+  height: var(--icon-size);
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z'/%3E%3Cpath d='M22 3h-6a4 4 0 0 1-4 4v14a3 3 0 0 0 3-3h7z'/%3E%3C/svg%3E");
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  background-color: currentColor;
+}

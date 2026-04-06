@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700">
+  <defs>
+    <style>
+      text { font-family: 'Segoe UI','Microsoft YaHei',system-ui,sans-serif; }
+    </style>
+  </defs>
+
+  <!-- 背景 -->
+  <rect width="1200" height="700" rx="12" fill="#ffffff" stroke="#d1d5db" stroke-width="1.5"/>
+
+  <!-- 标题核心块 -->
+  <rect x="420" y="20" width="360" height="44" rx="8" fill="#1e293b"/>
+  <text x="600" y="48" text-anchor="middle" fill="#ffffff" font-size="18" font-weight="bold">Agent 编排框架选型决策树</text>
+
+  <!-- ===== 决策节点1: 精细状态控制 ===== -->
+  <polygon points="600,90 780,140 600,190 420,140" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="600" y="136" text-anchor="middle" fill="#1e293b" font-size="13">是否需要精细状态控制？</text>
+  <text x="600" y="152" text-anchor="middle" fill="#1e293b" font-size="11">（状态机、条件分支、断点续跑）</text>
+
+  <!-- 是 → LangGraph -->
+  <line x1="780" y1="140" x2="920" y2="140" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="840" y="132" text-anchor="middle" fill="#475569" font-size="11">是</text>
+  <rect x="920" y="120" width="160" height="40" rx="6" fill="#1e293b"/>
+  <text x="1000" y="145" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="bold">LangGraph</text>
+
+  <!-- 否 ↓ -->
+  <line x1="600" y1="190" x2="600" y2="230" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="612" y="215" fill="#475569" font-size="11">否</text>
+
+  <!-- ===== 决策节点2: 角色驱动团队协作 ===== -->
+  <polygon points="600,230 780,280 600,330 420,280" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="600" y="276" text-anchor="middle" fill="#1e293b" font-size="13">是否角色驱动的团队协作？</text>
+  <text x="600" y="292" text-anchor="middle" fill="#1e293b" font-size="11">（多角色分工、任务委派）</text>
+
+  <!-- 是 → CrewAI -->
+  <line x1="780" y1="280" x2="920" y2="280" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="840" y="272" text-anchor="middle" fill="#475569" font-size="11">是</text>
+  <rect x="920" y="260" width="160" height="40" rx="6" fill="#1e293b"/>
+  <text x="1000" y="285" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="bold">CrewAI</text>
+
+  <!-- 否 ↓ -->
+  <line x1="600" y1="330" x2="600" y2="370" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="612" y="355" fill="#475569" font-size="11">否</text>
+
+  <!-- ===== 决策节点3: 对话驱动多Agent ===== -->
+  <polygon points="600,370 780,420 600,470 420,420" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="600" y="416" text-anchor="middle" fill="#1e293b" font-size="13">是否对话驱动的多Agent？</text>
+  <text x="600" y="432" text-anchor="middle" fill="#1e293b" font-size="11">（Agent间对话协商、微软生态）</text>
+
+  <!-- 是 → AutoGen -->
+  <line x1="780" y1="420" x2="920" y2="420" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="840" y="412" text-anchor="middle" fill="#475569" font-size="11">是</text>
+  <rect x="920" y="400" width="160" height="40" rx="6" fill="#1e293b"/>
+  <text x="1000" y="425" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="bold">AutoGen</text>
+
+  <!-- 否 ↓ -->
+  <line x1="600" y1="470" x2="600" y2="500" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="612" y="490" fill="#475569" font-size="11">否</text>
+
+  <!-- ===== 决策节点4: 低代码/可视化 ===== -->
+  <polygon points="600,500 760,545 600,590 440,545" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="600" y="541" text-anchor="middle" fill="#1e293b" font-size="13">是否需要低代码/可视化？</text>
+  <text x="600" y="557" text-anchor="middle" fill="#1e293b" font-size="11">（拖拽编排、快速上线）</text>
+
+  <!-- 是 → Dify/Coze -->
+  <line x1="760" y1="545" x2="920" y2="545" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="830" y="537" text-anchor="middle" fill="#475569" font-size="11">是</text>
+  <rect x="920" y="525" width="160" height="40" rx="6" fill="#1e293b"/>
+  <text x="1000" y="550" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="bold">Dify / Coze</text>
+
+  <!-- 否 ↓ → LlamaIndex -->
+  <line x1="600" y1="590" x2="600" y2="610" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="612" y="605" fill="#475569" font-size="11">否</text>
+  <rect x="520" y="610" width="160" height="40" rx="6" fill="#1e293b"/>
+  <text x="600" y="635" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="bold">LlamaIndex</text>
+  <text x="600" y="662" text-anchor="middle" fill="#475569" font-size="11">（数据密集型检索场景默认选型）</text>
+
+  <!-- ===== 左侧标注区：各框架一句话定位 ===== -->
+  <rect x="30" y="110" width="310" height="200" rx="8" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1"/>
+  <text x="185" y="135" text-anchor="middle" fill="#1e293b" font-size="14" font-weight="bold">各框架一句话定位</text>
+  <line x1="50" y1="145" x2="320" y2="145" stroke="#e2e8f0" stroke-width="1"/>
+
+  <text x="50" y="170" fill="#475569" font-size="12" font-weight="bold">LangGraph</text>
+  <text x="145" y="170" fill="#475569" font-size="12">= 状态机 + 精细控制</text>
+
+  <text x="50" y="198" fill="#475569" font-size="12" font-weight="bold">CrewAI</text>
+  <text x="115" y="198" fill="#475569" font-size="12">= 角色扮演 + 任务分工</text>
+
+  <text x="50" y="226" fill="#475569" font-size="12" font-weight="bold">AutoGen</text>
+  <text x="125" y="226" fill="#475569" font-size="12">= 对话驱动 + 微软生态</text>
+
+  <text x="50" y="254" fill="#475569" font-size="12" font-weight="bold">Dify</text>
+  <text x="90" y="254" fill="#475569" font-size="12">= 低代码 + 快速上线</text>
+
+  <text x="50" y="282" fill="#475569" font-size="12" font-weight="bold">LlamaIndex</text>
+  <text x="145" y="282" fill="#475569" font-size="12">= 数据索引 + RAG首选</text>
+
+  <!-- 箭头标记 -->
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#94a3b8"/>
+    </marker>
+  </defs>
+</svg>

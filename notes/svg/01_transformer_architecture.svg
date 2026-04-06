@@ -1,0 +1,189 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 700">
+  <style>
+    text { font-family: 'Segoe UI','Microsoft YaHei',system-ui,sans-serif; }
+  </style>
+
+  <!-- 背景 -->
+  <rect x="0" y="0" width="1000" height="700" rx="12" fill="#ffffff" stroke="#d1d5db" stroke-width="1.5"/>
+
+  <!-- 标题 -->
+  <text x="500" y="36" text-anchor="middle" font-size="18" font-weight="bold" fill="#1e293b">Transformer Decoder-Only 架构</text>
+
+  <!-- ===== 主流程（自左向右横向布局，从 Input 到 Output）===== -->
+
+  <!-- Input Embedding -->
+  <rect x="30" y="70" width="120" height="44" rx="6" fill="#1e293b"/>
+  <text x="90" y="97" text-anchor="middle" font-size="13" fill="#ffffff">Input Embedding</text>
+
+  <!-- 箭头 -->
+  <line x1="150" y1="92" x2="175" y2="92" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- + Positional Encoding -->
+  <rect x="178" y="70" width="130" height="44" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="243" y="88" text-anchor="middle" font-size="12" fill="#1e293b">+ Positional</text>
+  <text x="243" y="103" text-anchor="middle" font-size="12" fill="#1e293b">Encoding</text>
+
+  <!-- 箭头 -->
+  <line x1="308" y1="92" x2="333" y2="92" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- ===== Nx Decoder Block 大框 ===== -->
+  <rect x="336" y="55" width="420" height="120" rx="8" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5" stroke-dasharray="6,3"/>
+  <text x="546" y="72" text-anchor="middle" font-size="11" fill="#475569" font-style="italic">x N 层</text>
+
+  <!-- Masked Multi-Head Attention -->
+  <rect x="350" y="82" width="115" height="44" rx="6" fill="#1e293b"/>
+  <text x="407" y="100" text-anchor="middle" font-size="11" fill="#ffffff">Masked MHA</text>
+  <text x="407" y="115" text-anchor="middle" font-size="10" fill="#ffffff">(Causal Attn)</text>
+
+  <!-- 箭头 -->
+  <line x1="465" y1="104" x2="480" y2="104" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Add & Norm -->
+  <rect x="483" y="86" width="72" height="36" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="519" y="109" text-anchor="middle" font-size="11" fill="#1e293b">Add&Norm</text>
+
+  <!-- 箭头 -->
+  <line x1="555" y1="104" x2="570" y2="104" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- FFN -->
+  <rect x="573" y="82" width="68" height="44" rx="6" fill="#1e293b"/>
+  <text x="607" y="100" text-anchor="middle" font-size="12" fill="#ffffff">FFN</text>
+  <text x="607" y="115" text-anchor="middle" font-size="10" fill="#ffffff">(SwiGLU)</text>
+
+  <!-- 箭头 -->
+  <line x1="641" y1="104" x2="656" y2="104" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Add & Norm 2 -->
+  <rect x="659" y="86" width="72" height="36" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="695" y="109" text-anchor="middle" font-size="11" fill="#1e293b">Add&Norm</text>
+
+  <!-- 箭头出 Nx -->
+  <line x1="756" y1="104" x2="780" y2="104" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Linear -->
+  <rect x="783" y="82" width="80" height="44" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="823" y="109" text-anchor="middle" font-size="13" fill="#1e293b">Linear</text>
+
+  <!-- 箭头 -->
+  <line x1="863" y1="104" x2="878" y2="104" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Softmax -->
+  <rect x="881" y="82" width="90" height="44" rx="6" fill="#1e293b"/>
+  <text x="926" y="109" text-anchor="middle" font-size="13" fill="#ffffff">Softmax</text>
+
+  <!-- ===== KV Cache 标注 ===== -->
+  <rect x="348" y="190" width="130" height="36" rx="6" fill="#f8fafc" stroke="#e2e8f0" stroke-dasharray="4,2"/>
+  <text x="413" y="213" text-anchor="middle" font-size="11" fill="#475569">KV Cache (推理加速)</text>
+  <line x1="413" y1="190" x2="407" y2="126" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4,2" marker-end="url(#arrow)"/>
+
+  <!-- ===== 中部：Attention 详细拆解 ===== -->
+  <text x="500" y="260" text-anchor="middle" font-size="15" font-weight="bold" fill="#1e293b">Multi-Head Attention 内部结构</text>
+
+  <!-- Q/K/V 投影 -->
+  <rect x="100" y="280" width="80" height="36" rx="6" fill="#1e293b"/>
+  <text x="140" y="303" text-anchor="middle" font-size="12" fill="#ffffff">Q 投影</text>
+
+  <rect x="200" y="280" width="80" height="36" rx="6" fill="#1e293b"/>
+  <text x="240" y="303" text-anchor="middle" font-size="12" fill="#ffffff">K 投影</text>
+
+  <rect x="300" y="280" width="80" height="36" rx="6" fill="#1e293b"/>
+  <text x="340" y="303" text-anchor="middle" font-size="12" fill="#ffffff">V 投影</text>
+
+  <!-- 箭头到 Scaled Dot-Product -->
+  <line x1="140" y1="316" x2="310" y2="345" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="240" y1="316" x2="310" y2="345" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="340" y1="316" x2="370" y2="345" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- QK^T / sqrt(dk) -->
+  <rect x="250" y="345" width="180" height="40" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="340" y="361" text-anchor="middle" font-size="12" fill="#1e293b">QK^T / sqrt(d_k)</text>
+  <text x="340" y="377" text-anchor="middle" font-size="10" fill="#475569">缩放点积注意力</text>
+
+  <!-- Mask -->
+  <rect x="460" y="345" width="90" height="40" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="505" y="361" text-anchor="middle" font-size="11" fill="#1e293b">Causal Mask</text>
+  <text x="505" y="377" text-anchor="middle" font-size="10" fill="#475569">(下三角)</text>
+
+  <line x1="430" y1="365" x2="460" y2="365" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Softmax -->
+  <rect x="580" y="345" width="80" height="40" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="620" y="370" text-anchor="middle" font-size="12" fill="#1e293b">Softmax</text>
+
+  <line x1="550" y1="365" x2="580" y2="365" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- x V -->
+  <rect x="690" y="345" width="80" height="40" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="730" y="370" text-anchor="middle" font-size="12" fill="#1e293b">MatMul V</text>
+
+  <line x1="660" y1="365" x2="690" y2="365" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Concat + Linear -->
+  <rect x="800" y="345" width="120" height="40" rx="6" fill="#1e293b"/>
+  <text x="860" y="362" text-anchor="middle" font-size="11" fill="#ffffff">Concat + Linear</text>
+  <text x="860" y="377" text-anchor="middle" font-size="10" fill="#ffffff">(输出投影)</text>
+
+  <line x1="770" y1="365" x2="800" y2="365" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- ===== 右侧标注：MHA / MQA / GQA / MLA 对比 ===== -->
+  <rect x="740" y="420" width="240" height="180" rx="8" fill="#f8fafc" stroke="#e2e8f0"/>
+  <text x="860" y="444" text-anchor="middle" font-size="13" font-weight="bold" fill="#1e293b">注意力变体 KV Head 对比</text>
+
+  <text x="760" y="470" font-size="11" fill="#1e293b" font-weight="bold">MHA</text>
+  <text x="810" y="470" font-size="11" fill="#475569">KV Head = Q Head (原始)</text>
+
+  <text x="760" y="495" font-size="11" fill="#1e293b" font-weight="bold">MQA</text>
+  <text x="810" y="495" font-size="11" fill="#475569">KV Head = 1 (极致压缩)</text>
+
+  <text x="760" y="520" font-size="11" fill="#1e293b" font-weight="bold">GQA</text>
+  <text x="810" y="520" font-size="11" fill="#475569">KV Head = Q/G (折中方案)</text>
+
+  <text x="760" y="545" font-size="11" fill="#1e293b" font-weight="bold">MLA</text>
+  <text x="810" y="545" font-size="11" fill="#475569">低秩压缩KV (DeepSeek)</text>
+
+  <line x1="760" y1="560" x2="960" y2="560" stroke="#e2e8f0" stroke-width="1"/>
+  <text x="760" y="578" font-size="10" fill="#475569">KV Cache: MHA >> GQA > MQA</text>
+  <text x="760" y="592" font-size="10" fill="#475569">MLA: 缓存压缩后的联合向量</text>
+
+  <!-- ===== 左下：位置编码对比 ===== -->
+  <rect x="20" y="420" width="260" height="150" rx="8" fill="#f8fafc" stroke="#e2e8f0"/>
+  <text x="150" y="444" text-anchor="middle" font-size="13" font-weight="bold" fill="#1e293b">位置编码方案对比</text>
+
+  <text x="40" y="470" font-size="11" fill="#1e293b" font-weight="bold">绝对位置</text>
+  <text x="120" y="470" font-size="11" fill="#475569">正弦/可学习 (GPT-1/2)</text>
+
+  <text x="40" y="495" font-size="11" fill="#1e293b" font-weight="bold">RoPE</text>
+  <text x="120" y="495" font-size="11" fill="#475569">旋转位置编码 (LLaMA主流)</text>
+
+  <text x="40" y="520" font-size="11" fill="#1e293b" font-weight="bold">ALiBi</text>
+  <text x="120" y="520" font-size="11" fill="#475569">注意力线性偏置 (BLOOM)</text>
+
+  <text x="40" y="545" font-size="11" fill="#1e293b" font-weight="bold">NTK-RoPE</text>
+  <text x="120" y="545" font-size="11" fill="#475569">基频修改实现长度外推</text>
+
+  <!-- ===== 中下：FFN 结构 ===== -->
+  <rect x="310" y="420" width="200" height="120" rx="8" fill="#f8fafc" stroke="#e2e8f0"/>
+  <text x="410" y="444" text-anchor="middle" font-size="13" font-weight="bold" fill="#1e293b">FFN 变体</text>
+
+  <text x="330" y="470" font-size="11" fill="#1e293b" font-weight="bold">标准FFN</text>
+  <text x="410" y="470" font-size="11" fill="#475569">ReLU(xW1)W2</text>
+
+  <text x="330" y="495" font-size="11" fill="#1e293b" font-weight="bold">SwiGLU</text>
+  <text x="410" y="495" font-size="11" fill="#475569">Swish(xW)*(xV)W2</text>
+
+  <text x="330" y="520" font-size="11" fill="#1e293b" font-weight="bold">MoE</text>
+  <text x="410" y="520" font-size="11" fill="#475569">Top-K路由+专家FFN</text>
+
+  <!-- ===== 底部标注区：注意力公式 ===== -->
+  <rect x="20" y="600" width="960" height="80" rx="8" fill="#f8fafc" stroke="#e2e8f0"/>
+  <text x="500" y="625" text-anchor="middle" font-size="14" font-weight="bold" fill="#1e293b">核心公式</text>
+  <text x="500" y="650" text-anchor="middle" font-size="13" fill="#475569">Attention(Q, K, V) = softmax(QK^T / sqrt(d_k)) V</text>
+  <text x="500" y="672" text-anchor="middle" font-size="11" fill="#475569">其中 Q=xW_Q, K=xW_K, V=xW_V, d_k 为 Key 维度。多头则将 Q/K/V 分 h 个头独立计算后 Concat。</text>
+
+  <!-- 箭头 marker -->
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8"/>
+    </marker>
+  </defs>
+</svg>

@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 480" font-family="'Segoe UI','Microsoft YaHei',system-ui,sans-serif">
+  <rect width="780" height="480" fill="#ffffff" rx="12" stroke="#d1d5db"/>
+
+  <!-- Title -->
+  <text x="390" y="36" text-anchor="middle" font-size="18" font-weight="bold" fill="#1e293b">上下文压缩与 Token 预算管理</text>
+
+  <!-- Left: LLMLingua Pipeline -->
+  <rect x="30" y="56" width="340" height="400" rx="8" fill="#f8fafc" stroke="#e2e8f0"/>
+  <text x="200" y="80" text-anchor="middle" font-size="14" font-weight="bold" fill="#475569">LLMLingua 压缩流水线</text>
+
+  <!-- Input -->
+  <rect x="110" y="96" width="180" height="34" rx="6" fill="#1e293b"/>
+  <text x="200" y="118" text-anchor="middle" font-size="12" fill="#ffffff">原始 Prompt (长文本)</text>
+
+  <line x1="200" y1="130" x2="200" y2="154" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arw2)"/>
+
+  <!-- Budget Controller -->
+  <rect x="70" y="154" width="260" height="54" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="200" y="174" text-anchor="middle" font-size="12" font-weight="bold" fill="#1e293b">1. Budget Controller (预算控制)</text>
+  <text x="200" y="196" text-anchor="middle" font-size="10" fill="#475569">指令少压缩 | 示例多压缩 | 按部分分配预算</text>
+
+  <line x1="200" y1="208" x2="200" y2="230" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arw2)"/>
+
+  <!-- Token-level Compression -->
+  <rect x="70" y="230" width="260" height="54" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="200" y="250" text-anchor="middle" font-size="12" font-weight="bold" fill="#1e293b">2. Token-level 压缩</text>
+  <text x="200" y="272" text-anchor="middle" font-size="10" fill="#475569">小模型(GPT-2)评估每个token重要性</text>
+
+  <line x1="200" y1="284" x2="200" y2="306" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arw2)"/>
+
+  <!-- Distribution Alignment -->
+  <rect x="70" y="306" width="260" height="54" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="200" y="326" text-anchor="middle" font-size="12" font-weight="bold" fill="#1e293b">3. Distribution Alignment</text>
+  <text x="200" y="348" text-anchor="middle" font-size="10" fill="#475569">对齐小模型与目标大模型的分布</text>
+
+  <line x1="200" y1="360" x2="200" y2="382" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arw2)"/>
+
+  <!-- Output -->
+  <rect x="110" y="382" width="180" height="34" rx="6" fill="#1e293b"/>
+  <text x="200" y="404" text-anchor="middle" font-size="12" fill="#ffffff">压缩 Prompt (最高20x)</text>
+
+  <!-- Performance label -->
+  <text x="200" y="440" text-anchor="middle" font-size="10" fill="#94a3b8">性能损失 &lt;1.5% | 适用于 RAG / 长 Prompt</text>
+
+  <!-- Right: Token Budget -->
+  <rect x="400" y="56" width="350" height="400" rx="8" fill="#f8fafc" stroke="#e2e8f0"/>
+  <text x="575" y="80" text-anchor="middle" font-size="14" font-weight="bold" fill="#475569">Token 预算分配 (128K 模型)</text>
+
+  <!-- Budget bars -->
+  <!-- System Prompt 10-15% -->
+  <rect x="420" y="100" width="60" height="28" rx="4" fill="#1e293b"/>
+  <text x="450" y="119" text-anchor="middle" font-size="10" fill="#ffffff">~15K</text>
+  <text x="490" y="119" font-size="11" fill="#1e293b">System Prompt (10-15%)</text>
+  <text x="490" y="132" font-size="9" fill="#94a3b8">固定，不压缩</text>
+
+  <!-- Tool descriptions 10-15% -->
+  <rect x="420" y="148" width="60" height="28" rx="4" fill="#1e293b"/>
+  <text x="450" y="167" text-anchor="middle" font-size="10" fill="#ffffff">~15K</text>
+  <text x="490" y="167" font-size="11" fill="#1e293b">工具描述 (10-15%)</text>
+  <text x="490" y="180" font-size="9" fill="#94a3b8">按需加载，惰性加载</text>
+
+  <!-- Long-term memory 15-20% -->
+  <rect x="420" y="196" width="80" height="28" rx="4" fill="#1e293b"/>
+  <text x="460" y="215" text-anchor="middle" font-size="10" fill="#ffffff">~20K</text>
+  <text x="510" y="215" font-size="11" fill="#1e293b">长期记忆 (15-20%)</text>
+  <text x="510" y="228" font-size="9" fill="#94a3b8">检索 Top-K，压缩注入</text>
+
+  <!-- Dialogue history 30-40% -->
+  <rect x="420" y="244" width="140" height="28" rx="4" fill="#1e293b"/>
+  <text x="490" y="263" text-anchor="middle" font-size="10" fill="#ffffff">~45K</text>
+  <text x="570" y="263" font-size="11" fill="#1e293b">对话历史 (30-40%)</text>
+  <text x="570" y="276" font-size="9" fill="#94a3b8">近期原文 + 远期摘要</text>
+
+  <!-- Current I/O 20-30% -->
+  <rect x="420" y="292" width="110" height="28" rx="4" fill="#1e293b"/>
+  <text x="475" y="311" text-anchor="middle" font-size="10" fill="#ffffff">~33K</text>
+  <text x="540" y="311" font-size="11" fill="#1e293b">当前输入+输出 (20-30%)</text>
+  <text x="540" y="324" font-size="9" fill="#94a3b8">保留输出空间</text>
+
+  <!-- Dynamic adjustment -->
+  <rect x="420" y="348" width="310" height="96" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="575" y="370" text-anchor="middle" font-size="12" font-weight="bold" fill="#1e293b">动态预算调整</text>
+  <text x="440" y="392" font-size="11" fill="#475569">使用率 &lt; 70%  正常运行</text>
+  <text x="440" y="410" font-size="11" fill="#475569">使用率 70-90%  触发压缩 (摘要/LLMLingua)</text>
+  <text x="440" y="428" font-size="11" fill="#475569">使用率 &gt; 90%  强制截断最远历史</text>
+
+  <defs>
+    <marker id="arw2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8"/>
+    </marker>
+  </defs>
+</svg>

@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Users/cian/.claude/**)",
+      "Read(//e/Note/claude/interview-search/.claude/**)",
+      "WebFetch(domain:clawhub.ai)"
+    ]
+  }
+}

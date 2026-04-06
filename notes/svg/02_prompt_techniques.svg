@@ -1,0 +1,191 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 600">
+  <style>
+    text { font-family: 'Segoe UI','Microsoft YaHei',system-ui,sans-serif; }
+  </style>
+
+  <!-- 背景 -->
+  <rect x="0" y="0" width="1100" height="600" rx="12" fill="#ffffff" stroke="#d1d5db" stroke-width="1.5"/>
+
+  <!-- 核心块 -->
+  <rect x="440" y="30" width="220" height="48" rx="8" fill="#1e293b"/>
+  <text x="550" y="60" text-anchor="middle" font-size="16" font-weight="bold" fill="#ffffff">Prompt Engineering</text>
+
+  <!-- ===== L2 分支 ===== -->
+  <!-- 连接线从核心到 L2 -->
+  <line x1="550" y1="78" x2="110" y2="130" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow2)"/>
+  <line x1="550" y1="78" x2="330" y2="130" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow2)"/>
+  <line x1="550" y1="78" x2="550" y2="130" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow2)"/>
+  <line x1="550" y1="78" x2="770" y2="130" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow2)"/>
+  <line x1="550" y1="78" x2="990" y2="130" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow2)"/>
+
+  <!-- L2-1: 基础技术 -->
+  <rect x="30" y="130" width="160" height="40" rx="6" fill="#1e293b"/>
+  <text x="110" y="155" text-anchor="middle" font-size="13" fill="#ffffff">基础技术</text>
+
+  <!-- L2-2: 推理链 -->
+  <rect x="250" y="130" width="160" height="40" rx="6" fill="#1e293b"/>
+  <text x="330" y="155" text-anchor="middle" font-size="13" fill="#ffffff">推理链技术</text>
+
+  <!-- L2-3: Agent 专用 -->
+  <rect x="470" y="130" width="160" height="40" rx="6" fill="#1e293b"/>
+  <text x="550" y="155" text-anchor="middle" font-size="13" fill="#ffffff">Agent 专用</text>
+
+  <!-- L2-4: 自动优化 -->
+  <rect x="690" y="130" width="160" height="40" rx="6" fill="#1e293b"/>
+  <text x="770" y="155" text-anchor="middle" font-size="13" fill="#ffffff">自动优化</text>
+
+  <!-- L2-5: 安全防护 -->
+  <rect x="910" y="130" width="160" height="40" rx="6" fill="#1e293b"/>
+  <text x="990" y="155" text-anchor="middle" font-size="13" fill="#ffffff">安全防护</text>
+
+  <!-- ===== L3 叶子节点 ===== -->
+
+  <!-- 基础技术下的叶子 -->
+  <line x1="110" y1="170" x2="70" y2="200" stroke="#94a3b8" stroke-width="1"/>
+  <line x1="110" y1="170" x2="155" y2="200" stroke="#94a3b8" stroke-width="1"/>
+
+  <rect x="10" y="200" width="120" height="70" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="70" y="220" text-anchor="middle" font-size="12" font-weight="bold" fill="#1e293b">Zero-shot</text>
+  <text x="70" y="236" text-anchor="middle" font-size="10" fill="#475569">直接指令，无示例</text>
+  <text x="70" y="250" text-anchor="middle" font-size="10" fill="#475569">依赖模型预训练</text>
+  <text x="70" y="264" text-anchor="middle" font-size="10" fill="#475569">能力泛化</text>
+
+  <rect x="140" y="200" width="120" height="70" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="200" y="220" text-anchor="middle" font-size="12" font-weight="bold" fill="#1e293b">Few-shot</text>
+  <text x="200" y="236" text-anchor="middle" font-size="10" fill="#475569">提供 k 个示例</text>
+  <text x="200" y="250" text-anchor="middle" font-size="10" fill="#475569">ICL (上下文学习)</text>
+  <text x="200" y="264" text-anchor="middle" font-size="10" fill="#475569">示例选择很关键</text>
+
+  <!-- 推理链下的叶子 -->
+  <line x1="330" y1="170" x2="270" y2="200" stroke="#94a3b8" stroke-width="1"/>
+  <line x1="330" y1="170" x2="330" y2="200" stroke="#94a3b8" stroke-width="1"/>
+  <line x1="330" y1="170" x2="395" y2="200" stroke="#94a3b8" stroke-width="1"/>
+
+  <rect x="215" y="200" width="110" height="70" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="270" y="220" text-anchor="middle" font-size="12" font-weight="bold" fill="#1e293b">CoT</text>
+  <text x="270" y="236" text-anchor="middle" font-size="10" fill="#475569">链式思维推理</text>
+  <text x="270" y="250" text-anchor="middle" font-size="10" fill="#475569">"让我们一步步</text>
+  <text x="270" y="264" text-anchor="middle" font-size="10" fill="#475569">思考"</text>
+
+  <rect x="280" y="290" width="110" height="70" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="335" y="310" text-anchor="middle" font-size="12" font-weight="bold" fill="#1e293b">ToT</text>
+  <text x="335" y="326" text-anchor="middle" font-size="10" fill="#475569">树状搜索推理</text>
+  <text x="335" y="340" text-anchor="middle" font-size="10" fill="#475569">BFS/DFS 探索</text>
+  <text x="335" y="354" text-anchor="middle" font-size="10" fill="#475569">多路径评估</text>
+
+  <line x1="330" y1="270" x2="335" y2="290" stroke="#94a3b8" stroke-width="1"/>
+
+  <rect x="340" y="200" width="110" height="70" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="395" y="220" text-anchor="middle" font-size="12" font-weight="bold" fill="#1e293b">GoT</text>
+  <text x="395" y="236" text-anchor="middle" font-size="10" fill="#475569">图结构推理</text>
+  <text x="395" y="250" text-anchor="middle" font-size="10" fill="#475569">思维节点合并</text>
+  <text x="395" y="264" text-anchor="middle" font-size="10" fill="#475569">循环与回溯</text>
+
+  <!-- Agent 专用下的叶子 -->
+  <line x1="550" y1="170" x2="500" y2="200" stroke="#94a3b8" stroke-width="1"/>
+  <line x1="550" y1="170" x2="610" y2="200" stroke="#94a3b8" stroke-width="1"/>
+
+  <rect x="455" y="200" width="120" height="70" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="515" y="220" text-anchor="middle" font-size="12" font-weight="bold" fill="#1e293b">ReAct</text>
+  <text x="515" y="236" text-anchor="middle" font-size="10" fill="#475569">推理+行动交替</text>
+  <text x="515" y="250" text-anchor="middle" font-size="10" fill="#475569">Thought-Act-Obs</text>
+  <text x="515" y="264" text-anchor="middle" font-size="10" fill="#475569">工具调用范式</text>
+
+  <rect x="555" y="200" width="120" height="70" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="615" y="220" text-anchor="middle" font-size="12" font-weight="bold" fill="#1e293b">Reflexion</text>
+  <text x="615" y="236" text-anchor="middle" font-size="10" fill="#475569">自我反思迭代</text>
+  <text x="615" y="250" text-anchor="middle" font-size="10" fill="#475569">失败经验记忆</text>
+  <text x="615" y="264" text-anchor="middle" font-size="10" fill="#475569">改进重试机制</text>
+
+  <!-- 自动优化下的叶子 -->
+  <line x1="770" y1="170" x2="720" y2="200" stroke="#94a3b8" stroke-width="1"/>
+  <line x1="770" y1="170" x2="830" y2="200" stroke="#94a3b8" stroke-width="1"/>
+
+  <rect x="675" y="200" width="120" height="70" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="735" y="220" text-anchor="middle" font-size="12" font-weight="bold" fill="#1e293b">DSPy</text>
+  <text x="735" y="236" text-anchor="middle" font-size="10" fill="#475569">声明式 Prompt</text>
+  <text x="735" y="250" text-anchor="middle" font-size="10" fill="#475569">编程范式</text>
+  <text x="735" y="264" text-anchor="middle" font-size="10" fill="#475569">自动编译优化</text>
+
+  <rect x="785" y="200" width="120" height="70" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="845" y="220" text-anchor="middle" font-size="12" font-weight="bold" fill="#1e293b">OPRO</text>
+  <text x="845" y="236" text-anchor="middle" font-size="10" fill="#475569">LLM 自优化</text>
+  <text x="845" y="250" text-anchor="middle" font-size="10" fill="#475569">Prompt 搜索</text>
+  <text x="845" y="264" text-anchor="middle" font-size="10" fill="#475569">元提示迭代</text>
+
+  <!-- 安全防护下的叶子 -->
+  <line x1="990" y1="170" x2="940" y2="200" stroke="#94a3b8" stroke-width="1"/>
+  <line x1="990" y1="170" x2="1040" y2="200" stroke="#94a3b8" stroke-width="1"/>
+
+  <rect x="895" y="200" width="120" height="70" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="955" y="220" text-anchor="middle" font-size="12" font-weight="bold" fill="#1e293b">Injection</text>
+  <text x="955" y="236" text-anchor="middle" font-size="10" fill="#475569">提示注入攻击</text>
+  <text x="955" y="250" text-anchor="middle" font-size="10" fill="#475569">直接/间接注入</text>
+  <text x="955" y="264" text-anchor="middle" font-size="10" fill="#475569">数据投毒</text>
+
+  <rect x="1005" y="200" width="80" height="70" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="1045" y="220" text-anchor="middle" font-size="12" font-weight="bold" fill="#1e293b">Jailbreak</text>
+  <text x="1045" y="236" text-anchor="middle" font-size="10" fill="#475569">越狱攻击</text>
+  <text x="1045" y="250" text-anchor="middle" font-size="10" fill="#475569">角色扮演</text>
+  <text x="1045" y="264" text-anchor="middle" font-size="10" fill="#475569">DAN 等</text>
+
+  <!-- ===== 安全防护补充：防御手段 ===== -->
+  <line x1="990" y1="270" x2="990" y2="300" stroke="#94a3b8" stroke-width="1"/>
+  <rect x="920" y="300" width="140" height="56" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="990" y="318" text-anchor="middle" font-size="11" font-weight="bold" fill="#1e293b">防御手段</text>
+  <text x="990" y="334" text-anchor="middle" font-size="10" fill="#475569">输入过滤/System锁定</text>
+  <text x="990" y="348" text-anchor="middle" font-size="10" fill="#475569">Guardrails/红队测试</text>
+
+  <!-- ===== Self-Consistency 补充 ===== -->
+  <rect x="215" y="380" width="120" height="56" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="275" y="398" text-anchor="middle" font-size="11" font-weight="bold" fill="#1e293b">Self-Consistency</text>
+  <text x="275" y="414" text-anchor="middle" font-size="10" fill="#475569">多次采样+投票</text>
+  <text x="275" y="428" text-anchor="middle" font-size="10" fill="#475569">提升CoT稳定性</text>
+
+  <line x1="270" y1="270" x2="275" y2="380" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4,2"/>
+
+  <!-- ===== 底部标注区：技术演进路线 ===== -->
+  <rect x="30" y="490" width="1040" height="90" rx="8" fill="#f8fafc" stroke="#e2e8f0"/>
+  <text x="550" y="515" text-anchor="middle" font-size="14" font-weight="bold" fill="#1e293b">技术演进路线</text>
+
+  <!-- 演进箭头 -->
+  <rect x="60" y="530" width="100" height="32" rx="6" fill="#1e293b"/>
+  <text x="110" y="551" text-anchor="middle" font-size="11" fill="#ffffff">Prompt</text>
+
+  <line x1="160" y1="546" x2="190" y2="546" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow2)"/>
+
+  <rect x="195" y="530" width="100" height="32" rx="6" fill="#1e293b"/>
+  <text x="245" y="551" text-anchor="middle" font-size="11" fill="#ffffff">CoT</text>
+
+  <line x1="295" y1="546" x2="325" y2="546" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow2)"/>
+
+  <rect x="330" y="530" width="100" height="32" rx="6" fill="#1e293b"/>
+  <text x="380" y="551" text-anchor="middle" font-size="11" fill="#ffffff">ToT / GoT</text>
+
+  <line x1="430" y1="546" x2="460" y2="546" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow2)"/>
+
+  <rect x="465" y="530" width="100" height="32" rx="6" fill="#1e293b"/>
+  <text x="515" y="551" text-anchor="middle" font-size="11" fill="#ffffff">ReAct</text>
+
+  <line x1="565" y1="546" x2="595" y2="546" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow2)"/>
+
+  <rect x="600" y="530" width="100" height="32" rx="6" fill="#1e293b"/>
+  <text x="650" y="551" text-anchor="middle" font-size="11" fill="#ffffff">Reflexion</text>
+
+  <line x1="700" y1="546" x2="730" y2="546" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow2)"/>
+
+  <rect x="735" y="530" width="100" height="32" rx="6" fill="#1e293b"/>
+  <text x="785" y="551" text-anchor="middle" font-size="11" fill="#ffffff">DSPy</text>
+
+  <line x1="835" y1="546" x2="865" y2="546" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow2)"/>
+
+  <rect x="870" y="530" width="160" height="32" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="950" y="551" text-anchor="middle" font-size="11" fill="#475569">自主优化 Agent</text>
+
+  <!-- 箭头 marker -->
+  <defs>
+    <marker id="arrow2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8"/>
+    </marker>
+  </defs>
+</svg>

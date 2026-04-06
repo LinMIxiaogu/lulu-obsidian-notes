@@ -1,0 +1,115 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 340" font-family="'Segoe UI','Microsoft YaHei',system-ui,sans-serif">
+  <rect width="620" height="340" fill="#ffffff" rx="12" stroke="#d1d5db"/>
+
+  <text x="310" y="28" text-anchor="middle" font-size="18" font-weight="bold" fill="#1e293b">多 Agent 协作模式</text>
+
+  <!-- 分隔线 -->
+  <line x1="210" y1="40" x2="210" y2="330" stroke="#e2e8f0" stroke-width="1"/>
+  <line x1="420" y1="40" x2="420" y2="330" stroke="#e2e8f0" stroke-width="1"/>
+
+  <!-- ========= Supervisor 模式 ========= -->
+  <text x="105" y="56" text-anchor="middle" font-size="14" font-weight="bold" fill="#1e293b">Supervisor 模式</text>
+  <text x="105" y="72" text-anchor="middle" font-size="10" fill="#475569">中心协调、分配汇总</text>
+
+  <!-- Supervisor -->
+  <rect x="55" y="85" width="100" height="36" rx="8" fill="#1e293b"/>
+  <text x="105" y="108" text-anchor="middle" font-size="12" fill="#ffffff">主管 Agent</text>
+
+  <!-- 子Agent -->
+  <line x1="80" y1="121" x2="45" y2="145" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#a5)"/>
+  <line x1="105" y1="121" x2="105" y2="145" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#a5)"/>
+  <line x1="130" y1="121" x2="165" y2="145" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#a5)"/>
+
+  <rect x="15" y="148" width="60" height="32" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="45" y="169" text-anchor="middle" font-size="10" fill="#1e293b">Agent A</text>
+
+  <rect x="75" y="148" width="60" height="32" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="105" y="169" text-anchor="middle" font-size="10" fill="#1e293b">Agent B</text>
+
+  <rect x="135" y="148" width="60" height="32" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="165" y="169" text-anchor="middle" font-size="10" fill="#1e293b">Agent C</text>
+
+  <!-- 结果汇总 -->
+  <line x1="45" y1="180" x2="45" y2="197" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,2"/>
+  <line x1="105" y1="180" x2="105" y2="197" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,2"/>
+  <line x1="165" y1="180" x2="165" y2="197" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,2"/>
+  <line x1="45" y1="197" x2="165" y2="197" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,2"/>
+  <line x1="105" y1="197" x2="105" y2="210" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,2" marker-end="url(#a5)"/>
+
+  <rect x="55" y="213" width="100" height="28" rx="6" fill="#f8fafc" stroke="#e2e8f0"/>
+  <text x="105" y="232" text-anchor="middle" font-size="10" fill="#475569">汇总结果</text>
+
+  <!-- 优缺点 -->
+  <text x="105" y="260" text-anchor="middle" font-size="10" fill="#475569">+ 控制集中、易管理</text>
+  <text x="105" y="276" text-anchor="middle" font-size="10" fill="#475569">- 中心瓶颈</text>
+
+  <!-- ========= Handoff 模式 ========= -->
+  <text x="315" y="56" text-anchor="middle" font-size="14" font-weight="bold" fill="#1e293b">Handoff 模式</text>
+  <text x="315" y="72" text-anchor="middle" font-size="10" fill="#475569">直接交接控制权</text>
+
+  <!-- 三个Agent横排 -->
+  <rect x="225" y="90" width="70" height="36" rx="8" fill="#1e293b"/>
+  <text x="260" y="113" text-anchor="middle" font-size="11" fill="#ffffff">Agent 1</text>
+
+  <line x1="295" y1="108" x2="313" y2="108" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#a5)"/>
+  <text x="304" y="101" text-anchor="middle" font-size="9" fill="#475569">交接</text>
+
+  <rect x="318" y="90" width="70" height="36" rx="8" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="353" y="113" text-anchor="middle" font-size="11" fill="#1e293b">Agent 2</text>
+
+  <line x1="353" y1="126" x2="353" y2="145" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#a5)"/>
+  <text x="370" y="138" font-size="9" fill="#475569">交接</text>
+
+  <rect x="318" y="148" width="70" height="36" rx="8" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="353" y="171" text-anchor="middle" font-size="11" fill="#1e293b">Agent 3</text>
+
+  <!-- 回传可能 -->
+  <path d="M 318 166 Q 240 166 240 130 Q 240 108 225 108" fill="none" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,2" marker-end="url(#a5)"/>
+  <text x="240" y="155" font-size="9" fill="#475569">可回传</text>
+
+  <text x="315" y="210" text-anchor="middle" font-size="10" fill="#475569">如 OpenAI Swarm</text>
+  <text x="315" y="228" text-anchor="middle" font-size="10" fill="#475569">+ 去中心化、灵活</text>
+  <text x="315" y="244" text-anchor="middle" font-size="10" fill="#475569">- 流程不易追踪</text>
+
+  <!-- ========= Router 模式 ========= -->
+  <text x="520" y="56" text-anchor="middle" font-size="14" font-weight="bold" fill="#1e293b">Router 模式</text>
+  <text x="520" y="72" text-anchor="middle" font-size="10" fill="#475569">按类型路由到专家</text>
+
+  <!-- 输入 -->
+  <rect x="480" y="85" width="80" height="30" rx="8" fill="#1e293b"/>
+  <text x="520" y="105" text-anchor="middle" font-size="11" fill="#ffffff">输入</text>
+
+  <line x1="520" y1="115" x2="520" y2="127" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#a5)"/>
+
+  <!-- Router -->
+  <rect x="472" y="130" width="96" height="32" rx="8" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="520" y="151" text-anchor="middle" font-size="11" fill="#1e293b" font-weight="bold">Router</text>
+
+  <!-- 路由分支 -->
+  <line x1="490" y1="162" x2="455" y2="182" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#a5)"/>
+  <line x1="520" y1="162" x2="520" y2="182" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#a5)"/>
+  <line x1="550" y1="162" x2="585" y2="182" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#a5)"/>
+
+  <rect x="427" y="185" width="56" height="32" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="455" y="206" text-anchor="middle" font-size="9" fill="#1e293b">退款Agent</text>
+
+  <rect x="492" y="185" width="56" height="32" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="520" y="206" text-anchor="middle" font-size="9" fill="#1e293b">物流Agent</text>
+
+  <rect x="557" y="185" width="56" height="32" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="585" y="206" text-anchor="middle" font-size="9" fill="#1e293b">技术Agent</text>
+
+  <text x="520" y="240" text-anchor="middle" font-size="10" fill="#475569">+ 专业化分工</text>
+  <text x="520" y="256" text-anchor="middle" font-size="10" fill="#475569">- 路由准确性依赖</text>
+
+  <!-- 底部通信方式 -->
+  <rect x="30" y="292" width="560" height="36" rx="6" fill="#f8fafc" stroke="#e2e8f0"/>
+  <text x="310" y="310" text-anchor="middle" font-size="11" fill="#1e293b" font-weight="bold">通信机制</text>
+  <text x="310" y="324" text-anchor="middle" font-size="10" fill="#475569">共享消息总线 | 直接消息传递 | 黑板系统 | 发布-订阅</text>
+
+  <defs>
+    <marker id="a5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8"/>
+    </marker>
+  </defs>
+</svg>

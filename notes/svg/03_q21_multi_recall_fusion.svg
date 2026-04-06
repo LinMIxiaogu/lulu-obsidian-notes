@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 380" font-family="'Segoe UI','Microsoft YaHei',system-ui,sans-serif">
+  <rect width="600" height="380" fill="#ffffff" rx="12" stroke="#d1d5db"/>
+
+  <text x="300" y="30" text-anchor="middle" font-size="18" font-weight="bold" fill="#1e293b">多路召回与融合排序架构</text>
+
+  <!-- Query入口 -->
+  <rect x="240" y="48" width="120" height="36" rx="8" fill="#1e293b"/>
+  <text x="300" y="71" text-anchor="middle" font-size="13" fill="#ffffff">用户 Query</text>
+
+  <!-- 分支线 -->
+  <line x1="300" y1="84" x2="300" y2="100" stroke="#94a3b8" stroke-width="1.5"/>
+  <line x1="70" y1="100" x2="530" y2="100" stroke="#94a3b8" stroke-width="1.5"/>
+  <line x1="70" y1="100" x2="70" y2="115" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="185" y1="100" x2="185" y2="115" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="300" y1="100" x2="300" y2="115" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="415" y1="100" x2="415" y2="115" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="530" y1="100" x2="530" y2="115" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- 五路召回 -->
+  <rect x="20" y="118" width="100" height="50" rx="8" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="70" y="140" text-anchor="middle" font-size="12" fill="#1e293b" font-weight="bold">密集向量</text>
+  <text x="70" y="157" text-anchor="middle" font-size="10" fill="#475569">语义匹配</text>
+
+  <rect x="135" y="118" width="100" height="50" rx="8" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="185" y="140" text-anchor="middle" font-size="12" fill="#1e293b" font-weight="bold">BM25</text>
+  <text x="185" y="157" text-anchor="middle" font-size="10" fill="#475569">关键词匹配</text>
+
+  <rect x="250" y="118" width="100" height="50" rx="8" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="300" y="140" text-anchor="middle" font-size="12" fill="#1e293b" font-weight="bold">知识图谱</text>
+  <text x="300" y="157" text-anchor="middle" font-size="10" fill="#475569">关系推理</text>
+
+  <rect x="365" y="118" width="100" height="50" rx="8" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="415" y="140" text-anchor="middle" font-size="12" fill="#1e293b" font-weight="bold">结构化查询</text>
+  <text x="415" y="157" text-anchor="middle" font-size="10" fill="#475569">元数据过滤</text>
+
+  <rect x="480" y="118" width="100" height="50" rx="8" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="530" y="140" text-anchor="middle" font-size="12" fill="#1e293b" font-weight="bold">Web 搜索</text>
+  <text x="530" y="157" text-anchor="middle" font-size="10" fill="#475569">实时补充</text>
+
+  <!-- 汇聚线 -->
+  <line x1="70" y1="168" x2="70" y2="195" stroke="#94a3b8" stroke-width="1.5"/>
+  <line x1="185" y1="168" x2="185" y2="195" stroke="#94a3b8" stroke-width="1.5"/>
+  <line x1="300" y1="168" x2="300" y2="195" stroke="#94a3b8" stroke-width="1.5"/>
+  <line x1="415" y1="168" x2="415" y2="195" stroke="#94a3b8" stroke-width="1.5"/>
+  <line x1="530" y1="168" x2="530" y2="195" stroke="#94a3b8" stroke-width="1.5"/>
+  <line x1="70" y1="195" x2="530" y2="195" stroke="#94a3b8" stroke-width="1.5"/>
+  <line x1="300" y1="195" x2="300" y2="210" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- 去重 -->
+  <rect x="230" y="213" width="140" height="34" rx="8" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="300" y="235" text-anchor="middle" font-size="12" fill="#1e293b">按文档 ID 去重</text>
+
+  <line x1="300" y1="247" x2="300" y2="262" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- 融合排序 -->
+  <rect x="185" y="265" width="230" height="40" rx="8" fill="#1e293b"/>
+  <text x="300" y="290" text-anchor="middle" font-size="14" fill="#ffffff" font-weight="bold">融合排序</text>
+
+  <!-- 三种融合方法 -->
+  <line x1="300" y1="305" x2="300" y2="315" stroke="#94a3b8" stroke-width="1.5"/>
+  <line x1="100" y1="315" x2="500" y2="315" stroke="#94a3b8" stroke-width="1.5"/>
+
+  <rect x="30" y="325" width="170" height="42" rx="6" fill="#f8fafc" stroke="#e2e8f0"/>
+  <text x="115" y="342" text-anchor="middle" font-size="11" fill="#1e293b" font-weight="bold">RRF 倒数排名融合</text>
+  <text x="115" y="358" text-anchor="middle" font-size="10" fill="#475569">只看排名，无需归一化</text>
+
+  <rect x="215" y="325" width="170" height="42" rx="6" fill="#f8fafc" stroke="#e2e8f0"/>
+  <text x="300" y="342" text-anchor="middle" font-size="11" fill="#1e293b" font-weight="bold">线性加权融合</text>
+  <text x="300" y="358" text-anchor="middle" font-size="10" fill="#475569">需归一化 + 调参权重</text>
+
+  <rect x="400" y="325" width="170" height="42" rx="6" fill="#f8fafc" stroke="#e2e8f0"/>
+  <text x="485" y="342" text-anchor="middle" font-size="11" fill="#1e293b" font-weight="bold">Learning to Rank</text>
+  <text x="485" y="358" text-anchor="middle" font-size="10" fill="#475569">ML 模型排序，需标注</text>
+
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8"/>
+    </marker>
+  </defs>
+</svg>

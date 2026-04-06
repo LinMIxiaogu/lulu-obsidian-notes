@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 500" font-family="'Segoe UI','Microsoft YaHei',system-ui,sans-serif">
+  <rect width="760" height="500" fill="#ffffff" rx="12" stroke="#d1d5db"/>
+
+  <!-- Title -->
+  <text x="380" y="36" text-anchor="middle" font-size="18" font-weight="bold" fill="#1e293b">CrewAI 核心概念与执行模式</text>
+
+  <!-- Crew container -->
+  <rect x="40" y="56" width="680" height="240" rx="10" fill="#f8fafc" stroke="#e2e8f0"/>
+  <text x="380" y="80" text-anchor="middle" font-size="15" font-weight="bold" fill="#475569">Crew (团队)</text>
+
+  <!-- Agent 1 -->
+  <rect x="60" y="96" width="190" height="100" rx="8" fill="#1e293b"/>
+  <text x="155" y="118" text-anchor="middle" font-size="13" font-weight="bold" fill="#ffffff">Agent: Researcher</text>
+  <line x1="80" y1="126" x2="230" y2="126" stroke="#475569" stroke-width="0.5"/>
+  <text x="80" y="144" font-size="10" fill="#94a3b8">role: "Senior Researcher"</text>
+  <text x="80" y="160" font-size="10" fill="#94a3b8">goal: "发现技术趋势"</text>
+  <text x="80" y="176" font-size="10" fill="#94a3b8">backstory: "资深分析师..."</text>
+  <text x="80" y="192" font-size="10" fill="#94a3b8">tools: [搜索, 文件读取]</text>
+
+  <!-- Agent 2 -->
+  <rect x="285" y="96" width="190" height="100" rx="8" fill="#1e293b"/>
+  <text x="380" y="118" text-anchor="middle" font-size="13" font-weight="bold" fill="#ffffff">Agent: Writer</text>
+  <line x1="305" y1="126" x2="455" y2="126" stroke="#475569" stroke-width="0.5"/>
+  <text x="305" y="144" font-size="10" fill="#94a3b8">role: "Tech Writer"</text>
+  <text x="305" y="160" font-size="10" fill="#94a3b8">goal: "撰写技术报告"</text>
+  <text x="305" y="176" font-size="10" fill="#94a3b8">backstory: "专业作者..."</text>
+  <text x="305" y="192" font-size="10" fill="#94a3b8">tools: [文件写入]</text>
+
+  <!-- Agent 3 -->
+  <rect x="510" y="96" width="190" height="100" rx="8" fill="#1e293b"/>
+  <text x="605" y="118" text-anchor="middle" font-size="13" font-weight="bold" fill="#ffffff">Agent: Reviewer</text>
+  <line x1="530" y1="126" x2="680" y2="126" stroke="#475569" stroke-width="0.5"/>
+  <text x="530" y="144" font-size="10" fill="#94a3b8">role: "Quality Reviewer"</text>
+  <text x="530" y="160" font-size="10" fill="#94a3b8">goal: "确保内容质量"</text>
+  <text x="530" y="176" font-size="10" fill="#94a3b8">backstory: "审稿专家..."</text>
+  <text x="530" y="192" font-size="10" fill="#94a3b8">tools: []</text>
+
+  <!-- Task boxes below agents -->
+  <rect x="60" y="210" width="190" height="52" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="155" y="230" text-anchor="middle" font-size="11" font-weight="bold" fill="#1e293b">Task 1: 调研</text>
+  <text x="155" y="248" text-anchor="middle" font-size="9" fill="#475569">expected_output: 研究报告</text>
+  <text x="155" y="260" text-anchor="middle" font-size="9" fill="#94a3b8">agent: Researcher</text>
+
+  <rect x="285" y="210" width="190" height="52" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="380" y="230" text-anchor="middle" font-size="11" font-weight="bold" fill="#1e293b">Task 2: 撰写</text>
+  <text x="380" y="248" text-anchor="middle" font-size="9" fill="#475569">expected_output: 博客文章</text>
+  <text x="380" y="260" text-anchor="middle" font-size="9" fill="#94a3b8">context: [Task 1]</text>
+
+  <rect x="510" y="210" width="190" height="52" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="605" y="230" text-anchor="middle" font-size="11" font-weight="bold" fill="#1e293b">Task 3: 审核</text>
+  <text x="605" y="248" text-anchor="middle" font-size="9" fill="#475569">expected_output: 审核报告</text>
+  <text x="605" y="260" text-anchor="middle" font-size="9" fill="#94a3b8">context: [Task 2]</text>
+
+  <!-- Task flow arrows -->
+  <line x1="250" y1="236" x2="285" y2="236" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arw3)"/>
+  <line x1="475" y1="236" x2="510" y2="236" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arw3)"/>
+
+  <!-- Process modes -->
+  <rect x="40" y="310" width="340" height="170" rx="8" fill="#f8fafc" stroke="#e2e8f0"/>
+  <text x="210" y="334" text-anchor="middle" font-size="13" font-weight="bold" fill="#475569">Process: Sequential (顺序执行)</text>
+
+  <!-- Sequential flow -->
+  <rect x="60" y="352" width="90" height="32" rx="6" fill="#1e293b"/>
+  <text x="105" y="373" text-anchor="middle" font-size="11" fill="#ffffff">Task 1</text>
+  <line x1="150" y1="368" x2="170" y2="368" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arw3)"/>
+  <rect x="170" y="352" width="90" height="32" rx="6" fill="#1e293b"/>
+  <text x="215" y="373" text-anchor="middle" font-size="11" fill="#ffffff">Task 2</text>
+  <line x1="260" y1="368" x2="280" y2="368" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arw3)"/>
+  <rect x="280" y="352" width="80" height="32" rx="6" fill="#1e293b"/>
+  <text x="320" y="373" text-anchor="middle" font-size="11" fill="#ffffff">Task 3</text>
+  <text x="210" y="406" text-anchor="middle" font-size="10" fill="#475569">上一个 Task 输出作为下一个 Task 上下文</text>
+
+  <!-- Hierarchical mode -->
+  <rect x="400" y="310" width="320" height="170" rx="8" fill="#f8fafc" stroke="#e2e8f0"/>
+  <text x="560" y="334" text-anchor="middle" font-size="13" font-weight="bold" fill="#475569">Process: Hierarchical (层级式)</text>
+
+  <!-- Manager -->
+  <rect x="500" y="352" width="120" height="32" rx="6" fill="#1e293b"/>
+  <text x="560" y="373" text-anchor="middle" font-size="11" fill="#ffffff">Manager Agent</text>
+  <text x="560" y="345" font-size="9" fill="#94a3b8">自动生成</text>
+
+  <!-- Workers -->
+  <line x1="520" y1="384" x2="460" y2="410" stroke="#94a3b8" stroke-width="1.2" marker-end="url(#arw3)"/>
+  <line x1="560" y1="384" x2="560" y2="410" stroke="#94a3b8" stroke-width="1.2" marker-end="url(#arw3)"/>
+  <line x1="600" y1="384" x2="660" y2="410" stroke="#94a3b8" stroke-width="1.2" marker-end="url(#arw3)"/>
+
+  <rect x="420" y="410" width="80" height="28" rx="5" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="460" y="429" text-anchor="middle" font-size="10" fill="#1e293b">Worker 1</text>
+
+  <rect x="520" y="410" width="80" height="28" rx="5" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="560" y="429" text-anchor="middle" font-size="10" fill="#1e293b">Worker 2</text>
+
+  <rect x="620" y="410" width="80" height="28" rx="5" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="660" y="429" text-anchor="middle" font-size="10" fill="#1e293b">Worker 3</text>
+
+  <text x="560" y="460" text-anchor="middle" font-size="10" fill="#475569">Manager 自动分配任务给 Worker</text>
+
+  <!-- kickoff label -->
+  <text x="380" y="495" text-anchor="middle" font-size="11" fill="#94a3b8">crew.kickoff() 启动执行 | 角色扮演驱动协作 | ~20行代码搭建</text>
+
+  <defs>
+    <marker id="arw3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8"/>
+    </marker>
+  </defs>
+</svg>

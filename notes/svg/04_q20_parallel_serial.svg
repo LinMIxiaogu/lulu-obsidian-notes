@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 310" font-family="'Segoe UI','Microsoft YaHei',system-ui,sans-serif">
+  <rect width="560" height="310" fill="#ffffff" rx="12" stroke="#d1d5db"/>
+
+  <text x="280" y="28" text-anchor="middle" font-size="18" font-weight="bold" fill="#1e293b">并行 vs 串行工具调用时序</text>
+
+  <!-- 分隔线 -->
+  <line x1="280" y1="40" x2="280" y2="300" stroke="#e2e8f0" stroke-width="1"/>
+
+  <!-- ===== 串行 ===== -->
+  <text x="140" y="56" text-anchor="middle" font-size="14" font-weight="bold" fill="#1e293b">串行调用</text>
+
+  <!-- 时间轴 -->
+  <line x1="30" y1="75" x2="30" y2="265" stroke="#94a3b8" stroke-width="1"/>
+  <text x="24" y="72" text-anchor="middle" font-size="9" fill="#475569">t</text>
+
+  <!-- LLM判断 -->
+  <rect x="50" y="75" width="90" height="26" rx="5" fill="#1e293b"/>
+  <text x="95" y="93" text-anchor="middle" font-size="10" fill="#ffffff">LLM 推理</text>
+
+  <!-- 工具A -->
+  <rect x="50" y="106" width="80" height="26" rx="5" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="90" y="124" text-anchor="middle" font-size="10" fill="#1e293b">工具A 执行</text>
+
+  <!-- 等待结果返回LLM -->
+  <rect x="135" y="106" width="60" height="26" rx="5" fill="#1e293b"/>
+  <text x="165" y="124" text-anchor="middle" font-size="9" fill="#ffffff">LLM</text>
+
+  <!-- 工具B -->
+  <rect x="50" y="137" width="80" height="26" rx="5" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="90" y="155" text-anchor="middle" font-size="10" fill="#1e293b">工具B 执行</text>
+
+  <!-- 再次返回LLM -->
+  <rect x="135" y="137" width="60" height="26" rx="5" fill="#1e293b"/>
+  <text x="165" y="155" text-anchor="middle" font-size="9" fill="#ffffff">LLM</text>
+
+  <!-- 工具C -->
+  <rect x="50" y="168" width="80" height="26" rx="5" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="90" y="186" text-anchor="middle" font-size="10" fill="#1e293b">工具C 执行</text>
+
+  <!-- 最终回答 -->
+  <rect x="50" y="199" width="90" height="26" rx="5" fill="#1e293b"/>
+  <text x="95" y="217" text-anchor="middle" font-size="10" fill="#ffffff">最终回答</text>
+
+  <!-- 总耗时标注 -->
+  <line x1="200" y1="75" x2="200" y2="225" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,2"/>
+  <text x="215" y="155" font-size="10" fill="#475569" transform="rotate(90 215 155)">总耗时 = 累加</text>
+
+  <!-- 串行标注 -->
+  <rect x="40" y="235" width="210" height="28" rx="6" fill="#f8fafc" stroke="#e2e8f0"/>
+  <text x="145" y="254" text-anchor="middle" font-size="10" fill="#475569">延迟 = T(A) + T(B) + T(C) + 3x LLM</text>
+
+  <!-- ===== 并行 ===== -->
+  <text x="420" y="56" text-anchor="middle" font-size="14" font-weight="bold" fill="#1e293b">并行调用</text>
+
+  <!-- 时间轴 -->
+  <line x1="305" y1="75" x2="305" y2="265" stroke="#94a3b8" stroke-width="1"/>
+  <text x="299" y="72" text-anchor="middle" font-size="9" fill="#475569">t</text>
+
+  <!-- LLM判断 -->
+  <rect x="325" y="75" width="90" height="26" rx="5" fill="#1e293b"/>
+  <text x="370" y="93" text-anchor="middle" font-size="10" fill="#ffffff">LLM 推理</text>
+
+  <!-- 并行工具 -->
+  <rect x="325" y="106" width="80" height="26" rx="5" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="365" y="124" text-anchor="middle" font-size="10" fill="#1e293b">工具A 执行</text>
+
+  <rect x="415" y="106" width="80" height="26" rx="5" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="455" y="124" text-anchor="middle" font-size="10" fill="#1e293b">工具B 执行</text>
+
+  <rect x="505" y="106" width="45" height="26" rx="5" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="527" y="124" text-anchor="middle" font-size="9" fill="#1e293b">工具C</text>
+
+  <!-- 同时完成 -->
+  <line x1="325" y1="132" x2="325" y2="145" stroke="#94a3b8" stroke-width="1" stroke-dasharray="2,2"/>
+  <line x1="495" y1="132" x2="495" y2="145" stroke="#94a3b8" stroke-width="1" stroke-dasharray="2,2"/>
+  <line x1="550" y1="132" x2="550" y2="145" stroke="#94a3b8" stroke-width="1" stroke-dasharray="2,2"/>
+
+  <!-- 所有结果一次返回 -->
+  <rect x="325" y="142" width="215" height="26" rx="5" fill="#1e293b"/>
+  <text x="432" y="160" text-anchor="middle" font-size="10" fill="#ffffff">所有结果一次返回 LLM</text>
+
+  <!-- 最终回答 -->
+  <rect x="325" y="173" width="90" height="26" rx="5" fill="#1e293b"/>
+  <text x="370" y="191" text-anchor="middle" font-size="10" fill="#ffffff">最终回答</text>
+
+  <!-- 总耗时标注 -->
+  <line x1="440" y1="75" x2="440" y2="199" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,2"/>
+  <text x="455" y="145" font-size="10" fill="#475569" transform="rotate(90 455 145)">总耗时更短</text>
+
+  <!-- 并行标注 -->
+  <rect x="310" y="210" width="240" height="28" rx="6" fill="#f8fafc" stroke="#e2e8f0"/>
+  <text x="430" y="229" text-anchor="middle" font-size="10" fill="#475569">延迟 = max(T(A),T(B),T(C)) + 1x LLM</text>
+
+  <!-- 底部原则 -->
+  <rect x="30" y="272" width="500" height="28" rx="6" fill="#f8fafc" stroke="#e2e8f0"/>
+  <text x="280" y="291" text-anchor="middle" font-size="11" fill="#475569">原则: 无依赖就并行、有依赖就串行、每个工具要超时、失败要能降级</text>
+
+  <defs>
+    <marker id="a6" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8"/>
+    </marker>
+  </defs>
+</svg>

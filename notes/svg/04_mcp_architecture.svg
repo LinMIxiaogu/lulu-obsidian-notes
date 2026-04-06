@@ -1,0 +1,134 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 650">
+  <style>
+    text { font-family: 'Segoe UI','Microsoft YaHei',system-ui,sans-serif; }
+  </style>
+
+  <!-- 背景 -->
+  <rect x="0" y="0" width="1100" height="650" rx="12" fill="#ffffff" stroke="#d1d5db" stroke-width="1.5"/>
+
+  <!-- 标题：MCP 核心块 -->
+  <rect x="370" y="20" width="360" height="44" rx="8" fill="#1e293b"/>
+  <text x="550" y="48" text-anchor="middle" fill="#ffffff" font-size="18" font-weight="bold">MCP (Model Context Protocol)</text>
+
+  <!-- ===== Host 层 ===== -->
+  <rect x="60" y="90" width="980" height="120" rx="10" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.2"/>
+  <text x="80" y="112" fill="#475569" font-size="13" font-weight="bold">Host 层</text>
+
+  <!-- Host: Claude Desktop -->
+  <rect x="100" y="125" width="260" height="42" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="230" y="150" text-anchor="middle" fill="#1e293b" font-size="13" font-weight="bold">Claude Desktop / IDE</text>
+
+  <!-- MCP Client 1 -->
+  <rect x="420" y="120" width="160" height="36" rx="6" fill="#1e293b"/>
+  <text x="500" y="143" text-anchor="middle" fill="#ffffff" font-size="12">MCP Client A</text>
+
+  <!-- MCP Client 2 -->
+  <rect x="620" y="120" width="160" height="36" rx="6" fill="#1e293b"/>
+  <text x="700" y="143" text-anchor="middle" fill="#ffffff" font-size="12">MCP Client B</text>
+
+  <!-- MCP Client 3 -->
+  <rect x="820" y="120" width="160" height="36" rx="6" fill="#1e293b"/>
+  <text x="900" y="143" text-anchor="middle" fill="#ffffff" font-size="12">MCP Client C</text>
+
+  <!-- 说明 Host 包含多个 Client -->
+  <text x="100" y="193" fill="#475569" font-size="11">每个 Host 应用内可创建多个 MCP Client，每个 Client 与一个 Server 建立 1:1 连接</text>
+
+  <!-- ===== Transport 层 ===== -->
+  <rect x="60" y="230" width="980" height="60" rx="10" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.2"/>
+  <text x="80" y="252" fill="#475569" font-size="13" font-weight="bold">Transport 层</text>
+
+  <rect x="260" y="245" width="180" height="32" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="350" y="266" text-anchor="middle" fill="#1e293b" font-size="12">stdio（本地进程）</text>
+
+  <rect x="480" y="245" width="180" height="32" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="570" y="266" text-anchor="middle" fill="#1e293b" font-size="12">SSE + HTTP（远程）</text>
+
+  <rect x="700" y="245" width="220" height="32" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="810" y="266" text-anchor="middle" fill="#1e293b" font-size="12">Streamable HTTP（新增）</text>
+
+  <!-- 连接线：Client → Transport -->
+  <line x1="500" y1="156" x2="500" y2="230" stroke="#94a3b8" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <line x1="700" y1="156" x2="700" y2="230" stroke="#94a3b8" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <line x1="900" y1="156" x2="900" y2="230" stroke="#94a3b8" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+  <!-- 箭头定义 -->
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#94a3b8"/>
+    </marker>
+    <marker id="arrow-dash" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#94a3b8"/>
+    </marker>
+  </defs>
+
+  <!-- ===== Server 层 ===== -->
+  <rect x="60" y="310" width="980" height="200" rx="10" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.2"/>
+  <text x="80" y="332" fill="#475569" font-size="13" font-weight="bold">Server 层</text>
+
+  <!-- 连接线：Transport → Server -->
+  <line x1="500" y1="290" x2="230" y2="345" stroke="#94a3b8" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <line x1="700" y1="290" x2="550" y2="345" stroke="#94a3b8" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <line x1="900" y1="290" x2="880" y2="345" stroke="#94a3b8" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+  <!-- Server 1: 文件系统 -->
+  <rect x="100" y="345" width="230" height="38" rx="6" fill="#1e293b"/>
+  <text x="215" y="369" text-anchor="middle" fill="#ffffff" font-size="13">MCP Server: 文件系统</text>
+  <!-- 原语 -->
+  <rect x="100" y="393" width="70" height="28" rx="4" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="135" y="411" text-anchor="middle" fill="#1e293b" font-size="11">Tools</text>
+  <rect x="180" y="393" width="70" height="28" rx="4" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="215" y="411" text-anchor="middle" fill="#1e293b" font-size="11">Resources</text>
+  <rect x="260" y="393" width="70" height="28" rx="4" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="295" y="411" text-anchor="middle" fill="#1e293b" font-size="11">Prompts</text>
+
+  <!-- Server 2: 数据库 -->
+  <rect x="370" y="345" width="230" height="38" rx="6" fill="#1e293b"/>
+  <text x="485" y="369" text-anchor="middle" fill="#ffffff" font-size="13">MCP Server: 数据库</text>
+  <rect x="370" y="393" width="70" height="28" rx="4" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="405" y="411" text-anchor="middle" fill="#1e293b" font-size="11">Tools</text>
+  <rect x="450" y="393" width="70" height="28" rx="4" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="485" y="411" text-anchor="middle" fill="#1e293b" font-size="11">Resources</text>
+  <rect x="530" y="393" width="70" height="28" rx="4" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="565" y="411" text-anchor="middle" fill="#1e293b" font-size="11">Prompts</text>
+
+  <!-- Server 3: 搜索/API -->
+  <rect x="640" y="345" width="230" height="38" rx="6" fill="#1e293b"/>
+  <text x="755" y="369" text-anchor="middle" fill="#ffffff" font-size="13">MCP Server: Web/API</text>
+  <rect x="640" y="393" width="70" height="28" rx="4" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="675" y="411" text-anchor="middle" fill="#1e293b" font-size="11">Tools</text>
+  <rect x="720" y="393" width="70" height="28" rx="4" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="755" y="411" text-anchor="middle" fill="#1e293b" font-size="11">Resources</text>
+  <rect x="800" y="393" width="70" height="28" rx="4" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="835" y="411" text-anchor="middle" fill="#1e293b" font-size="11">Prompts</text>
+
+  <!-- 原语说明 -->
+  <text x="100" y="440" fill="#475569" font-size="11">Tools: 模型可调用的函数（搜索、CRUD等）</text>
+  <text x="100" y="456" fill="#475569" font-size="11">Resources: 可读取的数据源（文件、DB 记录）</text>
+  <text x="100" y="472" fill="#475569" font-size="11">Prompts: 预置的提示模板（可参数化复用）</text>
+
+  <!-- 右侧：与 Function Calling 关系（虚线标注框） -->
+  <rect x="600" y="435" width="420" height="68" rx="6" fill="#f8fafc" stroke="#94a3b8" stroke-dasharray="6,3"/>
+  <text x="615" y="455" fill="#475569" font-size="12" font-weight="bold">MCP 与 Function Calling 的关系</text>
+  <text x="615" y="472" fill="#475569" font-size="11">Function Calling 是 LLM 厂商私有的工具调用能力</text>
+  <text x="615" y="488" fill="#475569" font-size="11">MCP 是标准化协议，在 Function Calling 之上封装通用接口</text>
+
+  <!-- ===== 底部标注 ===== -->
+  <rect x="60" y="525" width="980" height="110" rx="10" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.2"/>
+  <text x="80" y="548" fill="#475569" font-size="13" font-weight="bold">MCP vs Function Calling 关键区别</text>
+
+  <!-- 三列对比 -->
+  <rect x="80" y="558" width="290" height="62" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="225" y="578" text-anchor="middle" fill="#1e293b" font-size="12" font-weight="bold">标准化协议</text>
+  <text x="225" y="596" text-anchor="middle" fill="#475569" font-size="11">统一接口规范，不绑定特定 LLM</text>
+  <text x="225" y="611" text-anchor="middle" fill="#475569" font-size="11">JSON-RPC 2.0 通信</text>
+
+  <rect x="400" y="558" width="290" height="62" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="545" y="578" text-anchor="middle" fill="#1e293b" font-size="12" font-weight="bold">跨模型兼容</text>
+  <text x="545" y="596" text-anchor="middle" fill="#475569" font-size="11">同一 Server 可被 Claude/GPT/Gemini 调用</text>
+  <text x="545" y="611" text-anchor="middle" fill="#475569" font-size="11">FC 仅限各自模型生态</text>
+
+  <rect x="720" y="558" width="300" height="62" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="870" y="578" text-anchor="middle" fill="#1e293b" font-size="12" font-weight="bold">Server 生态</text>
+  <text x="870" y="596" text-anchor="middle" fill="#475569" font-size="11">社区共建可复用的 Server 包</text>
+  <text x="870" y="611" text-anchor="middle" fill="#475569" font-size="11">一次开发，多处接入</text>
+</svg>

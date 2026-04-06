@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 580 340" font-family="'Segoe UI','Microsoft YaHei',system-ui,sans-serif">
+  <!-- 背景 -->
+  <rect width="580" height="340" fill="#ffffff" rx="12" stroke="#d1d5db"/>
+
+  <!-- 标题 -->
+  <text x="290" y="30" text-anchor="middle" font-size="18" font-weight="bold" fill="#1e293b">Parent Document Retriever（小块检索 → 大块返回）</text>
+
+  <!-- 原始文档 -->
+  <rect x="30" y="55" width="120" height="40" rx="8" fill="#1e293b"/>
+  <text x="90" y="80" text-anchor="middle" font-size="13" fill="#ffffff">原始文档</text>
+
+  <!-- 箭头 -->
+  <line x1="150" y1="75" x2="185" y2="75" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Parent Chunks -->
+  <rect x="190" y="50" width="170" height="50" rx="8" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="275" y="72" text-anchor="middle" font-size="13" fill="#1e293b" font-weight="bold">Parent Chunks</text>
+  <text x="275" y="90" text-anchor="middle" font-size="11" fill="#475569">大块（如 2000 tokens）</text>
+
+  <!-- 箭头到child -->
+  <line x1="360" y1="75" x2="395" y2="75" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Child Chunks -->
+  <rect x="400" y="50" width="150" height="50" rx="8" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="475" y="72" text-anchor="middle" font-size="13" fill="#1e293b" font-weight="bold">Child Chunks</text>
+  <text x="475" y="90" text-anchor="middle" font-size="11" fill="#475569">小块（如 200 tokens）</text>
+
+  <!-- 分割线 -->
+  <line x1="30" y1="120" x2="550" y2="120" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="6,3"/>
+
+  <!-- 检索阶段 -->
+  <text x="290" y="145" text-anchor="middle" font-size="14" font-weight="bold" fill="#1e293b">检索流程</text>
+
+  <!-- Query -->
+  <rect x="30" y="165" width="100" height="36" rx="8" fill="#1e293b"/>
+  <text x="80" y="188" text-anchor="middle" font-size="13" fill="#ffffff">用户 Query</text>
+
+  <!-- 箭头 -->
+  <line x1="130" y1="183" x2="165" y2="183" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Embedding匹配 -->
+  <rect x="170" y="165" width="120" height="36" rx="8" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="230" y="188" text-anchor="middle" font-size="12" fill="#1e293b">Embedding 匹配</text>
+
+  <!-- 箭头 -->
+  <line x1="290" y1="183" x2="325" y2="183" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- 命中小块 -->
+  <rect x="330" y="160" width="100" height="46" rx="8" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="380" y="180" text-anchor="middle" font-size="12" fill="#1e293b" font-weight="bold">命中小块</text>
+  <text x="380" y="196" text-anchor="middle" font-size="11" fill="#475569">精确匹配</text>
+
+  <!-- 箭头 -->
+  <line x1="430" y1="183" x2="455" y2="183" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- 返回大块 -->
+  <rect x="460" y="160" width="100" height="46" rx="8" fill="#1e293b"/>
+  <text x="510" y="180" text-anchor="middle" font-size="12" fill="#ffffff" font-weight="bold">返回大块</text>
+  <text x="510" y="196" text-anchor="middle" font-size="11" fill="#e2e8f0">上下文完整</text>
+
+  <!-- 映射关系标注 -->
+  <rect x="345" y="220" width="200" height="28" rx="6" fill="#f8fafc" stroke="#e2e8f0"/>
+  <text x="445" y="239" text-anchor="middle" font-size="11" fill="#475569">child → parent 映射关系</text>
+
+  <!-- 分割线 -->
+  <line x1="30" y1="260" x2="550" y2="260" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="6,3"/>
+
+  <!-- 对比 -->
+  <text x="290" y="282" text-anchor="middle" font-size="13" font-weight="bold" fill="#1e293b">核心优势：解决"块太小丢上下文"与"块太大匹配不精确"的矛盾</text>
+
+  <!-- 两种变体 -->
+  <rect x="40" y="295" width="230" height="32" rx="6" fill="#f8fafc" stroke="#e2e8f0"/>
+  <text x="155" y="316" text-anchor="middle" font-size="11" fill="#475569">Sentence Window: 句子级检索 + 前后扩展</text>
+
+  <rect x="290" y="295" width="260" height="32" rx="6" fill="#f8fafc" stroke="#e2e8f0"/>
+  <text x="420" y="316" text-anchor="middle" font-size="11" fill="#475569">Small-to-Big: 小粒度定位 → 大粒度上下文返回</text>
+
+  <!-- 箭头标记 -->
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8"/>
+    </marker>
+  </defs>
+</svg>
