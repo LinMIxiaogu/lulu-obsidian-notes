@@ -39,30 +39,18 @@
             "id": "e86d162308a0bbc7",
             "type": "leaf",
             "state": {
-              "type": "image",
-              "state": {
-                "file": "数据库/images/Pasted image 20260406132054.png"
-              },
-              "icon": "lucide-image",
-              "title": "Pasted image 20260406132054"
-            }
-          },
-          {
-            "id": "b8f96838dd395b8b",
-            "type": "leaf",
-            "state": {
               "type": "markdown",
               "state": {
-                "file": "AI/DeerFlow.md",
-                "mode": "preview",
+                "file": "算法/LLM相关核心代码/算法/模型结构与注意力机制.md",
+                "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "DeerFlow"
+              "title": "模型结构与注意力机制"
             }
           }
         ],
-        "currentTab": 3
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -197,13 +185,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "AI/DeerFlow.md",
+                "file": "算法/LLM相关核心代码/算法/模型结构与注意力机制.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "DeerFlow 的大纲"
+              "title": "模型结构与注意力机制 的大纲"
             }
           },
           {
@@ -231,7 +219,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 816.5
+    "width": 426.5
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -247,54 +235,53 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "b8f96838dd395b8b",
+  "active": "e86d162308a0bbc7",
   "lastOpenFiles": [
-    "AI/hippoRAG 1.md",
-    "AI/hippoRAG 1 1.md",
-    "notes/10_场景系统设计题.md",
-    "notes/01_LLM基础原理.md",
-    "OTA行业AI agent调研/OTA 行业 AI Agent 深度调研报告.md",
-    "notes/svg/10_q7_demo_to_prod.svg",
-    "notes/svg/10_q6_agent_platform.svg",
-    "notes/svg/10_q4_code_agent.svg",
-    "notes/svg/10_q3_text2sql.svg",
-    "notes/svg/10_q2_rag_agent.svg",
-    "notes/svg/10_multi_agent_collab.svg",
-    "notes/svg/10_customer_service_agent.svg",
-    "notes/svg/09_security_defense.svg",
-    "notes/svg/08_agent_engineering.svg",
-    "notes/svg/07_q17_crewai_architecture.svg",
-    "notes/svg",
-    "notes/diagrams",
-    "notes/svg.7z",
-    "notes/09_Agent评估与优化.md",
-    "notes/08_工程实践.md",
-    "notes/07_LangChain_LangGraph_LlamaIndex框架实战.md",
-    "notes/06_意图识别与任务路由.md",
-    "notes/05_记忆与上下文管理.md",
-    "notes/04_Agent架构与设计模式.md",
-    "notes/03_RAG系统设计与优化.md",
-    "notes/02_Prompt工程.md",
-    "notes",
-    "note/svg.7z",
-    "note/10_场景系统设计题.md",
-    "note/09_Agent评估与优化.md",
-    "note/08_工程实践.md",
-    "note/07_LangChain_LangGraph_LlamaIndex框架实战.md",
-    "note/06_意图识别与任务路由.md",
-    "note/05_记忆与上下文管理.md",
-    "note/04_Agent架构与设计模式.md",
-    "note/03_RAG系统设计与优化.md",
-    "note/02_Prompt工程.md",
-    "note/01_LLM基础原理.md",
-    "note",
-    "AI/hippoRAG.md",
+    "算法/LLM相关核心代码/目录索引.md",
+    "算法/LLM相关核心代码/算法/采样策略.md",
+    "算法/LLM相关核心代码/算法",
+    "算法/LLM相关核心代码/算法/优化与微调.md",
+    "算法/LLM相关核心代码/算法/模型结构与注意力机制.md",
+    "算法/LLM场景核心代码.md",
+    "数据库/images/Pasted image 20260406132054.png",
+    "算法/LLM相关核心代码/5. Python并发工程（Asyncio限流调用）.md",
+    "算法/LLM相关核心代码/算法/Python并发工程.md",
+    "算法/LLM相关核心代码/算法/RAG关键链路.md",
+    "算法/LLM相关核心代码/4. 优化与微调（LoRA）.md",
+    "算法/LLM相关核心代码/3. RAG关键链路（Cosine Similarity）.md",
+    "算法/LLM相关核心代码/2. 采样策略（Top-P Sampling）.md",
+    "算法/LLM相关核心代码/1. 模型结构与注意力机制（Self-Attention）.md",
     "AI/minGPT.pdf",
-    "AI/CS336-A2-A5-分享.md",
-    "AI/DeerFlow 1.md",
-    "AI/附件/Topic-Sensitive PageRank 1.pdf",
-    "AI/附件/From RAG to Memory.pdf",
-    "AI/附件/Topic-Sensitive PageRank.pdf",
+    "AI/lora微调cogview4模型实操（服务器）.pdf",
+    "AI/DeerFlow-字节开源.md",
+    "python-高频20题.md",
+    "AI/论文/AI智能体分层记忆.md",
+    "AI/附件/2025.emnlp-main.1318.pdf",
+    "算法/LLM相关核心代码/自注意力.md",
+    "算法/LLM相关核心代码/未命名.md",
+    "算法/LLM相关核心代码",
+    "算法/LLM相关手撕/答案.md",
+    "AI/大模型常见面试题.pdf",
+    "算法/LLM相关手撕",
+    "AI/大模型常见面试题 1.docx",
+    "AI/大模型常见面试题.docx",
+    "简历/简历新编辑.docx",
+    "AI/大模型常见面试题.md",
+    "LLM学习/02_Prompt工程.md",
+    "AI/如何写prompt.md",
+    "AI/如何写prompt 1.md",
+    "LLM学习/01_LLM基础原理.md",
+    "AI/hippoRAG 1 1.md",
+    "AI/论文/hippoRAG 1.md",
+    "LLM学习/svg/10_q7_demo_to_prod.svg",
+    "LLM学习/svg/10_q6_agent_platform.svg",
+    "LLM学习/svg/10_q4_code_agent.svg",
+    "LLM学习/svg/10_q3_text2sql.svg",
+    "LLM学习/svg/10_q2_rag_agent.svg",
+    "LLM学习/svg/10_multi_agent_collab.svg",
+    "LLM学习/svg/10_customer_service_agent.svg",
+    "LLM学习/svg/09_security_defense.svg",
+    "LLM学习/svg/08_agent_engineering.svg",
     "未命名 4.canvas",
     "未命名.canvas",
     "未命名 1.canvas",
