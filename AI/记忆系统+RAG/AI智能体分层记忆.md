@@ -1,5 +1,6 @@
 # MemoryOS of AI Agent
 参考资料：[[2025.emnlp-main.1318.pdf]]
+github :  https://github.com/BAI-LAB/MemoryOS.git
 
 > [!abstract]
 > MemoryOS 是一个受操作系统内存管理启发的 AI 智能体分层记忆框架。它通过 `Storage`、`Updating`、`Retrieval`、`Response Generation` 四个模块，统一管理短期、中期和长期记忆，以提升长对话中的连贯性、历史信息利用能力与个性化适配能力。

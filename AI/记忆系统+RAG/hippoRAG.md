@@ -1,3 +1,4 @@
+github : https://github.com/OSU-NLP-Group/HippoRAG.git
 ## 一、RAG 的核心价值与现状痛点
 
 - 定义 RAG：用 “外部检索 + 模型生成” 让大模型不用重新训练也能获得最新、最准确的知识，是现在企业里最常用的大模型增强方案。

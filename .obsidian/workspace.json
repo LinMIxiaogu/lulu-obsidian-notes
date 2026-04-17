@@ -27,12 +27,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "算法/LLM相关核心代码/算法/RAG关键链路.md",
-                "mode": "preview",
+                "file": "项目/专辑封面生成/专辑封面生成.md",
+                "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "RAG关键链路"
+              "title": "专辑封面生成"
             }
           }
         ],
@@ -93,7 +93,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 338.5110321044922
+    "width": 320.51103591918945
   },
   "right": {
     "id": "5c9bf151e9696823",
@@ -152,13 +152,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "算法/LLM相关核心代码/算法/RAG关键链路.md",
+                "file": "项目/专辑封面生成/专辑封面生成.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "RAG关键链路 的大纲"
+              "title": "专辑封面生成 的大纲"
             }
           },
           {
@@ -205,7 +205,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 866.5
+    "width": 564.5
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -223,43 +223,44 @@
   },
   "active": "e86d162308a0bbc7",
   "lastOpenFiles": [
-    "算法/LLM相关核心代码/算法/Python并发工程.md",
-    "算法/LLM相关核心代码/算法/优化与微调.md",
-    "算法/LLM相关核心代码/算法/模型结构与注意力机制.md",
-    "未命名.canvas",
-    "开发语言",
-    "2026-04-13.md",
-    "OTA行业AI agent调研/OTA 行业 AI Agent 深度调研报告.md",
-    "AI账号购买/claude code会员开通.md",
-    "AI/AI-coding.md",
-    "模型训练、微调/Lora 微调生图模型",
-    "AI/大模型常见面试题.pdf",
+    "开发语言/JAVA/集合框架.md",
+    "开发语言/JAVA/Redis与中间件.md",
+    "开发语言/JAVA/MySQL深入.md",
+    "开发语言/JAVA/JVM内存与GC.md",
+    "开发语言/JAVA/Java基础.md",
+    "开发语言/JAVA/IO与NIO.md",
     "模型训练、微调/Lora 微调生图模型/lora微调cogview4模型实操（服务器）.pdf",
-    "开发语言/JAVA/Java面试题库整理/02-Java并发与JUC.md",
-    "开发语言/JAVA/Java面试题库整理/01-Java基础语法与面向对象.md",
-    "开发语言/JAVA/Java面试题库整理/00-Java面试题库索引.md",
-    "开发语言/JAVA/Java面试题库整理/08-设计模式.md",
-    "开发语言/JAVA/Java面试题库整理/07-Redis与缓存.md",
-    "开发语言/JAVA/Java面试题库整理/06-Spring、Spring Boot 与 MyBatis.md",
-    "开发语言/JAVA/Java面试题库整理/05-计算机基础与MySQL.md",
-    "开发语言/JAVA/Java面试题库整理/04-JVM与内存模型.md",
-    "开发语言/JAVA/Java面试题库整理/03-Java集合、IO与网络.md",
-    "开发语言/JAVA/Java面试题库整理",
-    "开发语言/JAVA",
-    "AI/DeerFlow-字节开源.md",
-    "AI/CS336-A2-A5-分享.md",
-    "AI/论文/AI智能体分层记忆.md",
-    "AI/论文/mem0.pdf",
-    "AI/论文/mem0.pdf.crdownload",
-    "AI/论文/hippoRAG 1.md",
-    "项目/行程规划/01-架构与工作流.md",
+    "模型训练、微调/Lora 微调生图模型/lora微调cogview4-6b.md",
+    "模型训练、微调/bert意图识别/BERT意图识别-面试准备.md",
+    "JAVA/Java面试题库整理/01-Java基础语法与面向对象.md",
+    "JAVA/Java面试题库整理/00-Java面试题库索引.md",
+    "AI/minGPT.pdf",
+    "AI/CS336-A1-Transformer分享.pdf",
+    "AI/AI-coding.md",
+    "AI/大模型常见题.pdf",
+    "项目/TOMO酒店比价-GUI Agent/暂停技术流转图.md",
+    "项目/Agent.md",
+    "项目/TOMO酒店比价-GUI Agent/项目细节.md",
+    "项目/TOMO酒店比价-GUI Agent/项目描述.md",
+    "项目/TOMO酒店比价-GUI Agent/流程架构图.md",
+    "项目/TOMO酒店比价-GUI Agent/技术架构图.md",
+    "项目/TOMO酒店比价-GUI Agent/豆包手机助手功能及影响分析( 来源：cg老板发言).md",
+    "项目/images/Pasted image 20260406141306.png",
+    "项目/专辑封面生成/专辑封面生成.md",
+    "项目/行程规划/01-项目描述.md",
+    "项目/行程规划/00-项目概览.md",
+    "项目/行程规划/06-面试介绍说辞与追问.md",
+    "项目/行程规划/07-高频追问深度解析.md",
     "项目/行程规划/02-核心功能模块.md",
     "项目/行程规划/04-关键技术点.md",
     "项目/行程规划/05-面试重点问答.md",
-    "项目/行程规划/06-面试介绍说辞与追问.md",
-    "项目/行程规划/07-高频追问深度解析.md",
-    "项目/bert/意图识别sft.md.tmp.6240.1776071453212",
-    "项目/bert/意图识别sft.md.tmp.6240.1776070840325",
+    "开发语言/JAVA/分布式与微服务.md.tmp.40752.1776408985007",
+    "开发语言/JAVA/操作系统.md.tmp.40752.1776408488572",
+    "开发语言/JAVA/计算机网络.md.tmp.40752.1776401672093",
+    "开发语言/JAVA/MySQL深入.md.tmp.40752.1776401240246",
+    "开发语言/JAVA/Redis与中间件.md.tmp.35228.1776397688084",
+    "开发语言/JAVA/Spring框架.md.tmp.35228.1776394332614",
+    "未命名.canvas",
     "数据库/images/Pasted image 20260406132054.png",
     "LLM学习/svg/10_q7_demo_to_prod.svg",
     "LLM学习/svg/10_q6_agent_platform.svg",
@@ -269,7 +270,6 @@
     "LLM学习/svg/10_multi_agent_collab.svg",
     "LLM学习/svg/10_customer_service_agent.svg",
     "LLM学习/svg/09_security_defense.svg",
-    "LLM学习/svg/08_agent_engineering.svg",
     "未命名 4.canvas",
     "未命名 1.canvas",
     "未命名 3.canvas",
