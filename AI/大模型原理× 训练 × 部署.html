@@ -1,0 +1,1615 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>大模型原理 × 训练 × 部署 · AI应用开发岗精讲</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,900;1,9..144,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper: #faf7f2;
+  --paper2: #f4f0e8;
+  --paper3: #ede8dc;
+  --ink: #1a1612;
+  --ink2: #3d3830;
+  --ink3: #6b6356;
+  --ink4: #9c9285;
+  --rule: #d8d0c4;
+  --rule2: #e8e2d8;
+
+  --red:    #c0392b;
+  --red-bg: #fdf0ee;
+  --red-bd: #f0b8b2;
+
+  --blue:    #1a5fa8;
+  --blue-bg: #eef4fc;
+  --blue-bd: #b0ccea;
+
+  --green:    #1a7a4a;
+  --green-bg: #eef8f2;
+  --green-bd: #a0d4b8;
+
+  --amber:    #b06000;
+  --amber-bg: #fdf6e8;
+  --amber-bd: #e8c878;
+
+  --purple:    #6b35a8;
+  --purple-bg: #f4eefb;
+  --purple-bd: #c8a8e8;
+
+  --teal:    #1a7a7a;
+  --teal-bg: #eef8f8;
+  --teal-bd: #a0d4d4;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Lora', Georgia, serif;
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.85;
+  font-size: 15px;
+}
+
+/* ── TEXTURE ── */
+body::before {
+  content:'';
+  position: fixed; inset:0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+  pointer-events:none; z-index:0;
+}
+
+/* ── HERO ── */
+.hero {
+  position: relative;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 72px 40px 64px;
+  overflow: hidden;
+  z-index:1;
+}
+
+.hero-lines {
+  position: absolute; inset:0;
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255,255,255,0.04) 40px),
+    repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(255,255,255,0.04) 40px);
+  pointer-events:none;
+}
+
+.hero-accent {
+  position: absolute;
+  right: -80px; top: -80px;
+  width: 400px; height: 400px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(180,120,60,0.18) 0%, transparent 65%);
+}
+
+.hero-inner {
+  position: relative;
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.hero-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: rgba(255,255,255,0.45);
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
+
+.hero h1 {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(32px, 5vw, 58px);
+  font-weight: 900;
+  line-height: 1.1;
+  margin-bottom: 18px;
+  color: #faf7f2;
+}
+
+.hero h1 em {
+  font-style: italic;
+  font-weight: 300;
+  color: #d4a86a;
+}
+
+.hero-desc {
+  font-size: 15px;
+  color: rgba(255,255,255,0.55);
+  max-width: 520px;
+  line-height: 1.7;
+}
+
+.hero-modules {
+  display: flex;
+  gap: 10px;
+  margin-top: 32px;
+  flex-wrap: wrap;
+}
+
+.hero-mod {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  padding: 5px 14px;
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 3px;
+  color: rgba(255,255,255,0.6);
+  letter-spacing: 1px;
+}
+
+/* ── SIDEBAR NAV ── */
+.page-wrap {
+  display: flex;
+  align-items: flex-start;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  position: relative; z-index:1;
+}
+
+.sidebar {
+  position: sticky;
+  top: 32px;
+  width: 192px;
+  flex-shrink: 0;
+  margin-right: 52px;
+  padding: 28px 0;
+  align-self: flex-start;
+}
+
+.sidebar-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 3px;
+  color: var(--ink4);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  padding-left: 14px;
+}
+
+.sidebar-list {
+  list-style: none;
+  padding: 0; margin: 0;
+}
+
+.sidebar-list li { margin: 2px 0; }
+
+.nav-item {
+  display: block;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11.5px;
+  padding: 7px 14px;
+  color: var(--ink4);
+  text-decoration: none;
+  border-left: 2px solid transparent;
+  border-radius: 0 4px 4px 0;
+  transition: color 0.2s, background 0.2s, border-color 0.2s;
+  letter-spacing: 0.3px;
+  line-height: 1.4;
+}
+
+.nav-item:hover {
+  color: var(--ink2);
+  background: var(--paper2);
+  border-left-color: var(--rule);
+}
+
+.nav-item.active {
+  color: var(--ink);
+  background: var(--paper3);
+  border-left-color: var(--ink);
+  font-weight: 600;
+}
+
+/* ── MAIN ── */
+.main {
+  flex: 1;
+  min-width: 0;
+  padding: 0 0 96px;
+  position: relative; z-index:1;
+}
+
+@media (max-width: 860px) {
+  .sidebar { display: none; }
+  .page-wrap { display: block; }
+  .main { padding: 0 0 96px; }
+}
+
+/* ── SECTION ── */
+.section {
+  margin-top: 80px;
+  opacity: 1;
+  transform: none;
+  animation: secFadeUp 0.55s ease both;
+}
+
+@keyframes secFadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* JS 增强：仅在 IntersectionObserver 可用时启用延迟触发 */
+.section.js-hidden {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: none;
+  transition: opacity 0.55s ease, transform 0.55s ease;
+}
+.section.js-hidden.visible { opacity:1; transform:none; }
+
+.sec-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid var(--ink);
+  margin-bottom: 36px;
+}
+
+.sec-num {
+  font-family: 'Fraunces', serif;
+  font-size: 48px;
+  font-weight: 900;
+  line-height: 1;
+  color: var(--paper3);
+  -webkit-text-stroke: 1.5px var(--ink);
+  flex-shrink: 0;
+  margin-top: -4px;
+}
+
+.sec-meta { flex:1; }
+
+.sec-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 3px;
+  color: var(--ink4);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.sec-title {
+  font-family: 'Fraunces', serif;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.2;
+}
+
+.sec-sub {
+  font-size: 13px;
+  color: var(--ink3);
+  margin-top: 4px;
+  font-style: italic;
+}
+
+/* ── PROSE ── */
+.prose {
+  font-size: 14.5px;
+  color: var(--ink2);
+  line-height: 1.85;
+  margin-bottom: 28px;
+}
+
+/* ── CARDS ── */
+.card-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  margin: 20px 0;
+}
+
+.card {
+  border: 1.5px solid var(--rule);
+  border-radius: 4px;
+  padding: 22px;
+  background: #fff;
+  position: relative;
+  transition: box-shadow 0.2s, border-color 0.2s, transform 0.2s;
+}
+
+.card:hover {
+  box-shadow: 4px 4px 0 var(--ink);
+  border-color: var(--ink);
+  transform: translate(-2px,-2px);
+}
+
+.card-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.card-title {
+  font-family: 'Fraunces', serif;
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: var(--ink);
+}
+
+.card-body {
+  font-size: 13.5px;
+  color: var(--ink3);
+  line-height: 1.75;
+}
+
+.card-body ul { list-style: none; padding: 0; }
+.card-body li { padding: 3px 0 3px 14px; position: relative; }
+.card-body li::before { content: '—'; position:absolute; left:0; color: var(--ink4); font-size:11px; top:5px; }
+
+/* color accents on cards */
+.card.red   { border-top: 3px solid var(--red); }
+.card.blue  { border-top: 3px solid var(--blue); }
+.card.green { border-top: 3px solid var(--green); }
+.card.amber { border-top: 3px solid var(--amber); }
+.card.purple{ border-top: 3px solid var(--purple); }
+.card.teal  { border-top: 3px solid var(--teal); }
+
+.card.red   .card-label { color: var(--red); }
+.card.blue  .card-label { color: var(--blue); }
+.card.green .card-label { color: var(--green); }
+.card.amber .card-label { color: var(--amber); }
+.card.purple .card-label { color: var(--purple); }
+.card.teal  .card-label { color: var(--teal); }
+
+/* ── WIDE CARD ── */
+.wide {
+  border: 1.5px solid var(--rule);
+  border-radius: 4px;
+  padding: 28px 32px;
+  background: #fff;
+  margin: 20px 0;
+  position: relative;
+}
+
+.wide-title {
+  font-family: 'Fraunces', serif;
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 18px;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.wide-title::after {
+  content: '';
+  flex:1;
+  height: 1px;
+  background: var(--rule);
+}
+
+/* ── TABLE ── */
+.table-wrap {
+  overflow-x: auto;
+  margin: 16px 0;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+}
+
+thead {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+th {
+  padding: 10px 14px;
+  text-align: left;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 1px;
+  font-weight: 600;
+}
+
+td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--rule2);
+  color: var(--ink2);
+  vertical-align: top;
+  line-height: 1.6;
+}
+
+tr:nth-child(even) td { background: var(--paper2); }
+tr:last-child td { border-bottom: none; }
+
+/* ── CODE ── */
+.code-block {
+  background: var(--ink);
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 16px 0;
+  font-size: 13px;
+}
+
+.code-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  background: rgba(255,255,255,0.06);
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.code-bar-lang {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.4);
+}
+
+.code-dots { display:flex; gap:5px; }
+.code-dots span { width:9px; height:9px; border-radius:50%; }
+.code-dots span:nth-child(1) { background:#ff5f57; }
+.code-dots span:nth-child(2) { background:#febc2e; }
+.code-dots span:nth-child(3) { background:#28c840; }
+
+.code-content {
+  padding: 18px 20px;
+  font-family: 'IBM Plex Mono', monospace;
+  line-height: 1.9;
+  color: #c9d1d9;
+  white-space: pre;
+  overflow-x: auto;
+}
+
+.tk-k { color: #ff7b72; }
+.tk-s { color: #a5d6ff; }
+.tk-c { color: #6e7681; font-style: italic; }
+.tk-f { color: #d2a8ff; }
+.tk-n { color: #79c0ff; }
+.tk-v { color: #7ee787; }
+.tk-m { color: #ffa657; }
+
+/* ── CALLOUT ── */
+.callout {
+  display: flex;
+  gap: 14px;
+  padding: 16px 20px;
+  border-radius: 3px;
+  margin: 16px 0;
+  font-size: 13.5px;
+  line-height: 1.7;
+  border-left: 3px solid;
+}
+
+.callout-icon { font-size:16px; flex-shrink:0; margin-top:1px; }
+.callout-body { color: var(--ink2); }
+.callout-body strong { color: var(--ink); }
+
+.callout.tip    { background: var(--green-bg); border-color: var(--green); }
+.callout.warn   { background: var(--amber-bg); border-color: var(--amber); }
+.callout.info   { background: var(--blue-bg);  border-color: var(--blue); }
+.callout.exam   { background: var(--purple-bg);border-color: var(--purple); }
+.callout.key    { background: var(--red-bg);   border-color: var(--red); }
+
+/* ── DIAGRAM ── */
+.diagram {
+  background: var(--paper2);
+  border: 1.5px solid var(--rule);
+  border-radius: 4px;
+  padding: 28px 20px;
+  margin: 16px 0;
+  overflow-x: auto;
+}
+
+.d-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 6px 0;
+}
+
+.d-node {
+  padding: 9px 16px;
+  border-radius: 3px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  text-align: center;
+  border: 1.5px solid;
+  min-width: 90px;
+}
+
+.d-node.ink    { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+.d-node.red    { background:var(--red-bg); color:var(--red); border-color:var(--red-bd); }
+.d-node.blue   { background:var(--blue-bg); color:var(--blue); border-color:var(--blue-bd); }
+.d-node.green  { background:var(--green-bg); color:var(--green); border-color:var(--green-bd); }
+.d-node.amber  { background:var(--amber-bg); color:var(--amber); border-color:var(--amber-bd); }
+.d-node.purple { background:var(--purple-bg); color:var(--purple); border-color:var(--purple-bd); }
+.d-node.teal   { background:var(--teal-bg); color:var(--teal); border-color:var(--teal-bd); }
+.d-node.gray   { background:var(--paper3); color:var(--ink3); border-color:var(--rule); }
+
+.d-arrow { color: var(--ink4); font-size:18px; line-height:1; }
+.d-label { font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:var(--ink4); text-align:center; margin-top:6px; letter-spacing:0.5px; }
+
+/* ── PILL / TAG ── */
+.pill {
+  display: inline-block;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  padding: 2px 9px;
+  border-radius: 2px;
+  margin: 1px 2px;
+  vertical-align: middle;
+  border: 1px solid;
+}
+
+.pill.red    { background:var(--red-bg);    color:var(--red);    border-color:var(--red-bd); }
+.pill.blue   { background:var(--blue-bg);   color:var(--blue);   border-color:var(--blue-bd); }
+.pill.green  { background:var(--green-bg);  color:var(--green);  border-color:var(--green-bd); }
+.pill.amber  { background:var(--amber-bg);  color:var(--amber);  border-color:var(--amber-bd); }
+.pill.purple { background:var(--purple-bg); color:var(--purple); border-color:var(--purple-bd); }
+.pill.teal   { background:var(--teal-bg);   color:var(--teal);   border-color:var(--teal-bd); }
+.pill.ink    { background:var(--ink);       color:var(--paper);  border-color:var(--ink); }
+
+/* ── COMPARE 2-col ── */
+.vs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  border: 1.5px solid var(--ink);
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 16px 0;
+}
+
+.vs-side {
+  padding: 20px 22px;
+  font-size: 13.5px;
+}
+
+.vs-side:first-child { border-right: 1.5px solid var(--ink); background: #fff; }
+.vs-side:last-child  { background: var(--paper2); }
+
+.vs-title {
+  font-family: 'Fraunces', serif;
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.vs-body { color: var(--ink2); }
+.vs-body ul { list-style:none; padding:0; }
+.vs-body li { padding: 3px 0 3px 14px; position:relative; }
+.vs-body li::before { content:'›'; position:absolute; left:0; color:var(--ink4); }
+
+/* ── STEP LIST ── */
+.steps { display:flex; flex-direction:column; gap:0; }
+.step  { display:flex; gap:18px; padding-bottom:22px; position:relative; }
+.step:last-child { padding-bottom:0; }
+
+.step-left { display:flex; flex-direction:column; align-items:center; flex-shrink:0; }
+
+.step-dot {
+  width:30px; height:30px; border-radius:50%;
+  border: 2px solid var(--ink);
+  background: var(--paper);
+  display:flex; align-items:center; justify-content:center;
+  font-family:'IBM Plex Mono',monospace; font-size:11px; font-weight:600;
+  color: var(--ink); flex-shrink:0;
+}
+
+.step-line { width:1px; flex:1; background:var(--rule); margin-top:5px; min-height:16px; }
+
+.step-content { flex:1; padding-top:4px; }
+.step-content h4 { font-family:'Fraunces',serif; font-size:14.5px; font-weight:700; margin-bottom:5px; }
+.step-content p  { font-size:13.5px; color:var(--ink3); line-height:1.65; }
+
+/* ── MEMORY GRID ── */
+.mem-grid {
+  display:grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: 0;
+  border: 1.5px solid var(--ink);
+  border-radius:4px;
+  overflow:hidden;
+  margin: 16px 0;
+}
+
+.mem-cell {
+  padding: 16px;
+  border-right: 1px solid var(--rule);
+  text-align:center;
+}
+.mem-cell:last-child { border-right:none; }
+
+.mem-val {
+  font-family:'Fraunces',serif;
+  font-size:26px;
+  font-weight:900;
+  line-height:1;
+  margin-bottom:4px;
+}
+
+.mem-label {
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10px;
+  letter-spacing:1px;
+  color:var(--ink3);
+}
+
+/* ── EXAM BOX ── */
+.exam-grid {
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap:14px;
+  margin:20px 0;
+}
+
+.exam-card {
+  border: 1.5px solid var(--rule);
+  border-radius:4px;
+  overflow:hidden;
+  background:#fff;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.exam-card:hover {
+  box-shadow: 3px 3px 0 var(--ink);
+  transform: translate(-1px,-1px);
+}
+
+.exam-q {
+  background: var(--ink);
+  color: var(--paper);
+  padding: 12px 16px;
+  font-size:13px;
+  line-height:1.5;
+  font-weight:600;
+}
+
+.exam-a {
+  padding: 12px 16px;
+  font-size:12.5px;
+  color: var(--ink2);
+  line-height:1.65;
+  border-top:1px solid var(--rule);
+}
+
+.exam-tag {
+  font-family:'IBM Plex Mono',monospace;
+  font-size:9.5px;
+  letter-spacing:1.5px;
+  color:var(--ink4);
+  text-transform:uppercase;
+  padding: 6px 16px;
+  background: var(--paper2);
+  border-top:1px solid var(--rule);
+}
+
+/* ── FORMULA ── */
+.formula {
+  background: var(--paper2);
+  border: 1.5px solid var(--rule);
+  border-radius:4px;
+  padding:18px 22px;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:13.5px;
+  color:var(--ink);
+  margin:14px 0;
+  overflow-x:auto;
+  white-space:pre;
+  line-height:2;
+}
+
+/* ── DIVIDER ── */
+.divider {
+  border: none;
+  border-top: 1px solid var(--rule);
+  margin: 28px 0;
+}
+
+/* ── FOOTER ── */
+.footer {
+  text-align:center;
+  padding: 48px 24px;
+  border-top: 2px solid var(--ink);
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11px;
+  color:var(--ink4);
+  letter-spacing:1px;
+  position:relative; z-index:1;
+}
+
+/* ── RESPONSIVE ── */
+@media(max-width:640px){
+  .vs { grid-template-columns:1fr; }
+  .vs-side:first-child { border-right:none; border-bottom: 1.5px solid var(--ink); }
+  .mem-grid { grid-template-columns: repeat(2,1fr); }
+  .mem-cell:nth-child(2) { border-right:none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══ HERO ══ -->
+<div class="hero">
+  <div class="hero-lines"></div>
+  <div class="hero-accent"></div>
+  <div class="hero-inner">
+    <div class="hero-eyebrow">AI Application Developer · Interview Handbook Vol.2</div>
+    <h1>大模型<em>原理</em><br>× 训练 × 部署</h1>
+    <p class="hero-desc">从 Transformer 底层机制到 LoRA 微调再到 vLLM 生产部署，按 AI 应用开发岗的考察深度精准精讲。</p>
+    <div class="hero-modules">
+      <span class="hero-mod">01 · 模型基础理论</span>
+      <span class="hero-mod">02 · 微调与对齐</span>
+      <span class="hero-mod">03 · 推理与部署</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══ NAV ══ -->
+<!-- PAGE WRAP -->
+<div class="page-wrap">
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sidebar-title">目录</div>
+  <ul class="sidebar-list">
+    <li><a class="nav-item" href="#theory">01 · 基础理论</a></li>
+    <li><a class="nav-item" href="#finetune">02 · 微调与对齐</a></li>
+    <li><a class="nav-item" href="#deploy">03 · 推理与部署</a></li>
+    <li><a class="nav-item" href="#exam" style="margin-top:10px; color:var(--amber);">⚡ 考点速查</a></li>
+  </ul>
+</nav>
+
+<main class="main">
+
+<!-- ══════════════════════════════════════
+     01  模型基础理论
+══════════════════════════════════════ -->
+<section class="section" id="theory">
+  <div class="sec-header">
+    <div class="sec-num">01</div>
+    <div class="sec-meta">
+      <div class="sec-label">Module One</div>
+      <div class="sec-title">模型基础理论</div>
+      <div class="sec-sub">应用开发岗考察重点：能说清楚原理，而非手推公式</div>
+    </div>
+  </div>
+
+  <p class="prose">AI 应用开发岗不要求推导数学，但面试官会用几个关键问题判断你是否真正理解模型在做什么。核心考点围绕：<strong>注意力机制的直觉理解</strong>、<strong>KV Cache 的工程意义</strong>、<strong>位置编码的演化</strong>三条主线。</p>
+
+  <!-- 1-1 注意力机制 -->
+  <div class="wide">
+    <div class="wide-title">🔍 自注意力机制的本质</div>
+    <p class="prose">自注意力的核心问题是：<strong>序列中每个 token 应该「借鉴」其他哪些 token 的信息，借鉴多少？</strong></p>
+
+    <div class="diagram">
+      <div class="d-row">
+        <div class="d-node ink">输入 token X</div>
+      </div>
+      <div class="d-row">
+        <div class="d-arrow">↙</div><div class="d-arrow">↓</div><div class="d-arrow">↘</div>
+      </div>
+      <div class="d-row">
+        <div class="d-node red">Q = X·W<sub>Q</sub><br><span style="font-size:10px">「我想找什么」</span></div>
+        <div class="d-node blue">K = X·W<sub>K</sub><br><span style="font-size:10px">「我能提供什么」</span></div>
+        <div class="d-node green">V = X·W<sub>V</sub><br><span style="font-size:10px">「我实际携带的信息」</span></div>
+      </div>
+      <div class="d-row"><div class="d-arrow">↓</div></div>
+      <div class="d-row">
+        <div class="d-node amber">Attention = softmax(QK<sup>T</sup> / √d<sub>k</sub>) · V</div>
+      </div>
+      <div class="d-label">Q 和 K 点积 → 相关性打分 → softmax 归一化 → 加权聚合 V</div>
+    </div>
+
+    <div class="card-row">
+      <div class="card red">
+        <div class="card-label">高频考点</div>
+        <div class="card-title">Q 和 K 为何用不同矩阵？</div>
+        <div class="card-body">
+          分离的 W<sub>Q</sub> 和 W<sub>K</sub> 让模型独立学习「查询角色」和「被匹配角色」。若两者共享权重，同一词对自身的注意力永远最高，无法捕捉非对称关系。<br><br>
+          直觉：「苹果」在查询「水果」和查询「手机品牌」时，应与不同 K 产生不同得分。
+        </div>
+      </div>
+      <div class="card blue">
+        <div class="card-label">高频考点</div>
+        <div class="card-title">为何除以 √d<sub>k</sub>？</div>
+        <div class="card-body">
+          点积结果的方差随维度 d<sub>k</sub> 线性增长，维度越大，点积值越大，softmax 进入<strong>梯度饱和区</strong>（输出接近 one-hot），梯度几乎为零。<br><br>
+          除以 √d<sub>k</sub> 将方差稳定为 1，保持 softmax 分布平滑，训练稳定。
+        </div>
+      </div>
+      <div class="card green">
+        <div class="card-label">高频考点</div>
+        <div class="card-title">多头注意力的价值</div>
+        <div class="card-body">
+          单头注意力只能捕捉一种关联模式。多头将 d<sub>model</sub> 拆分为 h 个子空间，每个头独立学习不同关系（如：句法依赖、指代关系、语义相似），最终拼接融合。<br><br>
+          核心增益：<strong>多视角捕捉</strong>，而非单纯算力叠加。
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1-2 KV Cache -->
+  <div class="wide">
+    <div class="wide-title">⚡ KV Cache — 应用层最重要的推理概念</div>
+
+    <p class="prose">KV Cache 是 AI 应用开发岗必考的工程知识点，因为它直接影响你的 API 成本和响应延迟设计。</p>
+
+    <div class="callout info">
+      <div class="callout-icon">📌</div>
+      <div class="callout-body"><strong>本质问题：</strong>自回归生成中，每生成一个新 token，都需要计算它与所有历史 token 的注意力。历史 token 的 K、V 矩阵每次都要重算，产生大量冗余计算。</div>
+    </div>
+
+    <div class="diagram">
+      <div style="display:flex; gap:20px; flex-wrap:wrap; justify-content:center; align-items:stretch;">
+        <div style="flex:1; min-width:220px; background:#fff; border:1.5px solid var(--red-bd); border-radius:4px; padding:18px;">
+          <div style="font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:2px; color:var(--red); margin-bottom:10px;">❌ 无 KV Cache</div>
+          <div style="font-size:13px; color:var(--ink2); line-height:1.7;">
+            生成第 N 个 token 时<br>
+            → 重新计算前 N-1 个 token 的 K、V<br>
+            → 计算量 O(N²)<br>
+            → 长序列推理极慢
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; font-size:22px; color:var(--ink4);">→</div>
+        <div style="flex:1; min-width:220px; background:#fff; border:1.5px solid var(--green-bd); border-radius:4px; padding:18px;">
+          <div style="font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:2px; color:var(--green); margin-bottom:10px;">✅ 有 KV Cache</div>
+          <div style="font-size:13px; color:var(--ink2); line-height:1.7;">
+            生成第 N 个 token 时<br>
+            → 读取缓存中已存的 K、V<br>
+            → 只计算新 token 的 K、V<br>
+            → 计算量 O(N)，速度显著提升
+          </div>
+        </div>
+      </div>
+      <div class="d-label" style="margin-top:14px;">代价：显存占用随序列长度线性增长</div>
+    </div>
+
+    <div class="callout warn">
+      <div class="callout-icon">⚠️</div>
+      <div class="callout-body"><strong>应用开发考点：</strong>KV Cache 的显存公式 = 2 × 层数 × 头数 × 每头维度 × 序列长度 × 批量大小 × 数据类型字节数。这就是为什么长上下文 API 调用贵得多，也是 vLLM 重点优化的对象。</div>
+    </div>
+
+    <div class="card-row">
+      <div class="card amber">
+        <div class="card-label">工程影响</div>
+        <div class="card-title">Prompt Caching 的底层原理</div>
+        <div class="card-body">
+          Anthropic / OpenAI 提供的 Prompt Cache 本质是在服务器端复用静态前缀的 KV Cache。相同 System Prompt 的请求命中缓存后，只需计算新增内容的 K、V，成本可降低 90%。
+        </div>
+      </div>
+      <div class="card purple">
+        <div class="card-label">工程影响</div>
+        <div class="card-title">Context Window 限制的本质</div>
+        <div class="card-body">
+          上下文窗口不只是「能输入多少字」的问题，背后是 KV Cache 的显存上限。128K 上下文意味着需要在显存中维护 128K 个 token 的 K、V 矩阵，这是模型部署成本的核心变量。
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1-3 位置编码 -->
+  <div class="wide">
+    <div class="wide-title">📍 位置编码演化路线</div>
+    <p class="prose">自注意力机制本身是排列无关的（Permutation Invariant）——打乱输入顺序，注意力得分不变。位置编码是为模型注入顺序信息的方式，理解它的演化逻辑比死记公式重要得多。</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>方案</th><th>原理</th><th>优势</th><th>劣势</th><th>代表模型</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="pill blue">正弦余弦 PE</span></td>
+            <td>按维度用不同频率的 sin/cos 函数编码位置，加在 embedding 上</td>
+            <td>无需训练；可外推到训练时未见的长度</td>
+            <td>对相对位置建模间接；长序列效果下降</td>
+            <td>原版 Transformer, BERT</td>
+          </tr>
+          <tr>
+            <td><span class="pill amber">可学习绝对 PE</span></td>
+            <td>每个位置分配一个可训练向量，随模型端到端学习</td>
+            <td>灵活，能拟合数据中的位置模式</td>
+            <td>不能外推，超出训练长度效果崩溃</td>
+            <td>GPT-2, BERT 变体</td>
+          </tr>
+          <tr>
+            <td><span class="pill green">RoPE</span></td>
+            <td>在计算 QK 点积前，对 Q 和 K 按位置做旋转变换，使点积天然包含相对位置</td>
+            <td>相对位置直接体现在注意力分数中；外推性好；显存零额外开销</td>
+            <td>实现略复杂</td>
+            <td>LLaMA, Qwen, DeepSeek</td>
+          </tr>
+          <tr>
+            <td><span class="pill purple">ALiBi</span></td>
+            <td>不修改 embedding，在注意力分数上直接减去与距离成比例的偏置</td>
+            <td>外推性极强；实现极简</td>
+            <td>位置信息编码方式有局限</td>
+            <td>MPT, BLOOM</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout exam">
+      <div class="callout-icon">🎯</div>
+      <div class="callout-body"><strong>面试核心答点：</strong>RoPE 为什么好？因为它让「两个 token 的注意力得分」天然只依赖它们的<strong>相对位置差</strong>，而非各自的绝对位置。这使模型在处理比训练时更长的序列时仍能保持相对位置关系，这就是主流开源模型都选 RoPE 的原因。</div>
+    </div>
+  </div>
+
+  <!-- 1-4 Encoder vs Decoder -->
+  <div class="wide">
+    <div class="wide-title">🏗️ Encoder-only vs Decoder-only — 应用选型逻辑</div>
+
+    <div class="vs">
+      <div class="vs-side">
+        <div class="vs-title" style="color:var(--blue);">Encoder-only <span class="pill blue">BERT 系</span></div>
+        <div class="vs-body">
+          <ul>
+            <li><strong>注意力方向：</strong>双向，每个 token 能看到全句</li>
+            <li><strong>任务形式：</strong>理解 → 分类/相似度/抽取</li>
+            <li><strong>应用场景：</strong>语义搜索、文本分类、意图识别、NER、Reranker</li>
+            <li><strong>Embedding 质量高</strong>，适合做向量化</li>
+          </ul>
+        </div>
+      </div>
+      <div class="vs-side">
+        <div class="vs-title" style="color:var(--red);">Decoder-only <span class="pill red">GPT/LLaMA 系</span></div>
+        <div class="vs-body">
+          <ul>
+            <li><strong>注意力方向：</strong>单向（因果），只看左侧历史</li>
+            <li><strong>任务形式：</strong>生成 → 自回归预测下一个 token</li>
+            <li><strong>应用场景：</strong>对话、代码生成、摘要、RAG 的 Generation 阶段</li>
+            <li><strong>规模效应强</strong>，主流大模型方向</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <div class="callout-icon">💡</div>
+      <div class="callout-body"><strong>应用开发决策：</strong>RAG 的 Embedding 模型用 Encoder-only（如 BGE、E5）；RAG 的 Generator 用 Decoder-only（如 GPT-4o、Claude）。Reranker 也通常基于 Encoder-only 实现 cross-encoder 打分。</div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ══════════════════════════════════════
+     02  微调与对齐
+══════════════════════════════════════ -->
+<section class="section" id="finetune">
+  <div class="sec-header">
+    <div class="sec-num">02</div>
+    <div class="sec-meta">
+      <div class="sec-label">Module Two</div>
+      <div class="sec-title">微调与对齐</div>
+      <div class="sec-sub">应用开发岗考察重点：知道何时选微调、选哪种方案、代价是什么</div>
+    </div>
+  </div>
+
+  <p class="prose">AI 应用开发岗不需要你亲自跑训练，但面试官会考察你的决策判断力：<strong>这个业务场景到底要不要微调？选 LoRA 还是全量？微调后效果变差怎么办？</strong>这些才是核心考点。</p>
+
+  <!-- 要不要微调 -->
+  <div class="wide">
+    <div class="wide-title">🤔 第一问：要不要微调？</div>
+
+    <div class="callout key">
+      <div class="callout-icon">🚨</div>
+      <div class="callout-body"><strong>应用开发最高频考点：</strong>80% 的场景不需要微调。面试官最怕你动不动就说「微调一下就好了」——这暴露了对工程成本的无知。</div>
+    </div>
+
+    <div class="vs">
+      <div class="vs-side">
+        <div class="vs-title" style="color:var(--green);">✅ 应先用 Prompt 工程 / RAG</div>
+        <div class="vs-body">
+          <ul>
+            <li>需要注入最新知识（知识截止问题）</li>
+            <li>需要访问私有数据（安全问题）</li>
+            <li>任务通过 Few-shot 可达到目标效果</li>
+            <li>需求快速迭代，Prompt 更灵活</li>
+            <li>成本敏感，没有 GPU 资源</li>
+          </ul>
+        </div>
+      </div>
+      <div class="vs-side">
+        <div class="vs-title" style="color:var(--red);">🎯 微调有价值的场景</div>
+        <div class="vs-body">
+          <ul>
+            <li>需要固定输出格式/风格（如特定 JSON、专业语气）</li>
+            <li>需要垂直领域专业能力（医疗、法律术语）</li>
+            <li>推理时 Prompt 成本极高，需压缩</li>
+            <li>模型行为一致性要求极高</li>
+            <li>数据量充足（通常 &gt;1000 条高质量样本）</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SFT 方案对比 -->
+  <div class="wide">
+    <div class="wide-title">🛠️ SFT 方案全景：从全量到 LoRA</div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>方案</th><th>原理</th><th>显存需求</th><th>效果</th><th>适用场景</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="pill ink">全参数微调</span></td>
+            <td>更新模型全部参数</td>
+            <td>极高（模型参数 × 约 16 倍）</td>
+            <td>最好</td>
+            <td>数据量大、算力充足、追求极致效果</td>
+          </tr>
+          <tr>
+            <td><span class="pill red">LoRA</span></td>
+            <td>在注意力层旁并联低秩矩阵 A×B，冻结原始权重，只训练 A、B</td>
+            <td>低（仅 A、B 的梯度+优化器状态）</td>
+            <td>接近全量</td>
+            <td>当前主流首选，消费级 GPU 可跑</td>
+          </tr>
+          <tr>
+            <td><span class="pill amber">QLoRA</span></td>
+            <td>将冻结的基础模型量化为 4-bit，再做 LoRA 微调</td>
+            <td>极低（可在单张 24GB 显卡跑 70B 模型）</td>
+            <td>略低于 LoRA</td>
+            <td>显存严重受限时的首选</td>
+          </tr>
+          <tr>
+            <td><span class="pill purple">Prefix Tuning</span></td>
+            <td>在输入前添加可训练的「软提示」向量，模型参数全冻结</td>
+            <td>极低</td>
+            <td>一般</td>
+            <td>多任务场景，每个任务独立 prefix</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="wide" style="background:var(--paper2); border-color:var(--rule);">
+      <div class="wide-title">🔬 LoRA 原理精讲</div>
+      <p class="prose" style="margin-bottom:16px;">核心假设：模型微调时，权重矩阵的变化量 ΔW 是<strong>低秩的</strong>（即真正有效的信息维度远小于矩阵维度）。</p>
+
+      <div class="diagram">
+        <div class="d-row">
+          <div class="d-node gray" style="min-width:130px;">原始权重 W<br><span style="font-size:10px">d×d，冻结不动</span></div>
+          <div style="font-size:24px; color:var(--ink4);">+</div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:4px;">
+            <div class="d-node red" style="min-width:90px;">A<br><span style="font-size:10px">d×r</span></div>
+            <div style="font-size:13px; color:var(--ink4);">×</div>
+            <div class="d-node blue" style="min-width:90px;">B<br><span style="font-size:10px">r×d</span></div>
+          </div>
+          <div class="d-arrow">=</div>
+          <div class="d-node green" style="min-width:130px;">微调后 W'<br><span style="font-size:10px">W + AB (r≪d)</span></div>
+        </div>
+        <div class="d-label">秩 r 通常取 4~64，训练参数量仅为全量的 0.1%~1%</div>
+      </div>
+
+      <div class="card-row" style="margin-top:16px;">
+        <div class="card green">
+          <div class="card-label">推理时如何合并</div>
+          <div class="card-title">Zero Overhead 合并</div>
+          <div class="card-body">推理前可将 ΔW = A×B 直接加回 W，得到新的 W'，无需额外计算。等于零推理成本的个性化模型。</div>
+        </div>
+        <div class="card amber">
+          <div class="card-label">秩 r 的选择</div>
+          <div class="card-title">r 越大效果越好？</div>
+          <div class="card-body">并非如此。r 过大接近全量微调，失去参数高效的意义。实践中从 r=8 或 r=16 开始调，大多数任务 r=64 已足够。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 对齐方法 -->
+  <div class="wide">
+    <div class="wide-title">🎯 对齐方法：SFT → RLHF → DPO</div>
+    <p class="prose">对齐（Alignment）解决的是：<strong>模型能力很强，但输出不符合人类期望</strong>的问题。三种方法的演化逻辑比各自的细节更重要。</p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-left">
+          <div class="step-dot">1</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-content">
+          <h4>SFT（监督微调）— 教模型「正确行为」</h4>
+          <p>提供人工标注的「指令 → 理想回答」对，用交叉熵损失微调。模型学会按指令回复，但无法区分「好回答」和「更好的回答」，且依赖标注质量上限。</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-left">
+          <div class="step-dot">2</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-content">
+          <h4>RLHF（基于人类反馈的强化学习）— 教模型「人类更喜欢什么」</h4>
+          <p>先用人类偏好数据训练奖励模型（RM），再用 PPO 强化学习优化语言模型，最大化 RM 打分，同时约束与原始 SFT 模型的偏差（KL 散度惩罚）。效果好但训练极复杂，需要同时维护 4 个模型。</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-left">
+          <div class="step-dot">3</div>
+        </div>
+        <div class="step-content">
+          <h4>DPO（直接偏好优化）— RLHF 的简化替代</h4>
+          <p>数学上证明可以绕过 RM，直接用「好回答 vs 坏回答」的对比数据优化语言模型。将 RLHF 的 4 模型复杂流程简化为类似 SFT 的单模型训练，同等偏好数据下效果相当甚至更好。目前主流选择。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="table-wrap" style="margin-top:20px;">
+      <table>
+        <thead><tr><th>维度</th><th>RLHF / PPO</th><th>DPO</th></tr></thead>
+        <tbody>
+          <tr><td>训练复杂度</td><td>极高（需要 Actor、Critic、RM、Reference 四个模型）</td><td>低（单模型训练，类似 SFT）</td></tr>
+          <tr><td>数据格式</td><td>需要人类偏好排序 + 奖励模型标注</td><td>只需 (prompt, chosen, rejected) 三元组</td></tr>
+          <tr><td>稳定性</td><td>PPO 超参数敏感，容易崩溃</td><td>训练稳定，工程友好</td></tr>
+          <tr><td>效果</td><td>上限高，可持续优化</td><td>单轮效果接近 RLHF，多轮迭代稍弱</td></tr>
+          <tr><td>适用场景</td><td>追求极致对齐（如 GPT-4 级别训练）</td><td>大多数业务微调场景的首选</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 灾难性遗忘 -->
+  <div class="wide">
+    <div class="wide-title">🧠 灾难性遗忘 — 微调的核心风险</div>
+
+    <div class="callout warn">
+      <div class="callout-icon">⚠️</div>
+      <div class="callout-body"><strong>什么是灾难性遗忘：</strong>在特定任务上微调后，模型在原有通用能力上性能大幅下滑。例如微调成医疗问答模型后，数学推理能力明显变差。</div>
+    </div>
+
+    <div class="card-row">
+      <div class="card blue">
+        <div class="card-label">解决方案 1</div>
+        <div class="card-title">LoRA / PEFT 类方法</div>
+        <div class="card-body">冻结原始参数，只训练旁路矩阵。原始权重完整保留，通用能力自然不受损。这是 LoRA 最大的工程价值之一，不只是省显存。</div>
+      </div>
+      <div class="card green">
+        <div class="card-label">解决方案 2</div>
+        <div class="card-title">混合数据训练</div>
+        <div class="card-body">在微调数据中混入一定比例的通用数据（如 5%~15% 的原始预训练数据），让模型在学新技能的同时保持对旧知识的复习。</div>
+      </div>
+      <div class="card amber">
+        <div class="card-label">解决方案 3</div>
+        <div class="card-title">EWC（弹性权重巩固）</div>
+        <div class="card-body">为对原有任务重要的参数添加正则化约束，限制这些参数在微调时的变化幅度。理论优雅但工程实现成本高，实践中不如 LoRA 流行。</div>
+      </div>
+      <div class="card purple">
+        <div class="card-label">解决方案 4</div>
+        <div class="card-title">降低学习率 + 早停</div>
+        <div class="card-body">用极小的学习率（如 1e-5 以下）微调，减少对原始权重的扰动。配合验证集上的通用能力评估做早停，是最简单的工程实践。</div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ══════════════════════════════════════
+     03  推理与部署
+══════════════════════════════════════ -->
+<section class="section" id="deploy">
+  <div class="sec-header">
+    <div class="sec-num">03</div>
+    <div class="sec-meta">
+      <div class="sec-label">Module Three</div>
+      <div class="sec-title">推理与部署</div>
+      <div class="sec-sub">应用开发岗考察重点：能评估方案成本，能选合适的部署工具栈</div>
+    </div>
+  </div>
+
+  <p class="prose">推理部署是应用开发岗的核心工程能力之一。你不一定要亲手运维 GPU 集群，但必须能回答：<strong>为什么用 vLLM？量化损失多少精度？本地部署怎么快速启动？</strong></p>
+
+  <!-- vLLM -->
+  <div class="wide">
+    <div class="wide-title">🚀 vLLM — 高性能推理引擎</div>
+
+    <p class="prose">vLLM 是目前最主流的开源 LLM 推理服务框架，其核心创新是 <strong>PagedAttention</strong>，解决了 KV Cache 显存碎片化问题，将 GPU 吞吐量提升 10-24 倍。</p>
+
+    <div class="wide" style="background:var(--paper2); border-color:var(--rule); padding:22px 24px;">
+      <div class="wide-title" style="font-size:14px;">🧩 PagedAttention 的直觉理解</div>
+      <div class="vs">
+        <div class="vs-side">
+          <div class="vs-title" style="color:var(--red);">传统 KV Cache 的问题</div>
+          <div class="vs-body">
+            <p style="font-size:13px; color:var(--ink2); margin-bottom:10px;">为每条请求预分配连续的最大显存块（如为 2048 token 预留空间），但实际只用了 200 token：</p>
+            <ul>
+              <li>内部碎片：预留空间大量浪费</li>
+              <li>外部碎片：无法塞入新请求</li>
+              <li>批处理量（Batch Size）受严重限制</li>
+            </ul>
+          </div>
+        </div>
+        <div class="vs-side">
+          <div class="vs-title" style="color:var(--green);">PagedAttention 的解法</div>
+          <div class="vs-body">
+            <p style="font-size:13px; color:var(--ink2); margin-bottom:10px;">借鉴操作系统虚拟内存的「分页」思想：</p>
+            <ul>
+              <li>KV Cache 按固定大小的 Block 分配</li>
+              <li>Block 可不连续，用页表映射</li>
+              <li>不同请求可共享 KV Block（前缀缓存）</li>
+              <li>显存利用率接近 100%，Batch Size 大幅提升</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="wide" style="background:var(--paper2); border-color:var(--rule); padding:22px 24px; margin-top:0;">
+      <div class="wide-title" style="font-size:14px;">⚡ Continuous Batching</div>
+      <p style="font-size:13.5px; color:var(--ink2); margin-bottom:14px;">传统推理框架：一个 batch 的所有请求必须等最长的那条完成才能释放。<br>Continuous Batching：每生成完一个 token 就检查是否有请求完成，随时插入新请求，GPU 不再空等。</p>
+      <div class="diagram" style="padding:16px;">
+        <div class="d-row">
+          <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--ink4); width:70px; flex-shrink:0;">Static</div>
+          <div style="flex:1; height:28px; background:var(--blue-bg); border:1px solid var(--blue-bd); border-radius:3px; display:flex; align-items:center; padding:0 10px;">
+            <div style="width:30%; height:16px; background:var(--blue); border-radius:2px; margin-right:4px;"></div>
+            <div style="width:15%; height:16px; background:var(--blue); border-radius:2px; margin-right:4px; opacity:0.6;"></div>
+            <div style="flex:1; height:16px; background:var(--rule); border-radius:2px;"></div>
+          </div>
+          <div style="font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--red); margin-left:8px; width:60px;">等待浪费</div>
+        </div>
+        <div class="d-row" style="margin-top:8px;">
+          <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--ink4); width:70px; flex-shrink:0;">Continuous</div>
+          <div style="flex:1; height:28px; background:var(--green-bg); border:1px solid var(--green-bd); border-radius:3px; display:flex; align-items:center; padding:0 4px; gap:3px;">
+            <div style="width:22%; height:16px; background:var(--green); border-radius:2px;"></div>
+            <div style="width:14%; height:16px; background:#1a7a4a99; border-radius:2px;"></div>
+            <div style="width:20%; height:16px; background:var(--green); border-radius:2px;"></div>
+            <div style="width:16%; height:16px; background:#1a7a4a99; border-radius:2px;"></div>
+            <div style="width:18%; height:16px; background:var(--green); border-radius:2px;"></div>
+          </div>
+          <div style="font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--green); margin-left:8px; width:60px;">持续填满</div>
+        </div>
+        <div class="d-label">Continuous Batching 让 GPU 利用率从 30-50% 提升到 80-90%+</div>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <div class="callout-icon">💡</div>
+      <div class="callout-body"><strong>快速部署示例：</strong>vLLM 启动一行命令即可暴露 OpenAI 兼容接口，现有应用无需修改代码即可切换到自部署模型。</div>
+    </div>
+
+    <div class="code-block">
+      <div class="code-bar">
+        <div class="code-dots"><span></span><span></span><span></span></div>
+        <div class="code-bar-lang">BASH · vLLM 启动</div>
+      </div>
+      <div class="code-content"><span class="tk-c"># 安装</span>
+pip install vllm
+
+<span class="tk-c"># 启动 OpenAI 兼容推理服务</span>
+python -m vllm.entrypoints.openai.api_server \
+  --model Qwen/Qwen2.5-7B-Instruct \
+  --tensor-parallel-size 2 \       <span class="tk-c"># 多 GPU 并行</span>
+  --max-model-len 32768 \
+  --gpu-memory-utilization 0.9
+
+<span class="tk-c"># 调用方式与 OpenAI API 完全兼容</span>
+<span class="tk-k">from</span> openai <span class="tk-k">import</span> OpenAI
+client = OpenAI(base_url=<span class="tk-s">"http://localhost:8000/v1"</span>, api_key=<span class="tk-s">"token"</span>)</div>
+    </div>
+  </div>
+
+  <!-- 模型量化 -->
+  <div class="wide">
+    <div class="wide-title">🗜️ 模型量化 — 以精度换显存</div>
+
+    <p class="prose">量化将模型权重从高精度浮点数（FP32/FP16）压缩为低比特整数（INT8/INT4），显著降低显存占用和推理延迟，代价是轻微的精度损失。</p>
+
+    <div class="mem-grid">
+      <div class="mem-cell" style="background:#fff;">
+        <div class="mem-val" style="color:var(--ink);">32</div>
+        <div class="mem-label">FP32 · bit</div>
+        <div style="font-size:11px; color:var(--ink4); margin-top:4px;">基准精度</div>
+      </div>
+      <div class="mem-cell" style="background:var(--blue-bg);">
+        <div class="mem-val" style="color:var(--blue);">16</div>
+        <div class="mem-label">FP16/BF16 · bit</div>
+        <div style="font-size:11px; color:var(--ink4); margin-top:4px;">训练/推理标准</div>
+      </div>
+      <div class="mem-cell" style="background:var(--amber-bg);">
+        <div class="mem-val" style="color:var(--amber);">8</div>
+        <div class="mem-label">INT8 · bit</div>
+        <div style="font-size:11px; color:var(--ink4); margin-top:4px;">精度损失极小</div>
+      </div>
+      <div class="mem-cell" style="background:var(--red-bg);">
+        <div class="mem-val" style="color:var(--red);">4</div>
+        <div class="mem-label">INT4 · bit</div>
+        <div style="font-size:11px; color:var(--ink4); margin-top:4px;">显存降 75%</div>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>方案</th><th>类型</th><th>原理要点</th><th>精度损失</th><th>工具支持</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="pill amber">GPTQ</span></td>
+            <td>训练后量化（PTQ）</td>
+            <td>逐层量化，通过少量校准数据补偿误差</td>
+            <td>INT4 下约 1-3%</td>
+            <td>AutoGPTQ, vLLM</td>
+          </tr>
+          <tr>
+            <td><span class="pill blue">AWQ</span></td>
+            <td>训练后量化（PTQ）</td>
+            <td>识别并保护对精度影响大的「显著权重」，非均匀量化</td>
+            <td>优于 GPTQ</td>
+            <td>AutoAWQ, vLLM</td>
+          </tr>
+          <tr>
+            <td><span class="pill green">BitsAndBytes</span></td>
+            <td>运行时量化</td>
+            <td>推理时动态量化，与 Hugging Face 深度集成</td>
+            <td>较小</td>
+            <td>transformers 库直接支持</td>
+          </tr>
+          <tr>
+            <td><span class="pill purple">GGUF/llama.cpp</span></td>
+            <td>CPU 友好量化</td>
+            <td>专为 CPU 推理优化的量化格式，支持 Q2~Q8 多级</td>
+            <td>随量化等级变化</td>
+            <td>Ollama 底层使用</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout exam">
+      <div class="callout-icon">🎯</div>
+      <div class="callout-body"><strong>面试答题框架：</strong>选量化方案时先问三个问题：① 有没有 GPU（有 → GPTQ/AWQ，没有 → GGUF）；② 能接受多少精度损失（低损失 → INT8/AWQ，可接受 → INT4/GPTQ）；③ 部署环境是否有现成框架支持（Ollama → GGUF 天然支持）。</div>
+    </div>
+  </div>
+
+  <!-- 模型蒸馏 -->
+  <div class="wide">
+    <div class="wide-title">🧪 模型蒸馏 — 知识迁移到小模型</div>
+
+    <p class="prose">蒸馏（Distillation）是用大模型（Teacher）指导小模型（Student）训练，让小模型学到大模型的「行为模式」，而非仅仅学习 Ground Truth 标签。</p>
+
+    <div class="diagram">
+      <div class="d-row">
+        <div style="text-align:center;">
+          <div class="d-node ink" style="padding:14px 20px; min-width:140px;">Teacher 模型<br><span style="font-size:10px; opacity:0.6;">GPT-4o / 70B</span></div>
+        </div>
+        <div class="d-arrow">→</div>
+        <div style="text-align:center;">
+          <div class="d-node amber" style="padding:14px 20px; min-width:140px;">Soft Labels<br><span style="font-size:10px">输出概率分布</span></div>
+        </div>
+        <div class="d-arrow">↓</div>
+        <div style="text-align:center;">
+          <div class="d-node blue" style="padding:14px 20px; min-width:140px;">Student 模型<br><span style="font-size:10px">7B / 小模型</span></div>
+        </div>
+      </div>
+      <div class="d-label">Student 同时学习 Hard Label（正确答案）和 Soft Label（Teacher 的概率分布），后者包含更丰富的「知识」</div>
+    </div>
+
+    <div class="card-row">
+      <div class="card blue">
+        <div class="card-label">为什么 Soft Label 比 Hard Label 信息量更大</div>
+        <div class="card-title">概率分布中的隐含知识</div>
+        <div class="card-body">
+          Hard Label：「答案是猫」（0/1）<br><br>
+          Soft Label：「猫 0.7 / 豹 0.2 / 狗 0.1」<br><br>
+          后者告诉 Student：猫和豹比猫和狗更相似。这种类间关系信息是 Hard Label 无法传递的。
+        </div>
+      </div>
+      <div class="card green">
+        <div class="card-label">应用开发场景</div>
+        <div class="card-title">蒸馏 vs 微调 如何选？</div>
+        <div class="card-body">
+          <ul>
+            <li>有大模型 API 访问权限 + 想要轻量本地模型 → <strong>蒸馏</strong></li>
+            <li>有标注数据 + 想要特定能力 → <strong>微调</strong></li>
+            <li>两者可组合：先用大模型生成数据，再微调小模型</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card amber">
+        <div class="card-label">实战常见模式</div>
+        <div class="card-title">Data Distillation（数据蒸馏）</div>
+        <div class="card-body">用 GPT-4 / Claude 生成高质量问答数据，再用这些数据微调 LLaMA / Qwen 等开源小模型。DeepSeek、Alpaca 等模型都用过这个思路。成本低效果好，是当前最流行的蒸馏变体。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ollama -->
+  <div class="wide">
+    <div class="wide-title">🦙 Ollama — 本地部署快速上手</div>
+    <p class="prose">Ollama 是本地 LLM 部署的最简方案，底层基于 llama.cpp（GGUF 格式），封装了模型管理、GPU 调度和 API 服务，一行命令即可运行本地模型。</p>
+
+    <div class="code-block">
+      <div class="code-bar">
+        <div class="code-dots"><span></span><span></span><span></span></div>
+        <div class="code-bar-lang">BASH · Ollama 基本操作</div>
+      </div>
+      <div class="code-content"><span class="tk-c"># 安装（Mac/Linux）</span>
+curl -fsSL https://ollama.com/install.sh | sh
+
+<span class="tk-c"># 拉取并运行模型（自动下载）</span>
+ollama run qwen2.5:7b
+ollama run llama3.2:3b
+
+<span class="tk-c"># Ollama 自动暴露 REST API（默认 11434）</span>
+curl http://localhost:11434/api/generate \
+  -d '{"model": "qwen2.5:7b", "prompt": "你好"}'
+
+<span class="tk-c"># 使用 OpenAI 兼容接口（v1 路径）</span>
+<span class="tk-k">from</span> openai <span class="tk-k">import</span> OpenAI
+client = OpenAI(
+    base_url=<span class="tk-s">"http://localhost:11434/v1"</span>,
+    api_key=<span class="tk-s">"ollama"</span>    <span class="tk-c"># 任意字符串</span>
+)</div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>场景</th><th>推荐方案</th><th>理由</th></tr></thead>
+        <tbody>
+          <tr><td>个人开发 / 原型验证</td><td><span class="pill green">Ollama</span></td><td>安装简单，模型生态丰富，0 运维成本</td></tr>
+          <tr><td>生产级 GPU 服务</td><td><span class="pill blue">vLLM</span></td><td>吞吐量高，Continuous Batching，OpenAI 兼容</td></tr>
+          <tr><td>企业私有化部署</td><td><span class="pill amber">TGI / vLLM</span></td><td>支持多 GPU、量化、监控集成</td></tr>
+          <tr><td>边缘设备 / CPU 推理</td><td><span class="pill purple">llama.cpp / Ollama</span></td><td>GGUF 量化对 CPU 优化，MacBook 可跑 7B</td></tr>
+          <tr><td>快速暴露为 API 给其他服务调用</td><td><span class="pill teal">Ollama + LiteLLM</span></td><td>OpenAI 兼容接口，Java/Go 项目无需改造</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</section>
+
+<!-- ══════════════════════════════════════
+     考点速查
+══════════════════════════════════════ -->
+<section class="section" id="exam">
+  <div class="sec-header">
+    <div class="sec-num" style="font-size:36px;">⚡</div>
+    <div class="sec-meta">
+      <div class="sec-label">Quick Reference</div>
+      <div class="sec-title">高频考点速查</div>
+      <div class="sec-sub">按模块整理，面试前 30 分钟过一遍</div>
+    </div>
+  </div>
+
+  <!-- 理论考点 -->
+  <div class="wide">
+    <div class="wide-title">模块一：模型基础理论</div>
+    <div class="exam-grid">
+      <div class="exam-card">
+        <div class="exam-q">Q ≠ K 的权重矩阵，为什么不能共享？</div>
+        <div class="exam-a">共享导致自注意力变为对称操作，无法建模非对称依赖（A影响B ≠ B影响A）。分离权重让模型区分「查询角色」和「被查询角色」，大幅提升表达能力。</div>
+        <div class="exam-tag">ATTENTION · 基础必答</div>
+      </div>
+      <div class="exam-card">
+        <div class="exam-q">注意力分数为什么除以 √d<sub>k</sub>？</div>
+        <div class="exam-a">防止高维向量点积过大，导致 softmax 进入梯度近乎为零的饱和区（输出趋近 one-hot），使梯度无法正常反传。除以 √d<sub>k</sub> 将方差稳定为 1。</div>
+        <div class="exam-tag">ATTENTION · 基础必答</div>
+      </div>
+      <div class="exam-card">
+        <div class="exam-q">KV Cache 带来了什么问题，如何解决？</div>
+        <div class="exam-a">显存随序列长度线性增长，传统连续分配有严重碎片化。vLLM 用 PagedAttention 借鉴操作系统分页机制解决碎片问题，大幅提升批处理量和吞吐量。</div>
+        <div class="exam-tag">KV CACHE · 工程必答</div>
+      </div>
+      <div class="exam-card">
+        <div class="exam-q">RoPE 相比正弦位置编码好在哪里？</div>
+        <div class="exam-a">RoPE 让注意力得分天然只依赖两个 token 的相对位置差，而非绝对位置，外推性更强。当前主流开源模型（LLaMA、Qwen、DeepSeek）均采用 RoPE。</div>
+        <div class="exam-tag">POSITION ENCODING · 中高频</div>
+      </div>
+      <div class="exam-card">
+        <div class="exam-q">RAG 中 Embedding 为什么选 Encoder-only 而非 GPT 类模型？</div>
+        <div class="exam-a">Encoder-only 的双向注意力让每个 token 的表示包含完整上下文，向量语义更丰富。Decoder-only 的单向注意力导致表示质量较差，不适合语义搜索。</div>
+        <div class="exam-tag">ENCODER · 应用必答</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 微调考点 -->
+  <div class="wide" style="margin-top:0;">
+    <div class="wide-title">模块二：微调与对齐</div>
+    <div class="exam-grid">
+      <div class="exam-card">
+        <div class="exam-q">什么情况下选微调，什么情况下用 Prompt + RAG？</div>
+        <div class="exam-a">需要注入最新/私有知识 → RAG；需要固定输出格式/风格、垂直专业能力、且有高质量数据（&gt;1000条）和算力 → 微调。80% 场景 Prompt 工程先解决。</div>
+        <div class="exam-tag">SFT · 决策高频</div>
+      </div>
+      <div class="exam-card">
+        <div class="exam-q">LoRA 的核心原理是什么？为什么不只是省显存？</div>
+        <div class="exam-a">假设 ΔW 低秩，用 A×B 旁路代替。核心价值有二：省显存只是其一；更重要的是冻结原始权重天然防止灾难性遗忘，推理时可零成本合并。</div>
+        <div class="exam-tag">LORA · 高频必答</div>
+      </div>
+      <div class="exam-card">
+        <div class="exam-q">DPO 相比 RLHF/PPO 的核心优势？</div>
+        <div class="exam-a">数学等价地绕过了奖励模型，将 4 模型复杂流程降为单模型训练，训练稳定、工程友好。数据格式简单（chosen/rejected 对），效果接近 RLHF。</div>
+        <div class="exam-tag">DPO · 高频必答</div>
+      </div>
+      <div class="exam-card">
+        <div class="exam-q">微调后通用能力下降怎么办？</div>
+        <div class="exam-a">优先选 LoRA/QLoRA（冻结原始参数）；若全量微调则混入 5~15% 通用数据；用极小学习率 + 早停；或用 EWC 约束关键参数变化幅度。</div>
+        <div class="exam-tag">CATASTROPHIC FORGETTING · 中频</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 部署考点 -->
+  <div class="wide" style="margin-top:0;">
+    <div class="wide-title">模块三：推理与部署</div>
+    <div class="exam-grid">
+      <div class="exam-card">
+        <div class="exam-q">vLLM 为什么比原生 HuggingFace 推理快 10x 以上？</div>
+        <div class="exam-a">两个核心：① PagedAttention 解决 KV Cache 碎片化，大幅提升 GPU 显存利用率和 Batch Size；② Continuous Batching 让 GPU 持续满载而非等待最长请求。</div>
+        <div class="exam-tag">VLLM · 高频必答</div>
+      </div>
+      <div class="exam-card">
+        <div class="exam-q">INT4 量化损失大吗？生产能用吗？</div>
+        <div class="exam-a">AWQ/GPTQ 的 INT4 量化在大多数任务上精度损失约 1-3%，已足够生产使用。显存降低 75%，可在消费级 GPU 运行 70B 级别模型。建议用评测集验证目标任务的实际损失。</div>
+        <div class="exam-tag">QUANTIZATION · 中高频</div>
+      </div>
+      <div class="exam-card">
+        <div class="exam-q">Ollama 和 vLLM 怎么选？</div>
+        <div class="exam-a">Ollama：本地开发/原型/CPU 部署，极简运维，优先选。vLLM：生产 GPU 服务器，高并发，追求吞吐量，需要 Continuous Batching。两者都支持 OpenAI 兼容接口。</div>
+        <div class="exam-tag">DEPLOYMENT · 高频</div>
+      </div>
+      <div class="exam-card">
+        <div class="exam-q">蒸馏和微调的区别与联系？</div>
+        <div class="exam-a">微调用标注数据优化模型能力；蒸馏用大模型的输出分布（Soft Label）训练小模型，传递隐含知识。实践中常组合：用 GPT-4 生成高质量数据，再微调开源小模型（Data Distillation）。</div>
+        <div class="exam-tag">DISTILLATION · 中频</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 两份文档关系说明 -->
+  <div class="callout info" style="margin-top:20px;">
+    <div class="callout-icon">📚</div>
+    <div class="callout-body">
+      <strong>与 Vol.1 的关系：</strong>本文档（Vol.2）覆盖「模型认知层」，回答「模型本身怎么工作」。<br>
+      Vol.1 覆盖「应用工程层」（Prompt / Context / Agent / MCP），回答「怎么构建 AI 应用」。<br>
+      两份合并，构成 AI 应用开发岗的完整备考体系。
+    </div>
+  </div>
+
+</section>
+
+</main>
+
+</div><!-- end page-wrap -->
+
+<footer class="footer">
+  AI APPLICATION DEVELOPER · INTERVIEW HANDBOOK VOL.2<br>
+  <span style="opacity:0.5; margin-top:6px; display:block;">模型基础理论 · 微调与对齐 · 推理与部署</span>
+</footer>
+
+<script>
+  // 渐入动画：仅在 IntersectionObserver 可用时启用，
+  // 否则保持 CSS animation 兜底，确保 Obsidian 等环境正常显示
+  if ('IntersectionObserver' in window) {
+    const sections = document.querySelectorAll('.section');
+    sections.forEach(s => s.classList.add('js-hidden'));
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.05 });
+    sections.forEach(s => io.observe(s));
+  }
+
+  const navItems = document.querySelectorAll('.nav-item');
+  const sectionEls = document.querySelectorAll('section[id]');
+  window.addEventListener('scroll', () => {
+    let cur = '';
+    sectionEls.forEach(s => { if (window.scrollY >= s.offsetTop - 160) cur = s.id; });
+    navItems.forEach(item => {
+      item.classList.toggle('active', item.getAttribute('href') === '#' + cur);
+    });
+  });
+</script>
+</body>
+</html>

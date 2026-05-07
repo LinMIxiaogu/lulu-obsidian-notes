@@ -1,4 +1,6 @@
 {
   "promptDelete": false,
-  "openBehavior": "file:D:\\Users\\lulut.tang\\Documents\\lulu-obsidian-notes\\Obsidian Vault"
+  "openBehavior": "file:D:\\Users\\lulut.tang\\Documents\\lulu-obsidian-notes\\Obsidian Vault",
+  "readableLineLength": false,
+  "showUnsupportedFiles": true
 }

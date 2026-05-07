@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Claude Code 源码解析：把多 Agent 讲清楚</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+:root{
+  --bg:#fbf8ef; --paper:#fffdf8; --paper2:#f5efe1; --ink:#231b0f; --muted:#6f6049; --light:#a99470;
+  --line:#e5d9c2; --line2:#efe7d7; --accent:#b86d2d; --accent2:#516f9f; --green:#4d7c57; --red:#a34a42;
+  --yellow:#f6e4bd; --blue:#dfe8f5; --greenbg:#e2eddf; --redbg:#f4dfdc; --purple:#eee3f6;
+  --sidebar:286px; --header:62px; --shadow:0 18px 45px rgba(76,48,15,.08);
+}
+*{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;background:var(--bg);color:var(--ink);font-family:'Noto Serif SC',Georgia,serif;font-size:15.5px;line-height:1.9}
+a{color:inherit} code{font-family:'JetBrains Mono',monospace;font-size:.84em;background:#f2ead9;border:1px solid var(--line2);border-radius:4px;padding:1px 5px;color:#9b551f} strong{color:var(--ink);font-weight:800}
+header{height:var(--header);position:fixed;left:0;right:0;top:0;z-index:10;display:flex;align-items:center;padding:0 26px;background:rgba(245,239,225,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);gap:14px}.logo{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--accent);font-weight:700}.spacer{flex:1}.pill{font-family:'JetBrains Mono',monospace;font-size:11px;border:1px solid var(--line);background:var(--paper);padding:4px 10px;border-radius:999px;color:var(--muted)}
+.layout{display:flex;padding-top:var(--header)}aside{position:fixed;top:var(--header);bottom:0;left:0;width:var(--sidebar);padding:24px 0 48px;background:var(--paper2);border-right:1px solid var(--line);overflow:auto}.toc-title{font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.13em;font-size:10px;color:var(--light);padding:0 22px 12px;border-bottom:1px solid var(--line2);margin-bottom:12px}.toc-group{font-family:'JetBrains Mono',monospace;color:var(--light);font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:14px 22px 4px}aside a{display:block;text-decoration:none;color:var(--muted);font-size:13px;padding:6px 22px 6px 26px;border-left:3px solid transparent;transition:.15s}aside a:hover,aside a.active{color:var(--accent);background:#f7e7d3;border-left-color:var(--accent)}
+main{margin-left:var(--sidebar);max-width:990px;padding:54px 66px 110px}.hero{padding:28px 0 38px;border-bottom:1px solid var(--line);margin-bottom:46px}.eyebrow{font-family:'JetBrains Mono',monospace;font-size:12px;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);margin-bottom:14px}.hero h1{font-size:2.7rem;line-height:1.18;margin:0 0 18px;letter-spacing:-.04em}.hero p{max-width:790px;color:var(--muted);font-size:17px}.hero-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:26px}.metric{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:14px 15px;box-shadow:var(--shadow)}.metric b{font-family:'JetBrains Mono',monospace;color:var(--accent);display:block;font-size:18px}.metric span{font-size:12.5px;color:var(--muted)}
+section{scroll-margin-top:88px;margin-bottom:72px}.num{font-family:'JetBrains Mono',monospace;color:var(--accent);font-size:11px;letter-spacing:.12em}.hline{display:flex;align-items:end;gap:14px;margin-bottom:18px;border-bottom:1px solid var(--line);padding-bottom:11px}h2{font-size:1.65rem;line-height:1.32;margin:0}h3{font-size:1.08rem;margin:30px 0 10px}h3:before{content:'§ ';color:var(--accent)}p{color:var(--muted);margin:0 0 15px}.lead{font-size:17px;color:#4e402e}.plain-list{padding-left:1.2em;color:var(--muted)}.plain-list li{margin:6px 0}.card-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:22px 0}.card{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:18px 18px;box-shadow:var(--shadow)}.card h4{margin:0 0 7px;font-size:15px}.card p{font-size:13.5px;line-height:1.65;margin:0}.card .icon{font-size:22px;margin-bottom:9px}.callout{margin:22px 0;border-radius:14px;padding:16px 18px;border:1px solid var(--line);border-left:5px solid var(--accent);background:var(--yellow);color:var(--muted)}.callout b{display:block;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:6px}.callout.blue{background:var(--blue);border-left-color:var(--accent2)}.callout.blue b{color:var(--accent2)}.callout.green{background:var(--greenbg);border-left-color:var(--green)}.callout.green b{color:var(--green)}.callout.red{background:var(--redbg);border-left-color:var(--red)}.callout.red b{color:var(--red)}
+.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:14px;background:var(--paper);margin:20px 0}table{width:100%;border-collapse:collapse;font-size:13.5px}th{font-family:'JetBrains Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.06em;text-align:left;background:#f2ead9;color:var(--muted);padding:10px 12px;border-bottom:1px solid var(--line)}td{padding:11px 12px;border-bottom:1px solid var(--line2);color:var(--muted);vertical-align:top}tr:last-child td{border-bottom:0}
+.flow{margin:24px 0;background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:var(--shadow)}.flow-row{display:grid;grid-template-columns:1fr 34px 1fr 34px 1fr;align-items:center;gap:8px;margin-bottom:14px}.flow-row:last-child{margin-bottom:0}.node{border:1px solid var(--line);border-radius:14px;padding:14px;text-align:center;background:#fffdfa;min-height:92px;display:flex;flex-direction:column;justify-content:center}.node b{display:block;font-size:15px}.node span{display:block;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--light);line-height:1.45}.arrow{text-align:center;font-family:'JetBrains Mono',monospace;color:var(--accent);font-size:22px}.node.orange{background:#faead3}.node.blue{background:var(--blue)}.node.green{background:var(--greenbg)}.node.purple{background:var(--purple)}.node.red{background:var(--redbg)}
+.stack{border:1px solid var(--line);border-radius:18px;overflow:hidden;background:var(--paper);margin:22px 0}.stack-row{display:grid;grid-template-columns:170px 1fr;min-height:62px;border-bottom:1px solid var(--line2)}.stack-row:last-child{border-bottom:0}.stack-k{background:#f2ead9;padding:13px 16px;font-family:'JetBrains Mono',monospace;color:var(--accent);font-size:12px;display:flex;align-items:center}.stack-v{padding:13px 16px;color:var(--muted)}
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:24px 0}.compare .side{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:18px}.side h4{margin:0 0 10px}.mini-title{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--light);letter-spacing:.08em;text-transform:uppercase;margin:24px 0 8px}pre{background:#f2ead9;border:1px solid var(--line);border-radius:14px;padding:16px 18px;overflow:auto}pre code{border:0;background:transparent;padding:0;color:#3b3020;font-size:13px}.takeaways{counter-reset:item;display:grid;gap:12px;margin:22px 0}.takeaway{counter-increment:item;background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:16px 18px;display:grid;grid-template-columns:40px 1fr;gap:12px;box-shadow:var(--shadow)}.takeaway:before{content:counter(item);width:34px;height:34px;border-radius:50%;background:var(--accent);color:white;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-weight:700}.takeaway b{display:block}.takeaway span{color:var(--muted);font-size:13.5px;line-height:1.65}
+.timeline{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:22px 0}.phase{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:var(--shadow);position:relative}.phase em{font-family:'JetBrains Mono',monospace;font-style:normal;font-size:11px;color:var(--accent);letter-spacing:.08em}.phase h4{margin:6px 0 8px}.phase p{font-size:13.2px;line-height:1.6;margin:0}.worktree{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:20px;margin:22px 0;box-shadow:var(--shadow)}.tree{font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.75;color:#4b3a25;background:#f2ead9;border:1px solid var(--line2);border-radius:14px;padding:16px;overflow:auto}.badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;padding:2px 8px;border-radius:999px;background:#f2ead9;border:1px solid var(--line2);color:var(--accent);margin-right:6px}
+footer{margin-left:var(--sidebar);border-top:1px solid var(--line);padding:22px 66px;color:var(--light);font-family:'JetBrains Mono',monospace;font-size:11px;display:flex;gap:18px;justify-content:space-between;flex-wrap:wrap}#topBtn{position:fixed;right:28px;bottom:28px;width:40px;height:40px;border:0;border-radius:50%;background:var(--accent);color:white;font-size:18px;box-shadow:0 8px 25px rgba(184,109,45,.3);display:none;align-items:center;justify-content:center;cursor:pointer}
+@media(max-width:900px){aside{display:none}main,footer{margin-left:0;padding-left:24px;padding-right:24px}.hero h1{font-size:2.1rem}.hero-grid,.card-grid,.compare,.timeline{grid-template-columns:1fr}.flow-row{grid-template-columns:1fr}.arrow{transform:rotate(90deg);margin:0}.stack-row{grid-template-columns:1fr}.stack-k{border-bottom:1px solid var(--line2)}}
+.hero-path{margin:18px 0 8px;padding:14px 18px;border:1px solid var(--border);border-radius:14px;background:var(--panel);font-family:var(--mono);font-size:14px;color:var(--accent);letter-spacing:.02em;text-align:center;}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">▸ Claude Code 源码解析</div><div class="spacer"></div>
+  <span class="pill">改造版 v2：主线 + 关键模块补齐</span><span class="pill">Agent · Worktree · 权限 · 缓存 · 压缩 · 记忆</span>
+</header>
+<div class="layout">
+<aside>
+  <div class="toc-title">阅读路线</div>
+  <a href="#intro">先用一句话理解</a>
+  <div class="toc-group">主线</div>
+  <a href="#flow">一次请求怎么跑完</a>
+  <a href="#why">为什么要多 Agent</a>
+  <a href="#agents">Worker 不是复制人</a>
+  <a href="#modes">两种协作模式</a>
+  <a href="#coordinator">Coordinator 如何收束</a>
+  <div class="toc-group">机制</div>
+  <a href="#agenttool">AgentTool 是总入口</a>
+  <a href="#backend">三种执行后端</a>
+  <a href="#worktree">Worktree 隔离战场</a>
+  <a href="#message">通信：文件邮箱</a>
+  <a href="#permission">权限：人类兜底</a>
+  <a href="#cache">成本：缓存与工具加载</a>
+  <a href="#compact">上下文压缩</a>
+  <a href="#memory">记忆系统</a>
+  <div class="toc-group">落地</div>
+  <a href="#learn">做自己的 Agent 系统怎么借鉴</a>
+  <a href="#summary">最后总结</a>
+</aside>
+<main>
+  <section class="hero" id="intro">
+    <div class="eyebrow">Readable Source Analysis</div>
+    <h1>Claude Code 源码解析：<br>别先背概念，先看它怎么把活干完</h1>
+    <p>Claude Code 更像一套运行在终端里的 <strong>Agent 操作系统</strong>。它要解决的不是“怎么让模型回答代码问题”，而是“怎么让多个 Agent 在真实代码仓库里安全、并行、低成本地完成任务”。</p>
+    <p>这篇文章先追踪一条用户请求，再拆开看它背后的关键设计：</p>
+    <div class="hero-path">请求 → 拆解 → 执行 → 隔离 → 确权</div>
+    <div class="hero-grid">
+      <div class="metric"><b>协作模式</b><span>Team Mode / Coordinator Mode 如何组织多 Agent</span></div>
+      <div class="metric"><b>执行后端</b><span>InProcess / Tmux / iTerm2 如何承载 Worker</span></div>
+      <div class="metric"><b>并行隔离</b><span>Git Worktree 如何隔离多路修改</span></div>
+      <div class="metric"><b>生产支撑</b><span>SendMessage、权限、Prompt Cache 和记忆系统</span></div>
+    </div>
+  </section>
+
+  <section id="flow">
+    <div class="hline"><span class="num">01</span><h2>先看大图：一次复杂请求怎么跑完？</h2></div>
+    <p class="lead">理解 Claude Code，不要从“有哪些 Agent”开始，而要从“用户一句话怎么变成一组安全可控的工程动作”开始。</p>
+    <div class="flow">
+      <div class="flow-row">
+        <div class="node orange"><b>用户提出任务</b><span>例如：修一个跨模块 Bug</span></div><div class="arrow">→</div>
+        <div class="node purple"><b>Leader / Coordinator 拆任务</b><span>决定谁去读代码、谁去改、谁去验证</span></div><div class="arrow">→</div>
+        <div class="node blue"><b>AgentTool 派 Worker</b><span>统一入口，选择 Agent 类型与执行后端</span></div>
+      </div>
+      <div class="flow-row">
+        <div class="node green"><b>Worker 独立执行</b><span>独立上下文，必要时独立 worktree</span></div><div class="arrow">→</div>
+        <div class="node orange"><b>SendMessage 汇报</b><span>不是靠终端文本，而是显式消息</span></div><div class="arrow">→</div>
+        <div class="node red"><b>危险操作找人确认</b><span>权限最终回到 Leader 终端</span></div>
+      </div>
+    </div>
+    <div class="callout blue"><b>一句话模型</b>Claude Code 的核心不是“一个大模型很聪明”，而是“一个 Leader 把任务拆给多个隔离 Worker，并用工具、消息、权限、缓存、Worktree 和记忆机制把它们管起来”。</div>
+  </section>
+
+  <section id="why">
+    <div class="hline"><span class="num">02</span><h2>为什么单 Agent 不够用？</h2></div>
+    <p>单 Agent 最大的问题不是不会做，而是<strong>所有东西都挤在同一个上下文窗口里</strong>。代码搜索日志、错误输出、历史对话、工具结果越堆越多，模型后面就会被前面的噪音拖累。</p>
+    <div class="card-grid">
+      <div class="card"><div class="icon">🧠</div><h4>上下文会爆</h4><p>大型代码库里，文件内容、调用链、报错日志会迅速塞满窗口，中间信息容易被稀释。</p></div>
+      <div class="card"><div class="icon">⏳</div><h4>串行会慢</h4><p>一个 Agent 一次只能沿着一条路径查。多 Agent 可以同时查模块 A、模块 B、测试和文档。</p></div>
+      <div class="card"><div class="icon">🧰</div><h4>工具会乱</h4><p>工具太多时，模型既要理解任务，又要在几十个工具里选对工具，路由错误概率上升。</p></div>
+    </div>
+    <p>所以多 Agent 的本质不是“角色扮演”，而是<strong>把一个大上下文问题拆成多个小上下文问题</strong>。每个 Worker 只处理一小块，最后把浓缩后的结论交给 Leader。</p>
+    <div class="callout"><b>更好理解的类比</b>单 Agent 像一个人独自排查大型代码库，所有线索都挤在同一个脑子里；多 Agent 则像把 API 调用链、配置环境、测试日志分给不同 Worker 同时排查，Leader 只接收压缩后的结论并做决策。</div>
+  </section>
+
+  <section id="agents">
+    <div class="hline"><span class="num">03</span><h2>Worker 不是复制人：内置 Agent 的分工</h2></div>
+    <p>既然有多个 Worker，下一步自然会问：它们是不是都一样？答案是否定的。Claude Code 更像是在内置一组“岗位”，不同 Agent 的模型、工具权限和职责边界都不同。</p>
+    <div class="table-wrap"><table><thead><tr><th>Agent</th><th>像什么角色</th><th>主要用途</th><th>关键限制</th></tr></thead><tbody>
+      <tr><td><code>Explore</code></td><td>侦察兵</td><td>快速扫代码、找调用链、确认事实</td><td>偏只读，可用更轻量模型，高并发探索</td></tr>
+      <tr><td><code>Plan</code></td><td>架构师</td><td>制定方案、评估风险、拆解步骤</td><td>不直接改代码，避免“边想边动手”</td></tr>
+      <tr><td><code>verification</code></td><td>测试员 / 反方审查</td><td>检查实现是否可靠，补测试或找反例</td><td>强调验证，不负责主方案输出</td></tr>
+      <tr><td><code>fork</code></td><td>分身</td><td>继承父上下文尝试一个分支方案</td><td>权限需要沿父链路冒泡，不能悄悄扩大</td></tr>
+      <tr><td><code>general-purpose</code></td><td>通用工程师</td><td>兜底处理复杂、边界不明确的任务</td><td>能力更全，也更需要权限控制</td></tr>
+    </tbody></table></div>
+    <div class="callout green"><b>为什么这一节很重要</b>如果 Worker 都一样，多 Agent 只是“多开几个聊天窗口”。有了角色、模型和工具权限差异，多 Agent 才变成可控的工程组织。</div>
+  </section>
+
+  <section id="modes">
+    <div class="hline"><span class="num">04</span><h2>两种协作模式：固定团队 vs 临时外包</h2></div>
+    <p>Claude Code 的多 Agent 不止一种形态。理解 <code>Team Mode</code> 和 <code>Coordinator Mode</code> 的区别，很多后面的设计就顺了。</p>
+    <div class="compare">
+      <div class="side"><h4>Team Mode：固定团队</h4><p>像你提前建好一个团队，每个 Worker 有名字、有配置、有邮箱。适合长期协作，比如固定的“测试 Agent”“文档 Agent”“Reviewer Agent”。</p><p><strong>关键词：</strong>持久化、手动管理、团队配置。</p></div>
+      <div class="side"><h4>Coordinator Mode：临时外包</h4><p>像 Leader 临时拉几个人做一次项目。任务来了才 spawn Worker，结束后回收。适合一次复杂任务的自动拆解和并行执行。</p><p><strong>关键词：</strong>按需创建、自动编排、用完即毁。</p></div>
+    </div>
+    <div class="table-wrap"><table><thead><tr><th>维度</th><th>Team Mode</th><th>Coordinator Mode</th></tr></thead><tbody><tr><td>控制方式</td><td>Leader 手动管理 Worker</td><td>Coordinator 自动派发 Worker</td></tr><tr><td>Worker 生命周期</td><td>可以长期存在</td><td>任务完成后回收</td></tr><tr><td>可用工具</td><td>更完整</td><td>只保留 Agent、SendMessage、TaskStop 等编排工具</td></tr><tr><td>适合场景</td><td>固定角色协作</td><td>复杂任务临时拆解</td></tr></tbody></table></div>
+  </section>
+
+  <section id="coordinator">
+    <div class="hline"><span class="num">05</span><h2>Coordinator 如何收束：不是多开 Worker，而是分阶段压缩</h2></div>
+    <p>如果说 Team Mode 解决的是“固定团队怎么协作”，那么 Coordinator Mode 解决的是“临时复杂任务怎么自动拆解并收束”。它的关键价值不是派出很多 Worker，而是让探索过程留在 Worker 自己的上下文里，只把压缩后的结论带回来。</p>
+    <div class="timeline">
+      <div class="phase"><em>PHASE 1</em><h4>Research</h4><p>多个 Worker 分头读代码、查资料、找调用链、定位风险点。</p></div>
+      <div class="phase"><em>PHASE 2</em><h4>Synthesis</h4><p>Coordinator 收集各 Worker 的关键结论，而不是复制全部中间日志。</p></div>
+      <div class="phase"><em>PHASE 3</em><h4>Execution</h4><p>选择最可信方案，派执行型 Worker 修改代码、补测试或生成文档。</p></div>
+      <div class="phase"><em>PHASE 4</em><h4>Stop</h4><p>任务完成后回收 Worker，避免临时上下文继续污染主对话。</p></div>
+    </div>
+    <div class="callout blue"><b>核心收益</b>Coordinator Mode 把“探索噪音”和“决策上下文”分开：Worker 可以大胆试错，Coordinator 只保留能支撑决策的摘要、证据和下一步动作。</div>
+  </section>
+
+  <section id="agenttool">
+    <div class="hline"><span class="num">06</span><h2>AgentTool：所有子 Agent 的总入口</h2></div>
+    <p>如果把 Claude Code 看成一个公司，<code>AgentTool</code> 就像“派工系统”。Leader 不直接去启动某个进程，而是把任务交给 AgentTool，由它判断：用什么 Agent、给什么工具、跑在哪个后端、权限怎么继承。</p>
+    <div class="stack">
+      <div class="stack-row"><div class="stack-k">Agent 定义</div><div class="stack-v">每个 Agent 都有类型、使用场景、可用工具、禁用工具、模型、最大轮次等字段。这样 Agent 不是随便起一个对话，而是有边界的执行单元。</div></div>
+      <div class="stack-row"><div class="stack-k">工具过滤</div><div class="stack-v">Claude Code 不会让所有 Worker 都拥有完整权限。Explore、Plan 这类 Agent 通常只负责读代码和做方案；Coordinator 只负责派任务、收消息和停止任务，不能直接改文件；自定义 Agent 也可能被禁止继续创建新的子 Agent。</div></div>
+      <div class="stack-row"><div class="stack-k">代码层限权</div><div class="stack-v">这不是靠提示词提醒“不要乱改”，而是在代码层面直接不给它危险工具。没有 <code>Write</code> / <code>Edit</code>，它就不能改文件；没有 <code>AgentTool</code>，它就不能继续套娃。</div></div>
+      <div class="stack-row"><div class="stack-k">小型执行循环</div><div class="stack-v">Leader 派出 Worker 后，并不是调用一个固定函数等返回值。Worker 自己也会理解目标、选择工具、读取文件、观察结果、继续判断下一步，直到完成任务并汇报结果。所以 Worker 更像一个被限制权限的小型 Claude Code，而不是普通工具函数。</div></div>
+    </div>
+    <div class="callout green"><b>关键理解</b>Claude Code 的多 Agent 不是写死的 if/else 流程，而是把“Agent”抽象成一种可配置、可限权、可独立执行的工作单元。</div>
+  </section>
+
+  <section id="backend">
+    <div class="hline"><span class="num">07</span><h2>三种执行后端：Worker 运行在哪里？</h2></div>
+    <p>“执行后端”不是 Agent 类型，而是 Worker 的承载方式。同一套 Agent 逻辑，可以在当前进程内运行，也可以通过外部终端工具启动独立的 Claude Code 实例运行。</p>
+    <div class="table-wrap"><table><thead><tr><th>后端</th><th>怎么理解</th><th>优点</th><th>代价</th></tr></thead><tbody><tr><td><code>InProcess</code></td><td>Worker 复用当前 Claude Code 进程，在进程内创建独立的 Agent 运行上下文</td><td>启动快，通信成本低</td><td>进程级隔离弱，依赖运行时上下文隔离</td></tr><tr><td><code>Tmux</code></td><td>通过 tmux 启动独立 Claude Code 实例来承载 Worker</td><td>进程隔离更强，便于独立运行和排查</td><td>依赖 tmux，有额外进程和通信成本</td></tr><tr><td><code>iTerm2</code></td><td>通过 iTerm2 启动 / 管理独立 Claude Code 实例来承载 Worker</td><td>更贴近 macOS 原生终端体验</td><td>依赖 iTerm2，不通用</td></tr></tbody></table></div>
+    <p>这里容易误解的是 <code>InProcess</code>。它不是把多个任务塞回同一个 Agent，而是在同一个进程里创建多个独立的 Agent 运行上下文。<code>InProcess</code> 的隔离依赖类似 <code>AsyncLocalStorage</code> 这样的运行时上下文机制：不同 Worker 的异步调用链会携带自己的 Agent 身份、会话状态和工具执行上下文。</p>
+    <p>也就是说，Agent 的边界不一定等于操作系统进程；只要任务状态、上下文、消息通道和生命周期是独立管理的，它仍然可以作为一个独立 Worker 运行。</p>
+  </section>
+
+  <section id="worktree">
+    <div class="hline"><span class="num">08</span><h2>Git Worktree：多 Agent 并行改代码的隔离战场</h2></div>
+    <p>执行后端解决的是“Worker 跑在哪里”，但只要 Worker 会写代码，就会遇到另一个问题：多个 Worker 同时修改同一个仓库，怎么避免互相覆盖？这就是 <code>git worktree</code> 的意义。</p>
+    <div class="compare">
+      <div class="side"><h4>没有 Worktree</h4><p><span class="badge">风险</span>Worker A 和 Worker B 都在同一个工作区修改 <code>src/api.ts</code>。谁先写、谁后写、谁覆盖谁，很难控制。最后 Leader 看到的是混在一起的结果。</p></div>
+      <div class="side"><h4>有 Worktree</h4><p><span class="badge">隔离</span>Worker A 在 <code>worktree-a</code> 改方案 A，Worker B 在 <code>worktree-b</code> 改方案 B。Leader 可以对比差异，再决定合并哪一份。</p></div>
+    </div>
+    <div class="worktree">
+      <pre class="tree"><code>repo-main/
+├── 主工作区：保留当前仓库状态，作为对比和最终合并的位置
+├── worktree-agent-a/：Worker A 尝试方案 A
+├── worktree-agent-b/：Worker B 尝试方案 B
+└── worktree-agent-v/：verification Worker 跑测试 / 查反例</code></pre>
+    </div>
+    <p>注意，这个目录树不是执行顺序，而是隔离关系。Worker A、Worker B 和 verification Worker 可以在各自 worktree 里并行推进；最后再由 Leader 或用户比较结果，决定采用哪个方案、如何合并。</p>
+    <p>这也是多 Agent 从“并行思考”走向“并行动手”的关键一步。没有 Worktree，多 Agent 最多适合并行调研；有了 Worktree，多个 Worker 才能在代码层面安全试错。</p>
+    <div class="callout"><b>主线上的位置</b>先有执行后端，保证 Worker 能独立运行；再有 Worktree，保证 Worker 写代码时有独立战场。这两层隔离解决的是不同问题。</div>
+  </section>
+
+  <section id="message">
+    <div class="hline"><span class="num">09</span><h2>通信：SendMessage 和文件邮箱</h2></div>
+    <p>Claude Code 的 Agent 间通信可以分成两层：第一层是 <code>SendMessage</code>，它是 Agent 发送消息的统一入口，负责决定“发给谁、发什么、走哪条通道”；第二层是具体投递通道，例如内存队列、文件邮箱或广播写入。</p>
+    <div class="table-wrap"><table><thead><tr><th>场景</th><th>SendMessage 怎么送</th></tr></thead><tbody><tr><td>目标是运行中的 <code>InProcess</code> Worker</td><td>优先放进内存队列，速度最快</td></tr><tr><td>目标是独立进程 / 外部承载的 Worker</td><td>写入对应 Agent 的文件邮箱</td></tr><tr><td>目标 Agent 已停止但可以恢复</td><td>先唤醒，再投递消息</td></tr><tr><td>广播给所有成员</td><td>写给多个 Agent 的收件箱</td></tr></tbody></table></div>
+    <h3>文件邮箱：Agent 的本地收件箱</h3>
+    <p>文件邮箱不是 <code>SendMessage</code> 本身，而是 <code>SendMessage</code> 背后的一种落地通道。每个 Agent 可以有自己的收件箱文件：</p>
+    <pre><code>~/.claude/teams/{team_name}/inboxes/{agent_name}.json</code></pre>
+    <p>谁要给这个 Agent 留一条可恢复、可检查的消息，就把消息写进它的 JSON 收件箱。</p>
+    <div class="card-grid">
+      <div class="card"><div class="icon">📁</div><h4>零依赖</h4><p>用户不用额外安装 Redis、MQ 或数据库。</p></div>
+      <div class="card"><div class="icon">🧯</div><h4>可恢复</h4><p>消息落在文件里，进程崩溃后还能查。</p></div>
+      <div class="card"><div class="icon">🔍</div><h4>可调试</h4><p>开发者可以直接打开 JSON 文件看消息内容。</p></div>
+    </div>
+    <p>为了避免多个 Worker 同时写坏同一个 JSON 文件，写入时会加文件锁，并配合退避重试。</p>
+    <div class="callout blue"><b>准确关系</b><code>SendMessage</code> 是统一发送接口；内存队列、文件邮箱、广播写入，是它背后的不同投递方式。</div>
+  </section>
+
+  <section id="permission">
+    <div class="hline"><span class="num">10</span><h2>权限：防止多 Agent 里的权限漂移</h2></div>
+    <p>多 Agent 的风险不在于 Worker 会执行任务，而在于 Worker 嵌套之后，危险权限可能被层层传下去，最后变成“谁都能执行 Bash、写文件、删目录”。</p>
+
+    <p>Claude Code 用两件事控制这个风险：</p>
+    <div class="table-wrap"><table><thead><tr><th>机制</th><th>作用</th></tr></thead><tbody>
+      <tr><td><strong>工具过滤</strong></td><td>Agent 只拿到自己职责需要的工具，不该用的工具在代码层面不可见。</td></tr>
+      <tr><td><strong>权限冒泡</strong></td><td>Worker 触发危险操作时，请求回到 Leader 所在的用户交互链路，由用户最终裁决。</td></tr>
+    </tbody></table></div>
+
+    <p>权限检查链路可以简化成：</p>
+    <pre><code>Worker 请求执行 Bash / Edit / Write
+→ 工具自检
+→ 配置 allow / deny
+→ 风险分类或规则判断
+→ 必要时冒泡到 Leader
+→ 用户确认后执行</code></pre>
+
+    <div class="callout red"><b>核心原则</b>工具权限先于提示词约束；用户确认高于子 Agent 自行判断。比起在 prompt 里写“不要做危险操作”，更可靠的做法是在代码层面直接不给危险工具，并让危险操作不能绕过最外层确认。</div>
+  </section>
+
+  <section id="cache">
+    <div class="hline"><span class="num">11</span><h2>成本与速度：少传、少算、按需加载</h2></div>
+    <p>Claude Code 每次调用模型时，都要带上一大段上下文：系统规则、工具说明、项目状态、Git 信息、用户请求等。如果每次都从头传、从头算，成本高，速度也慢。</p>
+    <p>所以它做了两类优化。</p>
+
+    <h3>第一类：Prompt Cache，让稳定内容尽量保持不变</h3>
+    <p>模型身份、安全规则、代码风格、基础工具说明这些内容很少变化。Claude Code 会尽量让它们在 prompt 里保持稳定顺序和稳定文本。这样服务端就更容易复用缓存，而不是每轮都重新处理一遍。</p>
+
+    <h3>第二类：工具按需加载，不是一开始塞满所有工具</h3>
+    <p>常用工具直接给模型；低频工具先不展开完整说明，只保留搜索入口。等模型真的需要时，再通过 <code>ToolSearch</code> 加载相关工具。这和前端的 Code Splitting 类似：不是打开页面就加载全部代码，而是用到哪块，再加载哪块。</p>
+
+    <div class="tw"><table>
+      <thead><tr><th>优化</th><th>解决什么问题</th></tr></thead>
+      <tbody>
+        <tr><td><strong>静态段 / 动态段分离</strong></td><td>稳定内容更容易命中 Prompt Cache，经常变化的内容单独处理。</td></tr>
+        <tr><td><strong>确定性排序</strong></td><td>避免只是工具顺序变了，就导致 prompt 前缀不同、缓存失效。</td></tr>
+        <tr><td><strong>ToolSearch</strong></td><td>避免一开始塞太多低频工具说明，减少 prompt 体积和工具干扰。</td></tr>
+        <tr><td><strong>按需加载</strong></td><td>需要什么工具，再加载什么工具，把成本花在真正用到的地方。</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="callout green"><b>核心收益</b>这类优化看起来细，但对 AI 编程工具很关键。Claude Code 的一次任务可能会调用模型很多轮；每一轮少传一点、少算一点，最终都会变成速度和成本上的收益。</div>
+  </section>
+
+  <section id="compact">
+    <div class="hline"><span class="num">12</span><h2>上下文压缩：长任务快塞满时，Claude Code 怎么续命？</h2></div>
+    <p>这里先把两个概念拆开：<strong>压缩</strong>解决“当前会话太长，怎么继续跑”；<strong>记忆</strong>解决“跨会话哪些经验要留下”。Claude Code 的上下文降载不是一个动作，而是一条链路：先做便宜的规则清理，再判断是否需要正式压缩，能用已有会话摘要就用已有摘要，最后才让 Fork Agent 现场总结。</p>
+
+    <div class="tw"><table>
+      <thead><tr><th>环节</th><th>是否真的压缩</th><th>是否调用模型</th><th>作用</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Microcompact</strong></td><td>是</td><td>不用</td><td>按规则清理旧工具输出，比如 <code>Read</code> / <code>Bash</code> / <code>Grep</code> 的大块结果。</td></tr>
+        <tr><td><strong>Auto-Compact</strong></td><td>否</td><td>不直接调用</td><td>判断 token 是否接近阈值，并调度后续压缩路径。</td></tr>
+        <tr><td><strong>Session Memory Compact</strong></td><td>是</td><td>压缩当下不用</td><td>用会话过程中已经维护好的 <code>Session Memory</code> 作为摘要接力。</td></tr>
+        <tr><td><strong>Full Compact</strong></td><td>是</td><td>使用 Fork Agent</td><td>临时生成结构化摘要，作为最重的兜底方案。</td></tr>
+      </tbody>
+    </table></div>
+
+    <p>这条链路可以这样理解：</p>
+    <pre><code>旧工具输出太多
+→ Microcompact 先做规则压缩
+→ Auto-Compact 判断上下文是否接近阈值
+→ 如果需要正式压缩，优先尝试 Session Memory Compact
+→ 如果已有会话摘要不可用或压缩后仍不够，再回退 Full Compact</code></pre>
+
+    <p><strong>Microcompact</strong> 不用模型也能压缩，因为它不是“理解全文后总结”，而是规则清理。旧的文件读取结果、搜索结果、命令输出很占上下文，系统可以把这类旧工具结果替换成占位文本，先释放 token。它要小心的一点是：不能破坏 <code>tool_use</code> / <code>tool_result</code> 的配对关系，否则 API 消息结构会坏掉。</p>
+
+    <p><strong>Auto-Compact</strong> 更像容量监控器，而不是摘要算法。它根据 token 估算、模型上下文窗口、摘要预留和安全缓冲判断是否该压缩；同时还要避免压缩流程自己递归触发压缩，所以来源是 <code>session_memory</code> 或 <code>compact</code> 的请求会被排除。</p>
+
+    <p><strong>Session Memory Compact</strong> 的摘要不是现场凭空生成的。<code>Session Memory</code> 是会话过程中逐步维护的当前任务摘要，记录当前状态、任务要求、相关文件、错误修正、关键结果和工作日志。等上下文快满时，系统优先拿这份已有摘要来接力，而不是立刻重新让模型总结整段历史。</p>
+
+    <p><strong>Full Compact</strong> 是最后兜底：创建一个 Fork Agent，让它在不能调用工具的约束下，把长历史压成结构化摘要。它最贵，但信息保留能力最强，通常会保留当前目标、关键决策、重要文件、已修复错误、未完成事项和下一步动作。</p>
+
+    <div class="callout blue"><b>核心理解</b>Compact 不是长期记忆库，也不是向量数据库。它更像长任务里的“接力棒”：按成本排序，先清旧工具输出，再用已有摘要，最后才让模型重新总结。</div>
+  </section>
+
+  <section id="memory">
+    <div class="hline"><span class="num">13</span><h2>记忆系统：Session Memory、Persistent Memory、Team Memory</h2></div>
+    <p>压缩处理的是当前会话的上下文压力；记忆处理的是信息如何跨轮次、跨会话，甚至跨团队留下来。根据这份逆向分析，Claude Code 的记忆可以分成三层。</p>
+
+    <div class="tw"><table>
+      <thead><tr><th>层级</th><th>范围</th><th>主要用途</th><th>存储形态</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Session Memory</strong></td><td>当前会话</td><td>服务于上下文压缩，记录当前状态、任务规格、文件函数、错误修正、工作日志等。</td><td>会话目录下的单个文件，固定章节结构。</td></tr>
+        <tr><td><strong>Persistent Memory</strong></td><td>跨会话、按项目</td><td>保存用户偏好、项目事实、反馈、外部引用等可复用信息。</td><td><code>~/.claude/projects/&lt;项目&gt;/memory/</code> 下的 Markdown 文件。</td></tr>
+        <tr><td><strong>Team Memory</strong></td><td>跨用户、按仓库</td><td>把适合团队共享的项目记忆同步给同仓库成员。</td><td>本地 <code>team/</code> 子目录 + 服务端同步。</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>Session Memory：不是长期记忆，而是压缩的素材</h3>
+    <p>Session Memory 只服务当前会话。它会随着会话推进逐步更新，记录当前状态、任务要求、关键文件、工作流、错误修正、重要结果等。等 Auto-Compact 触发时，系统可以优先拿这份会话记忆做摘要，而不是临时再把整段历史交给 LLM 重新总结。</p>
+
+    <h3>Persistent Memory：MEMORY.md 是索引，不是全部记忆</h3>
+    <p>持久记忆更像本地知识库。每条记忆是一个独立 Markdown 文件，带 <code>name</code>、<code>description</code>、<code>type</code> 等 frontmatter；<code>MEMORY.md</code> 只负责做索引，告诉系统有哪些记忆文件、每个文件大概讲什么。</p>
+    <pre><code>memory/
+├── MEMORY.md              # 索引，不是记忆本体
+├── feedback_concise.md     # 用户反馈 / 工作偏好
+├── project_deadline.md     # 项目信息
+└── reference_linear.md     # 外部系统引用</code></pre>
+
+    <p>自动提取通常发生在一轮任务结束后：主 Agent 完成响应、Stop Hook 触发，后台 Fork Agent 再判断哪些内容值得写入记忆。它不是把当前对话完整保存，而是提炼成 user、feedback、project、reference 等类型的文件。</p>
+
+    <h3>Team Memory：团队共享，但要更谨慎</h3>
+    <p>Team Memory 面向多人协作，会把适合共享的项目记忆同步到团队范围。因为它跨用户，所以需要额外处理同步冲突、路径安全和秘密扫描。文章主线只需要知道：这是 Persistent Memory 的团队化扩展，不是每个场景都必须启用。</p>
+
+    <div class="callout green"><b>工程观点</b>Claude Code 的记忆不是“记得越多越好”，而是把信息分层：当前会话用 Session Memory 支撑压缩；跨会话用文件化 Persistent Memory 留下可审查的经验；团队协作再扩展到 Team Memory。</div>
+  </section>
+
+  <section id="learn">
+    <div class="hline"><span class="num">14</span><h2>如果你要做自己的 Agent 系统，真正值得抄什么？</h2></div>
+    <div class="takeaways">
+      <div class="takeaway"><div><b>先做清楚角色边界</b><span>不要一开始就追求“很多 Agent”。先定义谁负责规划、谁负责执行、谁负责验证、谁负责和用户确认。</span></div></div>
+      <div class="takeaway"><div><b>工具权限要写在代码里</b><span>只读 Agent 就真的只给 Read/Grep；规划 Agent 就不要给 Bash/Edit。不要只靠 prompt 约束。</span></div></div>
+      <div class="takeaway"><div><b>并行写代码必须有隔离战场</b><span>如果 Worker 会写文件，就要考虑 worktree、分支、沙箱或临时目录，否则并行很快变成互相覆盖。</span></div></div>
+      <div class="takeaway"><div><b>通信可以先从文件开始</b><span>本地 Agent 场景里，JSON 文件 + 文件锁比 Redis/MQ 更容易部署、更容易排查。</span></div></div>
+      <div class="takeaway"><div><b>把探索过程和最终结论分开</b><span>Worker 可以产生很多中间噪音，但回传给 Leader 的应该是压缩后的结论、证据和建议。</span></div></div>
+      <div class="takeaway"><div><b>缓存优化不是锦上添花</b><span>系统 prompt、工具描述、配置顺序越稳定，Prompt Cache 越容易命中，成本和响应速度都会改善。</span></div></div>
+      <div class="takeaway"><div><b>记忆要可读、可审计、可修改</b><span>对本地开发工具来说，文件化记忆往往比黑盒向量库更容易获得用户信任。</span></div></div>
+    </div>
+  </section>
+
+  <section id="summary">
+    <div class="hline"><span class="num">15</span><h2>最后用一张心智图收束</h2></div>
+    <div class="flow">
+      <div class="flow-row">
+        <div class="node purple"><b>Leader</b><span>理解目标 / 拆任务 / 最终决策</span></div><div class="arrow">→</div>
+        <div class="node blue"><b>Worker</b><span>独立上下文 / 并行探索 / 执行子任务</span></div><div class="arrow">→</div>
+        <div class="node green"><b>Worktree</b><span>给并行修改提供隔离战场</span></div>
+      </div>
+      <div class="flow-row">
+        <div class="node orange"><b>Cache</b><span>稳定 prompt 前缀降低成本</span></div><div class="arrow">+</div>
+        <div class="node red"><b>Permission</b><span>危险操作最终由人确认</span></div><div class="arrow">+</div>
+        <div class="node blue"><b>Compact / Memory</b><span>压缩让长任务不断线，文件记忆沉淀经验</span></div>
+      </div>
+    </div>
+    <div class="callout green"><b>总括</b>Claude Code 的工程价值，不在于“用了很多 Agent”，而在于它把 Agent 系统最难的几个问题——角色分工、上下文隔离、并发协作、代码隔离、工具权限、消息通信、缓存成本、上下文压缩、长期记忆——都落到了具体机制上。</div>
+  </section>
+</main>
+</div>
+<footer>
+  <span>改造目标：把源码分析从“信息堆叠”改成“主线讲解”</span>
+  <span>v3 补强：上下文压缩与三层记忆系统</span>
+  <span>整理时间：2026-04</span>
+</footer>
+<button id="topBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+<script>
+const topBtn=document.getElementById('topBtn');
+window.addEventListener('scroll',()=>{topBtn.style.display=window.scrollY>420?'flex':'none'});
+const sections=[...document.querySelectorAll('section[id]')];
+const links=[...document.querySelectorAll('aside a')];
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){links.forEach(l=>l.classList.toggle('active',l.getAttribute('href')==='#'+e.target.id));}})},{rootMargin:'-22% 0px -68% 0px'});
+sections.forEach(s=>obs.observe(s));
+</script>
+</body>
+</html>
