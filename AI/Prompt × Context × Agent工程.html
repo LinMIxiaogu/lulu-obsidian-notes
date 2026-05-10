@@ -1,0 +1,1830 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>大模型应用工程 · 核心知识图谱</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=JetBrains+Mono:wght@400;500;600&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:      #faf7f2;
+    --bg2:     #f4f0e8;
+    --bg3:     #ede8dc;
+    --surface: #ffffff;
+    --surface2:#f7f4ee;
+    --border:  #d8d0c4;
+    --accent1: #1a5fa8;
+    --accent2: #6b35a8;
+    --accent3: #1a7a4a;
+    --accent4: #b06000;
+    --accent5: #a01860;
+    --text:    #1a1612;
+    --text2:   #3d3830;
+    --text3:   #6b6356;
+    --glow1: rgba(26,95,168,0.08);
+    --glow2: rgba(107,53,168,0.08);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Noto Serif SC', serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.8;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content:'';
+    position:fixed; inset:0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.022'/%3E%3C/svg%3E");
+    pointer-events:none; z-index:0;
+  }
+
+  /* ===== HERO ===== */
+  .hero {
+    position: relative;
+    min-height: 340px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 80px 24px 60px;
+    overflow: hidden;
+    background: var(--text);
+    z-index:1;
+  }
+
+  .hero-grid {
+    position: absolute; inset: 0;
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255,255,255,0.04) 40px),
+      repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(255,255,255,0.04) 40px);
+    pointer-events:none;
+  }
+
+  .hero-glow {
+    position: absolute;
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(180,120,60,0.15) 0%, transparent 65%);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    animation: pulse 5s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%,100% { opacity: 0.7; transform: translate(-50%,-50%) scale(1); }
+    50%      { opacity: 1;   transform: translate(-50%,-50%) scale(1.06); }
+  }
+
+  .hero-badge {
+    position: relative;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: rgba(255,255,255,0.5);
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 5px 16px;
+    border-radius: 3px;
+    margin-bottom: 20px;
+    background: rgba(255,255,255,0.06);
+  }
+
+  .hero h1 {
+    position: relative;
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(28px, 5vw, 52px);
+    font-weight: 800;
+    line-height: 1.15;
+    color: #faf7f2;
+    margin-bottom: 16px;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: #d4a86a;
+    font-weight: 400;
+  }
+
+  .hero p {
+    position: relative;
+    color: rgba(255,255,255,0.5);
+    font-size: 15px;
+    max-width: 600px;
+  }
+
+  /* ===== SIDEBAR NAV ===== */
+  .page-wrap {
+    display: flex;
+    align-items: flex-start;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 24px;
+    position: relative; z-index:1;
+  }
+
+  .sidebar {
+    position: sticky;
+    top: 32px;
+    width: 200px;
+    flex-shrink: 0;
+    margin-right: 48px;
+    padding: 28px 0 28px;
+    align-self: flex-start;
+  }
+
+  .sidebar-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 3px;
+    color: var(--text3);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    padding-left: 14px;
+  }
+
+  .sidebar-list {
+    list-style: none;
+    padding: 0; margin: 0;
+  }
+
+  .sidebar-list li { margin: 2px 0; }
+
+  .nav-item {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px;
+    padding: 7px 14px;
+    color: var(--text3);
+    text-decoration: none;
+    border-left: 2px solid transparent;
+    border-radius: 0 4px 4px 0;
+    transition: all 0.2s;
+    letter-spacing: 0.3px;
+    line-height: 1.4;
+  }
+
+  .nav-item:hover {
+    color: var(--text2);
+    background: var(--bg2);
+    border-left-color: var(--border);
+  }
+
+  .nav-item.active {
+    color: var(--text);
+    background: var(--bg3);
+    border-left-color: var(--text);
+    font-weight: 600;
+  }
+
+  /* ===== LAYOUT ===== */
+  .main {
+    flex: 1;
+    min-width: 0;
+    padding: 0 0 80px;
+    position: relative; z-index:1;
+  }
+
+  @media (max-width: 860px) {
+    .sidebar { display: none; }
+    .page-wrap { display: block; }
+    .main { padding: 0 0 80px; }
+  }
+
+  /* ===== SECTION ===== */
+  .section {
+    margin-top: 72px;
+    opacity: 1;
+    transform: none;
+    /* 用 CSS animation 替代 JS IntersectionObserver 驱动的显隐，
+       确保在 Obsidian 等受限环境下内容始终可见 */
+    animation: fadeUp 0.5s ease both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: none; }
+  }
+
+  /* JS 增强：支持 IntersectionObserver 的环境下延迟触发 */
+  .section.js-hidden {
+    opacity: 0;
+    transform: translateY(24px);
+    animation: none;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+
+  .section.js-hidden.visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 32px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--text);
+  }
+
+  .section-icon {
+    width: 44px; height: 44px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+    border: 1.5px solid var(--border);
+    background: var(--surface);
+  }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .section-subtitle {
+    font-size: 12px;
+    color: var(--text3);
+    font-family: 'JetBrains Mono', monospace;
+    margin-top: 2px;
+    letter-spacing: 0.5px;
+  }
+
+  .section-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text3);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  /* ===== CARDS ===== */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 16px;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 4px;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+
+  .card:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 4px 4px 0 var(--text);
+    border-color: var(--text);
+  }
+
+  .card.blue::before   { background: var(--accent1); }
+  .card.purple::before { background: var(--accent2); }
+  .card.green::before  { background: var(--accent3); }
+  .card.orange::before { background: var(--accent4); }
+  .card.pink::before   { background: var(--accent5); }
+
+  .card-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 14.5px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text);
+  }
+
+  .card-body {
+    font-size: 13.5px;
+    color: var(--text2);
+    line-height: 1.75;
+  }
+
+  .card-body ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .card-body li {
+    padding: 3px 0 3px 16px;
+    position: relative;
+  }
+
+  .card-body li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--text3);
+    font-size: 11px;
+    top: 5px;
+  }
+
+  /* ===== CODE BLOCK ===== */
+  .code-block {
+    background: var(--text);
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 16px 0;
+  }
+
+  .code-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 16px;
+    background: rgba(255,255,255,0.06);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .code-lang {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: rgba(255,255,255,0.35);
+    letter-spacing: 2px;
+  }
+
+  .code-dots {
+    display: flex; gap: 5px;
+  }
+
+  .code-dots span {
+    width: 9px; height: 9px;
+    border-radius: 50%;
+  }
+
+  .code-dots span:nth-child(1) { background: #ff5f57; }
+  .code-dots span:nth-child(2) { background: #febc2e; }
+  .code-dots span:nth-child(3) { background: #28c840; }
+
+  .code-content {
+    padding: 18px 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    line-height: 1.85;
+    overflow-x: auto;
+    white-space: pre;
+    color: #c9d1d9;
+  }
+
+  .token-keyword  { color: #ff7b72; }
+  .token-string   { color: #a5d6ff; }
+  .token-comment  { color: #6e7681; font-style: italic; }
+  .token-fn       { color: #d2a8ff; }
+  .token-var      { color: #79c0ff; }
+  .token-num      { color: #ffa657; }
+  .token-key      { color: #7ee787; }
+
+  /* ===== DIAGRAM ===== */
+  .diagram-container {
+    background: var(--bg2);
+    border: 1.5px solid var(--border);
+    border-radius: 4px;
+    padding: 28px 24px;
+    margin: 20px 0;
+    overflow-x: auto;
+  }
+
+  .flow-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 8px 0;
+  }
+
+  .flow-node {
+    padding: 10px 18px;
+    border-radius: 4px;
+    font-size: 12.5px;
+    font-family: 'JetBrains Mono', monospace;
+    text-align: center;
+    min-width: 100px;
+    border: 1.5px solid;
+  }
+
+  .flow-node.blue   { background: #eef4fc; border-color: #b0ccea; color: var(--accent1); }
+  .flow-node.purple { background: #f4eefb; border-color: #c8a8e8; color: var(--accent2); }
+  .flow-node.green  { background: #eef8f2; border-color: #a0d4b8; color: var(--accent3); }
+  .flow-node.orange { background: #fdf6e8; border-color: #e8c878; color: var(--accent4); }
+  .flow-node.pink   { background: #fdf0f5; border-color: #e8a8c4; color: var(--accent5); }
+  .flow-node.gray   { background: var(--bg2); border-color: var(--border); color: var(--text3); }
+
+  .flow-arrow {
+    color: var(--text3);
+    font-size: 18px;
+    line-height: 1;
+  }
+
+  .flow-label {
+    font-size: 11px;
+    color: var(--text3);
+    font-family: 'JetBrains Mono', monospace;
+    text-align: center;
+    margin-top: 4px;
+    letter-spacing: 0.3px;
+  }
+
+  /* ===== TABLE ===== */
+  .table-wrap {
+    overflow-x: auto;
+    border-radius: 4px;
+    border: 1.5px solid var(--border);
+    margin: 16px 0;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+  }
+
+  thead {
+    background: var(--text);
+  }
+
+  th {
+    padding: 10px 16px;
+    text-align: left;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 1px;
+    color: var(--bg);
+    font-weight: 600;
+    border-bottom: none;
+  }
+
+  td {
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--bg2);
+    color: var(--text2);
+    vertical-align: top;
+  }
+
+  tr:last-child td { border-bottom: none; }
+  tr:nth-child(even) td { background: var(--bg2); }
+  tr:hover td { background: #eef4fc; }
+
+  /* ===== TAGS ===== */
+  .tag {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    padding: 2px 9px;
+    border-radius: 2px;
+    margin: 2px;
+    vertical-align: middle;
+    border: 1px solid;
+  }
+
+  .tag.blue   { background: #eef4fc; color: var(--accent1); border-color: #b0ccea; }
+  .tag.green  { background: #eef8f2; color: var(--accent3); border-color: #a0d4b8; }
+  .tag.orange { background: #fdf6e8; color: var(--accent4); border-color: #e8c878; }
+  .tag.purple { background: #f4eefb; color: var(--accent2); border-color: #c8a8e8; }
+  .tag.red    { background: #fdf0ee; color: #c0392b;        border-color: #f0b8b2; }
+
+  /* ===== CALLOUT ===== */
+  .callout {
+    border-radius: 3px;
+    padding: 14px 18px;
+    margin: 16px 0;
+    font-size: 13.5px;
+    line-height: 1.7;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    border-left: 3px solid;
+  }
+
+  .callout.tip    { background: #eef8f2; border-color: var(--accent3); }
+  .callout.warn   { background: #fdf6e8; border-color: var(--accent4); }
+  .callout.info   { background: #eef4fc; border-color: var(--accent1); }
+  .callout.exam   { background: #f4eefb; border-color: var(--accent2); }
+
+  .callout-icon { font-size: 15px; flex-shrink: 0; margin-top: 1px; }
+  .callout-body { flex: 1; color: var(--text2); }
+  .callout-body strong { color: var(--text); }
+
+  /* ===== COMPARE BOXES ===== */
+  .compare-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin: 16px 0;
+  }
+
+  .compare-box {
+    background: var(--bg2);
+    border: 1.5px solid var(--border);
+    border-radius: 4px;
+    padding: 18px;
+  }
+
+  .compare-box h4 {
+    font-family: 'Syne', sans-serif;
+    font-size: 13.5px;
+    margin-bottom: 10px;
+    color: var(--text);
+  }
+
+  /* ===== ARCH DIAGRAM ===== */
+  .arch-layer {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    border-radius: 4px;
+    margin: 5px 0;
+    font-size: 13px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .arch-label {
+    width: 80px;
+    font-size: 10px;
+    color: var(--text3);
+    flex-shrink: 0;
+    letter-spacing: 1px;
+  }
+
+  .arch-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    flex: 1;
+  }
+
+  .arch-pill {
+    padding: 4px 11px;
+    border-radius: 3px;
+    font-size: 12px;
+    border: 1px solid;
+  }
+
+  /* ===== FULL-WIDTH SECTION ===== */
+  .wide-card {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 4px;
+    padding: 26px 28px;
+    margin: 16px 0;
+  }
+
+  .wide-card h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .wide-card h3::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ===== LIFECYCLE STEPS ===== */
+  .steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    position: relative;
+  }
+
+  .step {
+    display: flex;
+    gap: 20px;
+    position: relative;
+    padding-bottom: 24px;
+  }
+
+  .step:last-child { padding-bottom: 0; }
+
+  .step-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    flex-shrink: 0;
+  }
+
+  .step-num {
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    flex-shrink: 0;
+    border: 2px solid;
+    background: var(--surface);
+  }
+
+  .step-line {
+    width: 1px;
+    flex: 1;
+    min-height: 20px;
+    background: var(--border);
+    margin-top: 5px;
+  }
+
+  .step-content {
+    flex: 1;
+    padding-top: 3px;
+  }
+
+  .step-content h4 {
+    font-size: 14px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: var(--text);
+  }
+
+  .step-content p {
+    font-size: 13px;
+    color: var(--text2);
+    line-height: 1.65;
+  }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    text-align: center;
+    padding: 48px 24px;
+    color: var(--text3);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    border-top: 2px solid var(--text);
+    letter-spacing: 1px;
+    position: relative; z-index:1;
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 640px) {
+    .compare-grid { grid-template-columns: 1fr; }
+    .card-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-badge">LLM APPLICATION ENGINEERING · 面试知识精讲</div>
+  <h1>Prompt × Context × <em>Agent</em><br>工程全栈知识图谱</h1>
+  <p>覆盖 Prompt 工程 · 上下文工程 · Harness · Agent 框架 · Function Calling · MCP · Skill 七大模块</p>
+</div>
+
+<!-- PAGE WRAP -->
+<div class="page-wrap">
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sidebar-title">目录</div>
+  <ul class="sidebar-list">
+    <li><a class="nav-item" href="#prompt">01 · Prompt 工程</a></li>
+    <li><a class="nav-item" href="#context">02 · 上下文工程</a></li>
+    <li><a class="nav-item" href="#harness">03 · Harness 工程</a></li>
+    <li><a class="nav-item" href="#agent">04 · Agent 框架</a></li>
+    <li><a class="nav-item" href="#fc">05 · Function Calling</a></li>
+    <li><a class="nav-item" href="#mcp">06 · MCP</a></li>
+    <li><a class="nav-item" href="#skill">07 · Skill</a></li>
+    <li><a class="nav-item" href="#exam" style="margin-top:10px; color:var(--accent4);">⚡ 考点速查</a></li>
+  </ul>
+</nav>
+
+<main class="main">
+
+<!-- ===================== 01 PROMPT ===================== -->
+<section class="section" id="prompt">
+  <div class="section-header">
+    <div class="section-icon" style="background:#eef4fc;">✍️</div>
+    <div>
+      <div class="section-num">MODULE 01</div>
+      <div class="section-title">Prompt 工程</div>
+      <div class="section-subtitle">prompt_engineering · 输入侧的核心竞争力</div>
+    </div>
+  </div>
+
+  <!-- 提示策略 -->
+  <div class="wide-card">
+    <h3>📐 核心提示策略对比</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>策略</th><th>原理</th><th>适用场景</th><th>注意事项</th></tr></thead>
+        <tbody>
+          <tr><td><span class="tag blue">Zero-shot</span></td><td>直接描述任务，无示例</td><td>通用任务、快速验证</td><td>依赖模型能力上限</td></tr>
+          <tr><td><span class="tag green">Few-shot</span></td><td>给 2~5 个输入输出示例</td><td>格式敏感、分类、实体抽取</td><td>示例质量 &gt; 数量；格式必须一致</td></tr>
+          <tr><td><span class="tag orange">CoT</span></td><td>在示例中展示推理过程</td><td>数学推理、多步逻辑、代码生成</td><td>简单任务反而降效；增加 token</td></tr>
+          <tr><td><span class="tag purple">Zero-shot CoT</span></td><td>追加 "Let's think step by step"</td><td>无标注数据时快速提升推理</td><td>效果弱于有示例的 CoT</td></tr>
+          <tr><td><span class="tag blue">Self-Consistency</span></td><td>多次采样 → 投票取多数</td><td>有唯一正确答案的推理</td><td>成本 = N × 单次；temperature &gt; 0</td></tr>
+          <tr><td><span class="tag green">Many-shot</span></td><td>百级示例充满上下文</td><td>长窗口模型 + 分类任务</td><td>示例多样性比重复更重要</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- System Prompt -->
+  <div class="card-grid">
+    <div class="card blue">
+      <div class="card-title">🧱 System Prompt 结构化设计</div>
+      <div class="card-body">
+        <div class="code-block">
+          <div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><div class="code-lang">SYSTEM PROMPT TEMPLATE</div></div>
+          <div class="code-content"><span class="token-comment"># Role — 你是谁</span>
+你是一名专业的合同审查律师...
+
+<span class="token-comment"># Context — 背景</span>
+用户将提供合同文本...
+
+<span class="token-comment"># Instructions — 行为规则</span>
+1. 识别风险条款
+2. 用中文回复
+
+<span class="token-comment"># Constraints — 禁止事项</span>
+不要给出法律建议
+不要捏造条款
+
+<span class="token-comment"># Output Format</span>
+以 JSON 格式输出...</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card purple">
+      <div class="card-title">⚔️ Prompt 注入攻击与防御</div>
+      <div class="card-body">
+        <ul>
+          <li><strong style="color:#c0392b">Direct Injection</strong> — 用户输入覆盖系统指令</li>
+          <li><strong style="color:#fb923c">Indirect Injection</strong> — 文档/网页内嵌恶意指令（RAG 高危）</li>
+          <li><strong style="color:#f472b6">Jailbreak</strong> — 角色扮演、编码混淆绕过限制</li>
+        </ul>
+        <div style="margin-top:12px; padding-top:12px; border-top:1px solid var(--border);">
+          <div style="font-size:12px; color:var(--text3); margin-bottom:8px; font-family:'JetBrains Mono',monospace;">防御手段</div>
+          <ul>
+            <li>输入过滤 + 异常结构检测</li>
+            <li>Sandwich Defense（前后重申规则）</li>
+            <li>指令隔离标签 <span class="tag blue">&lt;user_input&gt;</span></li>
+            <li>Guard Model（如 LlamaGuard）二次审核</li>
+            <li>RAG 场景：文档内容单独封装</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 输出格式控制 -->
+  <div class="wide-card">
+    <h3>🎯 输出格式控制 — JSON Mode vs Structured Output</h3>
+    <div class="compare-grid">
+      <div class="compare-box">
+        <h4 style="color:var(--accent1)">JSON Mode</h4>
+        <ul style="font-size:13px; color:var(--text2); list-style:none; padding:0;">
+          <li style="padding:3px 0;">✅ 强制输出合法 JSON 语法</li>
+          <li style="padding:3px 0;">❌ 不保证字段名/类型/完整性</li>
+          <li style="padding:3px 0;">❌ 需要 prompt 里说明字段</li>
+          <li style="padding:3px 0; color:var(--text3)">适合简单场景快速使用</li>
+        </ul>
+      </div>
+      <div class="compare-box">
+        <h4 style="color:var(--accent3)">Structured Output (Schema 约束)</h4>
+        <ul style="font-size:13px; color:var(--text2); list-style:none; padding:0;">
+          <li style="padding:3px 0;">✅ JSON Schema 约束字段名+类型</li>
+          <li style="padding:3px 0;">✅ 必填字段有保证</li>
+          <li style="padding:3px 0;">✅ 嵌套/枚举均支持</li>
+          <li style="padding:3px 0; color:var(--text3)">生产环境首选</li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout info">
+      <div class="callout-icon">💡</div>
+      <div class="callout-body"><strong>面试考点：</strong>两者核心区别是 Schema 约束的强度。JSON Mode 只保证可解析，Structured Output 保证字段语义。生产代码必须做 validation + retry，不能假设输出一定合法。</div>
+    </div>
+  </div>
+
+  <!-- 高级技巧 -->
+  <div class="card-grid">
+    <div class="card green">
+      <div class="card-title">🌳 Tree of Thoughts (ToT)</div>
+      <div class="card-body">
+        <div class="diagram-container" style="padding:16px; margin:0; background:var(--bg2);">
+          <div class="flow-row">
+            <div class="flow-node gray">问题</div>
+          </div>
+          <div class="flow-row" style="margin-top:4px;">
+            <div class="flow-arrow">↙</div>
+            <div class="flow-arrow">↓</div>
+            <div class="flow-arrow">↘</div>
+          </div>
+          <div class="flow-row">
+            <div class="flow-node blue">路径A</div>
+            <div class="flow-node green">路径B ✓</div>
+            <div class="flow-node gray">路径C</div>
+          </div>
+          <div class="flow-label">BFS/DFS 探索 → 评分 → 选最优</div>
+        </div>
+        <ul style="margin-top:12px;">
+          <li>适合复杂规划、创意写作</li>
+          <li>评估器打分修剪低质路径</li>
+          <li>成本高，不适合实时场景</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card orange">
+      <div class="card-title">🔗 Prompt Chaining 与 Meta Prompting</div>
+      <div class="card-body">
+        <div style="margin-bottom:12px;">
+          <div style="font-size:12px; color:var(--text3); font-family:'JetBrains Mono',monospace; margin-bottom:6px;">PROMPT CHAINING</div>
+          <div class="flow-row" style="justify-content:flex-start; gap:6px;">
+            <div class="flow-node blue" style="min-width:70px; font-size:11px; padding:6px 10px;">任务拆解</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-node purple" style="min-width:70px; font-size:11px; padding:6px 10px;">子Prompt1</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-node green" style="min-width:70px; font-size:11px; padding:6px 10px;">子Prompt2</div>
+          </div>
+        </div>
+        <ul>
+          <li>每步输出是下步的输入</li>
+          <li>便于调试和中间结果审查</li>
+        </ul>
+        <div style="margin-top:12px; padding-top:12px; border-top:1px solid var(--border);">
+          <div style="font-size:12px; color:var(--text3); font-family:'JetBrains Mono',monospace; margin-bottom:6px;">META PROMPTING (DSPy)</div>
+          <ul>
+            <li>用 LLM 自动生成/优化 Prompt</li>
+            <li>生成候选 → 评估 → 梯度迭代</li>
+            <li>解决手工调参耗时问题</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 02 CONTEXT ===================== -->
+<section class="section" id="context">
+  <div class="section-header">
+    <div class="section-icon" style="background:#f4eefb;">🧠</div>
+    <div>
+      <div class="section-num">MODULE 02</div>
+      <div class="section-title">上下文工程</div>
+      <div class="section-subtitle">context_engineering · 管理模型的"记忆空间"</div>
+    </div>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-icon">📌</div>
+    <div class="callout-body"><strong>核心命题：</strong>上下文窗口是有限的昂贵资源。上下文工程就是在有限 token 预算内，把最有价值的信息塞进去，同时管理好多轮对话、外部知识、工具结果之间的优先级。</div>
+  </div>
+
+  <!-- Context 组成 -->
+  <div class="wide-card">
+    <h3>🏗️ 上下文窗口的组成结构</h3>
+    <div class="diagram-container">
+      <div style="display:flex; flex-direction:column; gap:6px; max-width:600px; margin:0 auto;">
+        <div class="arch-layer" style="background:var(--blue-bg-inline); border:1.5px solid #b0ccea;">
+          <div class="arch-label">SYSTEM</div>
+          <div class="arch-content">
+            <div class="arch-pill blue" style="background:#eef4fc; border-color:#b0ccea; color:var(--accent1);">角色定义</div>
+            <div class="arch-pill blue" style="background:#eef4fc; border-color:#b0ccea; color:var(--accent1);">行为规则</div>
+            <div class="arch-pill blue" style="background:#eef4fc; border-color:#b0ccea; color:var(--accent1);">输出格式</div>
+          </div>
+        </div>
+        <div class="arch-layer" style="background:#f4eefb; border:1.5px solid #c8a8e8;">
+          <div class="arch-label">MEMORY</div>
+          <div class="arch-content">
+            <div class="arch-pill purple" style="background:#f4eefb; border-color:#c8a8e8; color:var(--accent2);">对话历史摘要</div>
+            <div class="arch-pill purple" style="background:#f4eefb; border-color:#c8a8e8; color:var(--accent2);">用户画像</div>
+            <div class="arch-pill purple" style="background:#f4eefb; border-color:#c8a8e8; color:var(--accent2);">实体记忆</div>
+          </div>
+        </div>
+        <div class="arch-layer" style="background:#eef8f2; border:1.5px solid #a0d4b8;">
+          <div class="arch-label">KNOWLEDGE</div>
+          <div class="arch-content">
+            <div class="arch-pill green" style="background:#eef8f2; border-color:#a0d4b8; color:var(--accent3);">RAG 检索结果</div>
+            <div class="arch-pill green" style="background:#eef8f2; border-color:#a0d4b8; color:var(--accent3);">文档块</div>
+            <div class="arch-pill green" style="background:#eef8f2; border-color:#a0d4b8; color:var(--accent3);">结构化数据</div>
+          </div>
+        </div>
+        <div class="arch-layer" style="background:#fdf6e8; border:1.5px solid #e8c878;">
+          <div class="arch-label">TOOLS</div>
+          <div class="arch-content">
+            <div class="arch-pill orange" style="background:#fdf6e8; border-color:#e8c878; color:var(--accent4);">Tool 定义</div>
+            <div class="arch-pill orange" style="background:#fdf6e8; border-color:#e8c878; color:var(--accent4);">Tool 执行结果</div>
+          </div>
+        </div>
+        <div class="arch-layer" style="background:#fdf0f5; border:1.5px solid #e8a8c4;">
+          <div class="arch-label">USER</div>
+          <div class="arch-content">
+            <div class="arch-pill pink" style="background:#fdf0f5; border-color:#e8a8c4; color:var(--accent5);">当前用户输入</div>
+          </div>
+        </div>
+      </div>
+      <div class="flow-label" style="margin-top:16px;">Token 消耗从上到下叠加，总量受上下文窗口限制</div>
+    </div>
+  </div>
+
+  <div class="card-grid">
+    <div class="card purple">
+      <div class="card-title">📏 上下文长度管理策略</div>
+      <div class="card-body">
+        <ul>
+          <li><strong style="color:var(--accent2)">滑动窗口</strong> — 保留最近 N 轮对话，丢弃早期</li>
+          <li><strong style="color:var(--accent2)">摘要压缩</strong> — 用 LLM 将历史对话压缩为摘要</li>
+          <li><strong style="color:var(--accent2)">分层存储</strong> — 短期(原文) + 长期(向量/摘要)</li>
+          <li><strong style="color:var(--accent2)">Token 预算分配</strong> — 为每个模块设上限</li>
+          <li><strong style="color:var(--accent2)">Prompt 压缩</strong> — LLMLingua 动态删除冗余 token</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card blue">
+      <div class="card-title">🔖 上下文位置效应</div>
+      <div class="card-body">
+        <div class="callout warn" style="margin:0 0 12px 0;">
+          <div class="callout-icon">⚠️</div>
+          <div class="callout-body"><strong>Lost in the Middle 效应：</strong>模型对上下文头部和尾部的内容记忆显著优于中间部分。</div>
+        </div>
+        <ul>
+          <li>关键指令 → 放在 System Prompt 或末尾</li>
+          <li>重要文档 → 避免堆在中间</li>
+          <li>Reranker → 把最相关内容放首位</li>
+          <li>实验验证：超过 16K 后中间遗忘显著</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card green">
+      <div class="card-title">💾 多轮对话记忆类型</div>
+      <div class="card-body">
+        <div class="table-wrap" style="margin:0;">
+          <table>
+            <thead><tr><th>类型</th><th>存储位置</th><th>生命周期</th></tr></thead>
+            <tbody>
+              <tr><td style="color:var(--accent3)">In-context</td><td>上下文窗口</td><td>当前会话</td></tr>
+              <tr><td style="color:var(--accent1)">External Vector</td><td>向量数据库</td><td>持久化</td></tr>
+              <tr><td style="color:var(--accent2)">Summary</td><td>KV Store</td><td>可配置</td></tr>
+              <tr><td style="color:var(--accent4)">Entity</td><td>图数据库/KV</td><td>持久化</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="card orange">
+      <div class="card-title">💰 Token 成本优化</div>
+      <div class="card-body">
+        <ul>
+          <li><strong style="color:var(--accent4)">Prompt Caching</strong> — 缓存静态 System Prompt（Anthropic 减 90% 输入成本）</li>
+          <li><strong style="color:var(--accent4)">Semantic Cache</strong> — 相似问题命中缓存回答</li>
+          <li><strong style="color:var(--accent4)">模型路由</strong> — 简单问题 → 小模型；复杂 → 大模型</li>
+          <li><strong style="color:var(--accent4)">LLMLingua</strong> — 对长文档做 token 压缩（可达 4x）</li>
+          <li><strong style="color:var(--accent4)">Streaming</strong> — 流式输出降低首字节延迟感知</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 03 HARNESS ===================== -->
+<section class="section" id="harness">
+  <div class="section-header">
+    <div class="section-icon" style="background:#eef8f2;">🔧</div>
+    <div>
+      <div class="section-num">MODULE 03</div>
+      <div class="section-title">Harness 工程</div>
+      <div class="section-subtitle">llm_harness · 围绕模型调用的工程脚手架</div>
+    </div>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-icon">📌</div>
+    <div class="callout-body"><strong>Harness</strong> 是指围绕 LLM 调用搭建的工程框架，包括输入预处理、调用管理、输出后处理、错误重试、可观测性等，本质是让 LLM 调用生产可用。</div>
+  </div>
+
+  <div class="wide-card">
+    <h3>🏛️ Harness 全流程架构</h3>
+    <div class="diagram-container">
+      <div class="steps">
+        <div class="step">
+          <div class="step-left">
+            <div class="step-num" style="background:#eef4fc; color:var(--accent1); border:1px solid rgba(79,158,255,0.3);">01</div>
+            <div class="step-line"></div>
+          </div>
+          <div class="step-content">
+            <h4 style="color:var(--accent1)">输入预处理层</h4>
+            <p>用户输入清洗 → 安全过滤 → Prompt 模板渲染 → Token 计数 → 超长截断/压缩</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-left">
+            <div class="step-num" style="background:#f4eefb; color:var(--accent2); border:1px solid rgba(167,139,250,0.3);">02</div>
+            <div class="step-line"></div>
+          </div>
+          <div class="step-content">
+            <h4 style="color:var(--accent2)">调用管理层</h4>
+            <p>限流（Rate Limit）→ 重试（指数退避）→ 超时控制 → 多供应商路由（LiteLLM）→ Fallback 降级</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-left">
+            <div class="step-num" style="background:#eef8f2; color:var(--accent3); border:1px solid rgba(52,211,153,0.3);">03</div>
+            <div class="step-line"></div>
+          </div>
+          <div class="step-content">
+            <h4 style="color:var(--accent3)">输出后处理层</h4>
+            <p>格式解析（JSON/Markdown）→ Schema 验证 → Hallucination 检测 → 内容安全过滤 → 结果缓存</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-left">
+            <div class="step-num" style="background:#fdf6e8; color:var(--accent4); border:1px solid rgba(251,146,60,0.3);">04</div>
+            <div class="step-line"></div>
+          </div>
+          <div class="step-content">
+            <h4 style="color:var(--accent4)">可观测性层</h4>
+            <p>Trace / Span 记录 → Token 用量统计 → 延迟监控 → 评估打分 → 版本化 Prompt 管理</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-grid">
+    <div class="card green">
+      <div class="card-title">🔄 重试与错误处理</div>
+      <div class="card-body">
+        <div class="code-block">
+          <div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><div class="code-lang">PYTHON</div></div>
+          <div class="code-content"><span class="token-keyword">async def</span> <span class="token-fn">call_with_retry</span>(prompt, max_retries=<span class="token-num">3</span>):
+    <span class="token-keyword">for</span> attempt <span class="token-keyword">in</span> range(max_retries):
+        <span class="token-keyword">try</span>:
+            result = <span class="token-keyword">await</span> llm.call(prompt)
+            <span class="token-comment"># 验证输出格式</span>
+            validate_schema(result)
+            <span class="token-keyword">return</span> result
+        <span class="token-keyword">except</span> RateLimitError:
+            wait = <span class="token-num">2</span> ** attempt  <span class="token-comment"># 指数退避</span>
+            <span class="token-keyword">await</span> asyncio.sleep(wait)
+        <span class="token-keyword">except</span> ValidationError:
+            prompt = add_repair_hint(prompt)
+    <span class="token-keyword">raise</span> MaxRetriesExceeded()</div>
+        </div>
+        <ul style="margin-top:8px;">
+          <li>JSON 解析失败 → 带错误信息重试</li>
+          <li>429 限流 → 指数退避 + jitter</li>
+          <li>超时 → Fallback 到备用模型</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card blue">
+      <div class="card-title">📊 可观测性工具链</div>
+      <div class="card-body">
+        <div class="table-wrap" style="margin:0 0 12px 0;">
+          <table>
+            <thead><tr><th>工具</th><th>核心功能</th></tr></thead>
+            <tbody>
+              <tr><td style="color:var(--accent1)">LangSmith</td><td>Trace、评估、Prompt 版本管理</td></tr>
+              <tr><td style="color:var(--accent3)">LangFuse</td><td>开源、成本追踪、A/B 对比</td></tr>
+              <tr><td style="color:var(--accent4)">Helicone</td><td>代理层、token 统计、缓存</td></tr>
+              <tr><td style="color:var(--accent2)">Phoenix (Arize)</td><td>幻觉检测、嵌入可视化</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout tip" style="margin:0;">
+          <div class="callout-icon">✅</div>
+          <div class="callout-body">生产必备：每个 LLM 调用都应记录 input、output、latency、token_count、model_version</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card orange">
+      <div class="card-title">🌐 多供应商路由 (LiteLLM)</div>
+      <div class="card-body">
+        <ul>
+          <li>统一接口调用 OpenAI / Anthropic / Gemini / 本地模型</li>
+          <li>按成本/延迟/能力动态路由</li>
+          <li>主供应商故障 → 自动 Fallback</li>
+          <li>负载均衡：同一模型多 API Key 轮询</li>
+        </ul>
+        <div class="code-block" style="margin-top:12px;">
+          <div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><div class="code-lang">CONFIG</div></div>
+          <div class="code-content"><span class="token-key">router_settings</span>:
+  <span class="token-key">routing_strategy</span>: <span class="token-string">"latency-based-routing"</span>
+  <span class="token-key">fallbacks</span>:
+    - <span class="token-string">"gpt-4o"</span> → [<span class="token-string">"claude-3-5-sonnet"</span>]</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card purple">
+      <div class="card-title">🛡️ 内容安全与 Guardrails</div>
+      <div class="card-body">
+        <ul>
+          <li><strong style="color:var(--accent2)">输入侧</strong> — 检测 PII、有害内容、注入攻击</li>
+          <li><strong style="color:var(--accent2)">输出侧</strong> — 事实核查、幻觉检测、合规过滤</li>
+          <li><strong style="color:var(--accent2)">NeMo Guardrails</strong> — 声明式规则引擎，可配置允许/拒绝话题</li>
+          <li><strong style="color:var(--accent2)">Guardrails AI</strong> — Schema 验证 + 自定义验证器</li>
+        </ul>
+        <div class="callout warn" style="margin-top:12px;">
+          <div class="callout-icon">⚠️</div>
+          <div class="callout-body">幻觉检测方法：RAG-Faithfulness（答案是否被文档支持）、Self-check（多次采样一致性）、外部事实核查 API</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 04 AGENT ===================== -->
+<section class="section" id="agent">
+  <div class="section-header">
+    <div class="section-icon" style="background:#fdf6e8;">🤖</div>
+    <div>
+      <div class="section-num">MODULE 04</div>
+      <div class="section-title">Agent 框架</div>
+      <div class="section-subtitle">agent_framework · 自主规划与工具执行</div>
+    </div>
+  </div>
+
+  <!-- Agent Loop -->
+  <div class="wide-card">
+    <h3>🔁 Agent 核心循环</h3>
+    <div class="diagram-container">
+      <div style="display:flex; align-items:center; justify-content:center; gap:12px; flex-wrap:wrap;">
+        <div style="text-align:center;">
+          <div class="flow-node blue" style="padding:14px 20px;">用户目标</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div style="text-align:center;">
+          <div class="flow-node purple" style="padding:14px 20px;">LLM 规划<br><span style="font-size:10px;">(Think/Reason)</span></div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div style="text-align:center;">
+          <div class="flow-node orange" style="padding:14px 20px;">工具执行<br><span style="font-size:10px;">(Act)</span></div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div style="text-align:center;">
+          <div class="flow-node green" style="padding:14px 20px;">结果观察<br><span style="font-size:10px;">(Observe)</span></div>
+        </div>
+        <div class="flow-arrow">↺</div>
+        <div style="text-align:center;">
+          <div class="flow-node blue" style="padding:14px 20px;">任务完成<br><span style="font-size:10px;">(Done)</span></div>
+        </div>
+      </div>
+      <div class="flow-label" style="margin-top:12px;">Think → Act → Observe 循环，直到满足终止条件</div>
+    </div>
+  </div>
+
+  <div class="card-grid">
+    <div class="card orange">
+      <div class="card-title">⚡ ReAct vs Plan-and-Execute</div>
+      <div class="card-body">
+        <div class="compare-grid" style="gap:10px;">
+          <div style="background:var(--bg2); border-radius:4px; padding:14px; border:1px solid var(--border);">
+            <div style="font-size:12px; color:var(--accent4); font-family:'JetBrains Mono',monospace; margin-bottom:8px;">ReAct</div>
+            <ul style="font-size:12px; color:var(--text2); list-style:none; padding:0;">
+              <li style="padding:2px 0;">• 思考与行动交替进行</li>
+              <li style="padding:2px 0;">• 实时感知反馈</li>
+              <li style="padding:2px 0;">• 适合动态、短任务</li>
+              <li style="padding:2px 0; color:var(--text3)">⚠️ 步骤多时上下文膨胀</li>
+            </ul>
+          </div>
+          <div style="background:var(--bg2); border-radius:4px; padding:14px; border:1px solid var(--border);">
+            <div style="font-size:12px; color:var(--accent3); font-family:'JetBrains Mono',monospace; margin-bottom:8px;">Plan & Execute</div>
+            <ul style="font-size:12px; color:var(--text2); list-style:none; padding:0;">
+              <li style="padding:2px 0;">• 先生成完整计划</li>
+              <li style="padding:2px 0;">• 再逐步执行</li>
+              <li style="padding:2px 0;">• 适合复杂长任务</li>
+              <li style="padding:2px 0; color:var(--text3)">⚠️ 计划难以动态调整</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card purple">
+      <div class="card-title">🕸️ 多 Agent 框架对比</div>
+      <div class="card-body">
+        <div class="table-wrap" style="margin:0;">
+          <table>
+            <thead><tr><th>框架</th><th>模式</th><th>特点</th></tr></thead>
+            <tbody>
+              <tr><td style="color:var(--accent2)">LangGraph</td><td>有向图 DAG</td><td>状态机，可循环，可视化强</td></tr>
+              <tr><td style="color:var(--accent3)">AutoGen</td><td>对话式多 Agent</td><td>Agent 间互发消息协作</td></tr>
+              <tr><td style="color:var(--accent4)">CrewAI</td><td>角色分工</td><td>高抽象，定义 Role/Task/Crew</td></tr>
+              <tr><td style="color:var(--accent1)">OpenAI Swarm</td><td>轻量切换</td><td>Handoff 机制，极简</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="card blue">
+      <div class="card-title">💾 Agent 记忆管理</div>
+      <div class="card-body">
+        <ul>
+          <li><strong style="color:var(--accent1)">Working Memory</strong> — 当前任务的中间状态（上下文内）</li>
+          <li><strong style="color:var(--accent1)">Episodic Memory</strong> — 历史任务执行记录（向量检索）</li>
+          <li><strong style="color:var(--accent1)">Semantic Memory</strong> — 领域知识库（RAG）</li>
+          <li><strong style="color:var(--accent1)">Procedural Memory</strong> — 技能/Workflow 定义</li>
+        </ul>
+        <div class="callout tip" style="margin-top:12px;">
+          <div class="callout-icon">💡</div>
+          <div class="callout-body">记忆压缩策略：定期将 Working Memory 中已完成的步骤压缩为摘要，控制上下文增长。</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card green">
+      <div class="card-title">🛡️ Agent 可靠性与安全</div>
+      <div class="card-body">
+        <ul>
+          <li><strong style="color:var(--accent3)">步骤上限</strong> — 设置 max_iterations 防止无限循环</li>
+          <li><strong style="color:var(--accent3)">工具沙箱</strong> — 代码执行在隔离容器（E2B/Docker）</li>
+          <li><strong style="color:var(--accent3)">人工介入</strong> — Human-in-the-loop 审批高风险操作</li>
+          <li><strong style="color:var(--accent3)">权限最小化</strong> — 工具只开放必要权限</li>
+          <li><strong style="color:var(--accent3)">回滚机制</strong> — 关键操作前创建检查点</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 05 FUNCTION CALLING ===================== -->
+<section class="section" id="fc">
+  <div class="section-header">
+    <div class="section-icon" style="background:#fdf0f5;">⚙️</div>
+    <div>
+      <div class="section-num">MODULE 05</div>
+      <div class="section-title">Function Calling / Tool Use</div>
+      <div class="section-subtitle">tool_use · 让模型操作外部世界</div>
+    </div>
+  </div>
+
+  <!-- FC 流程图 -->
+  <div class="wide-card">
+    <h3>🔄 Function Calling 完整流程</h3>
+    <div class="diagram-container">
+      <div class="steps">
+        <div class="step">
+          <div class="step-left">
+            <div class="step-num" style="background:#eef4fc; color:var(--accent1); border:1px solid rgba(79,158,255,0.3);">1</div>
+            <div class="step-line"></div>
+          </div>
+          <div class="step-content">
+            <h4 style="color:var(--accent1)">定义工具 Schema</h4>
+            <p>传入工具列表（名称、描述、参数 JSON Schema），描述越清晰，模型选择越准确</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-left">
+            <div class="step-num" style="background:#f4eefb; color:var(--accent2); border:1px solid rgba(167,139,250,0.3);">2</div>
+            <div class="step-line"></div>
+          </div>
+          <div class="step-content">
+            <h4 style="color:var(--accent2)">模型输出 Tool Call</h4>
+            <p>模型决定调用哪个工具，输出 function_name + arguments（JSON），此时模型不执行，只生成调用意图</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-left">
+            <div class="step-num" style="background:#eef8f2; color:var(--accent3); border:1px solid rgba(52,211,153,0.3);">3</div>
+            <div class="step-line"></div>
+          </div>
+          <div class="step-content">
+            <h4 style="color:var(--accent3)">客户端执行工具</h4>
+            <p>应用层解析 tool_call，调用真实函数/API，获取结果</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-left">
+            <div class="step-num" style="background:#fdf6e8; color:var(--accent4); border:1px solid rgba(251,146,60,0.3);">4</div>
+          </div>
+          <div class="step-content">
+            <h4 style="color:var(--accent4)">结果回传给模型</h4>
+            <p>将 tool_result 以 role:tool 的形式加入对话，模型根据结果生成最终回复</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-grid">
+    <div class="card pink">
+      <div class="card-title">📝 工具定义最佳实践</div>
+      <div class="card-body">
+        <div class="code-block">
+          <div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><div class="code-lang">JSON SCHEMA</div></div>
+          <div class="code-content">{
+  <span class="token-key">"name"</span>: <span class="token-string">"search_order"</span>,
+  <span class="token-key">"description"</span>: <span class="token-string">"根据订单ID查询订单状态
+    和物流信息。当用户询问订单
+    进度时调用此工具。"</span>,
+  <span class="token-key">"parameters"</span>: {
+    <span class="token-key">"type"</span>: <span class="token-string">"object"</span>,
+    <span class="token-key">"properties"</span>: {
+      <span class="token-key">"order_id"</span>: {
+        <span class="token-key">"type"</span>: <span class="token-string">"string"</span>,
+        <span class="token-key">"description"</span>: <span class="token-string">"订单号，
+          格式为ORD-XXXXXX"</span>
+      }
+    },
+    <span class="token-key">"required"</span>: [<span class="token-string">"order_id"</span>]
+  }
+}</div>
+        </div>
+        <ul style="margin-top:8px;">
+          <li>description 要说明<strong style="color:var(--text)">何时</strong>调用</li>
+          <li>参数说明要包含格式示例</li>
+          <li>工具数量不宜超过 20 个</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card blue">
+      <div class="card-title">🔀 Parallel Tool Calling</div>
+      <div class="card-body">
+        <div class="callout info" style="margin-bottom:12px;">
+          <div class="callout-icon">⚡</div>
+          <div class="callout-body">现代模型（GPT-4o、Claude 3.5）支持单次输出多个工具调用，并行执行后统一回传结果。</div>
+        </div>
+        <div class="flow-row" style="justify-content:flex-start; flex-direction:column; align-items:flex-start; gap:8px;">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <div class="flow-node purple" style="font-size:11px; padding:6px 12px; min-width:80px;">LLM 输出</div>
+            <div class="flow-arrow">→</div>
+            <div style="display:flex; flex-direction:column; gap:4px;">
+              <div class="flow-node blue" style="font-size:11px; padding:4px 10px;">tool_call_1: get_weather</div>
+              <div class="flow-node blue" style="font-size:11px; padding:4px 10px;">tool_call_2: get_news</div>
+            </div>
+          </div>
+          <div style="font-size:12px; color:var(--text3);">↓ 并行执行 → 合并结果 → 再次请求模型</div>
+        </div>
+        <ul style="margin-top:10px;">
+          <li>显著减少总延迟</li>
+          <li>需要客户端支持并发执行</li>
+          <li>tool_result 必须一一对应 tool_call_id</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card green">
+      <div class="card-title">🎛️ tool_choice 参数控制</div>
+      <div class="card-body">
+        <div class="table-wrap" style="margin:0;">
+          <table>
+            <thead><tr><th>值</th><th>行为</th><th>适用场景</th></tr></thead>
+            <tbody>
+              <tr><td style="color:var(--accent3)">auto</td><td>模型自主决定</td><td>通用场景</td></tr>
+              <tr><td style="color:var(--accent4)">none</td><td>禁止工具调用</td><td>纯文本回复</td></tr>
+              <tr><td style="color:var(--accent2)">required</td><td>必须调用工具</td><td>强制路由</td></tr>
+              <tr><td style="color:var(--accent1)">{"name":"X"}</td><td>强制调用指定工具</td><td>结构化提取</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="card orange">
+      <div class="card-title">⚠️ 常见问题与调试</div>
+      <div class="card-body">
+        <ul>
+          <li><strong style="color:#c0392b">工具选错</strong> → 优化 description，更明确区分边界</li>
+          <li><strong style="color:#c0392b">参数幻觉</strong> → 加强参数描述，用枚举约束值域</li>
+          <li><strong style="color:#c0392b">无限循环</strong> → 设置 max_tool_calls 上限</li>
+          <li><strong style="color:#c0392b">结果回传错误</strong> → tool_use_id 必须与调用一一对应</li>
+          <li><strong style="color:#fb923c">工具超时</strong> → 异步执行 + 超时熔断</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 06 MCP ===================== -->
+<section class="section" id="mcp">
+  <div class="section-header">
+    <div class="section-icon" style="background:#eef4fc;">🔌</div>
+    <div>
+      <div class="section-num">MODULE 06</div>
+      <div class="section-title">MCP — Model Context Protocol</div>
+      <div class="section-subtitle">mcp · AI 工具集成的 USB 标准</div>
+    </div>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-icon">📌</div>
+    <div class="callout-body"><strong>MCP 本质：</strong>Anthropic 提出的开放协议，定义了 AI 模型与外部工具/数据源之间的标准化通信方式。类比 USB-C — 统一接口，任意设备互插。</div>
+  </div>
+
+  <!-- MCP 架构图 -->
+  <div class="wide-card">
+    <h3>🏗️ MCP 三层架构</h3>
+    <div class="diagram-container">
+      <div style="display:flex; gap:20px; align-items:stretch; flex-wrap:wrap; justify-content:center;">
+        <div style="flex:1; min-width:160px; background:#eef4fc; border:1.5px solid #b0ccea; border-radius:4px; padding:20px; text-align:center;">
+          <div style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--accent1); margin-bottom:10px; letter-spacing:1px;">MCP HOST</div>
+          <div class="flow-node blue" style="margin:6px auto; display:block; font-size:12px;">Claude Desktop</div>
+          <div class="flow-node blue" style="margin:6px auto; display:block; font-size:12px;">Claude.ai</div>
+          <div class="flow-node blue" style="margin:6px auto; display:block; font-size:12px;">IDE 插件</div>
+          <div style="font-size:11px; color:var(--text3); margin-top:12px;">用户交互入口</div>
+        </div>
+        <div style="display:flex; align-items:center; font-size:24px; color:var(--text3);">⇄</div>
+        <div style="flex:1; min-width:160px; background:#f4eefb; border:1.5px solid #c8a8e8; border-radius:4px; padding:20px; text-align:center;">
+          <div style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--accent2); margin-bottom:12px; letter-spacing:1px;">MCP CLIENT</div>
+          <div style="font-size:12px; color:var(--text2); line-height:1.6;">协议处理层<br>连接管理<br>会话状态<br>能力协商</div>
+          <div style="font-size:11px; color:var(--text3); margin-top:12px;">内嵌在 Host 中</div>
+        </div>
+        <div style="display:flex; align-items:center; font-size:24px; color:var(--text3);">⇄</div>
+        <div style="flex:1; min-width:160px; background:#eef8f2; border:1.5px solid #a0d4b8; border-radius:4px; padding:20px; text-align:center;">
+          <div style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--accent3); margin-bottom:12px; letter-spacing:1px;">MCP SERVER</div>
+          <div class="flow-node green" style="margin:6px auto; display:block; font-size:12px;">文件系统</div>
+          <div class="flow-node green" style="margin:6px auto; display:block; font-size:12px;">数据库</div>
+          <div class="flow-node green" style="margin:6px auto; display:block; font-size:12px;">GitHub / Slack</div>
+          <div style="font-size:11px; color:var(--text3); margin-top:12px;">暴露 Tools/Resources</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-grid">
+    <div class="card blue">
+      <div class="card-title">📦 MCP 三大能力原语</div>
+      <div class="card-body">
+        <div class="table-wrap" style="margin:0;">
+          <table>
+            <thead><tr><th>原语</th><th>描述</th><th>示例</th></tr></thead>
+            <tbody>
+              <tr><td><span class="tag blue">Tools</span></td><td>可执行操作，有副作用</td><td>创建文件、发邮件</td></tr>
+              <tr><td><span class="tag green">Resources</span></td><td>只读数据/文件，URI 寻址</td><td>读取代码文件</td></tr>
+              <tr><td><span class="tag purple">Prompts</span></td><td>服务端预定义提示模板</td><td>代码审查模板</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="card green">
+      <div class="card-title">🔗 传输层协议</div>
+      <div class="card-body">
+        <div class="compare-grid" style="gap:10px;">
+          <div style="background:var(--bg2); border-radius:4px; padding:14px; border:1px solid var(--border);">
+            <div style="font-size:12px; color:var(--accent3); font-family:'JetBrains Mono',monospace; margin-bottom:8px;">stdio</div>
+            <ul style="font-size:12px; color:var(--text2); list-style:none; padding:0;">
+              <li>• 本地进程通信</li>
+              <li>• 标准输入输出</li>
+              <li>• 适合本地工具集成</li>
+            </ul>
+          </div>
+          <div style="background:var(--bg2); border-radius:4px; padding:14px; border:1px solid var(--border);">
+            <div style="font-size:12px; color:var(--accent1); font-family:'JetBrains Mono',monospace; margin-bottom:8px;">HTTP/SSE</div>
+            <ul style="font-size:12px; color:var(--text2); list-style:none; padding:0;">
+              <li>• 远程服务调用</li>
+              <li>• 支持流式推送</li>
+              <li>• 适合云端服务集成</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card purple">
+      <div class="card-title">🆚 MCP vs Function Calling</div>
+      <div class="card-body">
+        <div class="table-wrap" style="margin:0;">
+          <table>
+            <thead><tr><th>维度</th><th>Function Calling</th><th>MCP</th></tr></thead>
+            <tbody>
+              <tr><td>标准化</td><td>各厂商自定义</td><td>开放统一协议</td></tr>
+              <tr><td>工具复用</td><td>每次手工定义</td><td>安装即用</td></tr>
+              <tr><td>数据访问</td><td>仅参数传递</td><td>支持 Resources</td></tr>
+              <tr><td>安全控制</td><td>应用层负责</td><td>协议层授权</td></tr>
+              <tr><td>生态</td><td>广泛支持</td><td>快速增长中</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout tip" style="margin-top:12px;">
+          <div class="callout-icon">💡</div>
+          <div class="callout-body">MCP 不是替代 Function Calling，而是在其上提供标准化封装层。底层仍然通过 Tool Use 调用。</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card orange">
+      <div class="card-title">🔒 MCP 安全考量</div>
+      <div class="card-body">
+        <ul>
+          <li><strong style="color:var(--accent4)">最小权限</strong> — 每个 Server 只暴露必要能力</li>
+          <li><strong style="color:var(--accent4)">用户确认</strong> — 高风险操作需显式授权</li>
+          <li><strong style="color:var(--accent4)">沙箱隔离</strong> — Server 间互相隔离</li>
+          <li><strong style="color:var(--accent4)">Prompt Injection 防御</strong> — 验证来自 Server 的内容</li>
+          <li><strong style="color:var(--accent4)">审计日志</strong> — 记录所有工具调用历史</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 07 SKILL ===================== -->
+<section class="section" id="skill">
+  <div class="section-header">
+    <div class="section-icon" style="background:#eef8f2;">🎯</div>
+    <div>
+      <div class="section-num">MODULE 07</div>
+      <div class="section-title">Skill 技能系统</div>
+      <div class="section-subtitle">skill_system · 可复用的 AI 能力单元</div>
+    </div>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-icon">📌</div>
+    <div class="callout-body"><strong>Skill 是什么：</strong>将完成特定任务所需的 Prompt + 工具调用 + 数据流程封装为可复用的能力单元。是 Agent 系统中的"函数库"。</div>
+  </div>
+
+  <div class="wide-card">
+    <h3>🧩 Skill 的组成结构</h3>
+    <div class="card-grid" style="margin-top:0;">
+      <div style="background:var(--blue-bg-inline); border:1.5px solid #b0ccea; border-radius:4px; padding:20px;">
+        <div style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--accent1); margin-bottom:10px;">TRIGGER 触发条件</div>
+        <p style="font-size:13px; color:var(--text2);">定义何时调用此 Skill（关键词/意图/条件），类似 Function 的签名，让 Agent 知道该选择它。</p>
+      </div>
+      <div style="background:#f4eefb; border:1.5px solid #c8a8e8; border-radius:4px; padding:20px;">
+        <div style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--accent2); margin-bottom:10px;">PROMPT 提示模板</div>
+        <p style="font-size:13px; color:var(--text2);">任务专属的 System Prompt 和 Few-shot 示例，针对该任务高度优化，不依赖通用提示。</p>
+      </div>
+      <div style="background:#eef8f2; border:1.5px solid #a0d4b8; border-radius:4px; padding:20px;">
+        <div style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--accent3); margin-bottom:10px;">TOOLS 工具集</div>
+        <p style="font-size:13px; color:var(--text2);">仅注入该 Skill 需要的工具，避免工具过多导致模型选择混乱。</p>
+      </div>
+      <div style="background:#fdf6e8; border:1.5px solid #e8c878; border-radius:4px; padding:20px;">
+        <div style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--accent4); margin-bottom:10px;">OUTPUT 输出规范</div>
+        <p style="font-size:13px; color:var(--text2);">严格的输出 Schema，方便下游 Skill 或流程消费结果。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-grid">
+    <div class="card green">
+      <div class="card-title">🔧 Skill vs Tool 的区别</div>
+      <div class="card-body">
+        <div class="table-wrap" style="margin:0;">
+          <table>
+            <thead><tr><th>维度</th><th>Tool</th><th>Skill</th></tr></thead>
+            <tbody>
+              <tr><td>本质</td><td>单一函数调用</td><td>封装的 LLM 工作流</td></tr>
+              <tr><td>包含 LLM</td><td>❌ 纯代码</td><td>✅ 含 Prompt+模型</td></tr>
+              <tr><td>复杂度</td><td>单步原子操作</td><td>可多步、可条件</td></tr>
+              <tr><td>复用方式</td><td>函数调用</td><td>Skill 注册表引用</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="card blue">
+      <div class="card-title">📚 Skill 注册与选择机制</div>
+      <div class="card-body">
+        <div class="steps" style="gap:0;">
+          <div class="step" style="padding-bottom:14px;">
+            <div class="step-left">
+              <div class="step-num" style="background:#eef4fc; color:var(--accent1); border:1px solid rgba(79,158,255,0.3); width:26px; height:26px; font-size:11px;">1</div>
+              <div class="step-line"></div>
+            </div>
+            <div class="step-content" style="padding-top:2px;">
+              <p style="font-size:13px; color:var(--text2);">用户输入 → 意图识别（Routing LLM）</p>
+            </div>
+          </div>
+          <div class="step" style="padding-bottom:14px;">
+            <div class="step-left">
+              <div class="step-num" style="background:#f4eefb; color:var(--accent2); border:1px solid rgba(167,139,250,0.3); width:26px; height:26px; font-size:11px;">2</div>
+              <div class="step-line"></div>
+            </div>
+            <div class="step-content" style="padding-top:2px;">
+              <p style="font-size:13px; color:var(--text2);">Skill 注册表检索 → 语义匹配候选</p>
+            </div>
+          </div>
+          <div class="step" style="padding-bottom:14px;">
+            <div class="step-left">
+              <div class="step-num" style="background:#eef8f2; color:var(--accent3); border:1px solid rgba(52,211,153,0.3); width:26px; height:26px; font-size:11px;">3</div>
+              <div class="step-line"></div>
+            </div>
+            <div class="step-content" style="padding-top:2px;">
+              <p style="font-size:13px; color:var(--text2);">加载 Skill 专属 Prompt + Tools</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-left">
+              <div class="step-num" style="background:#fdf6e8; color:var(--accent4); border:1px solid rgba(251,146,60,0.3); width:26px; height:26px; font-size:11px;">4</div>
+            </div>
+            <div class="step-content" style="padding-top:2px;">
+              <p style="font-size:13px; color:var(--text2);">执行 → 输出结果 → 返回主 Agent</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card orange">
+      <div class="card-title">🏗️ 常见 Skill 设计模式</div>
+      <div class="card-body">
+        <ul>
+          <li><strong style="color:var(--accent4)">Pipeline Skill</strong> — 串行子步骤，每步输出是下步输入</li>
+          <li><strong style="color:var(--accent4)">Branching Skill</strong> — 根据中间结果条件分支</li>
+          <li><strong style="color:var(--accent4)">Parallel Skill</strong> — 多子任务并行，汇聚结果</li>
+          <li><strong style="color:var(--accent4)">Recursive Skill</strong> — 自调用分解复杂任务</li>
+          <li><strong style="color:var(--accent4)">Critic-Actor</strong> — 生成器 + 批评者迭代优化</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card purple">
+      <div class="card-title">📐 Skill 质量评估</div>
+      <div class="card-body">
+        <ul>
+          <li><strong style="color:var(--accent2)">触发精准率</strong> — 正确场景调用正确 Skill 的比例</li>
+          <li><strong style="color:var(--accent2)">输出合规率</strong> — 输出符合 Schema 的比例</li>
+          <li><strong style="color:var(--accent2)">任务完成率</strong> — 端到端完成目标的比例</li>
+          <li><strong style="color:var(--accent2)">延迟/成本</strong> — Token 消耗和响应时间</li>
+          <li><strong style="color:var(--accent2)">回归稳定性</strong> — 模型升级后能力保持</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 考点速查 ===================== -->
+<section class="section" id="exam">
+  <div class="section-header">
+    <div class="section-icon" style="background:#fdf0f5;">⚡</div>
+    <div>
+      <div class="section-num">QUICK REF</div>
+      <div class="section-title">高频考点速查</div>
+      <div class="section-subtitle">interview_questions · 面试必备</div>
+    </div>
+  </div>
+
+  <div class="wide-card">
+    <h3>🎯 必答题清单</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>模块</th><th>高频考题</th><th>核心答点</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="tag blue">Prompt</span></td>
+            <td>CoT 什么时候反效果？</td>
+            <td>简单分类/检索任务，增加冗余 token 反而干扰；多步推理才有效</td>
+          </tr>
+          <tr>
+            <td><span class="tag blue">Prompt</span></td>
+            <td>JSON Mode vs Structured Output 区别？</td>
+            <td>JSON Mode 仅保证语法；Structured Output 保证字段名/类型/必填</td>
+          </tr>
+          <tr>
+            <td><span class="tag purple">Context</span></td>
+            <td>Lost in the Middle 是什么？</td>
+            <td>模型对上下文中间位置内容遗忘，重要内容放首尾</td>
+          </tr>
+          <tr>
+            <td><span class="tag purple">Context</span></td>
+            <td>多轮对话记忆如何管理？</td>
+            <td>滑动窗口 / 摘要压缩 / 向量化长期记忆，三层结合</td>
+          </tr>
+          <tr>
+            <td><span class="tag green">Harness</span></td>
+            <td>生产 LLM 调用必须有哪些工程保障？</td>
+            <td>重试退避、输出验证、限流熔断、Trace 可观测、成本监控</td>
+          </tr>
+          <tr>
+            <td><span class="tag orange">Agent</span></td>
+            <td>ReAct vs Plan-and-Execute 如何选择？</td>
+            <td>动态短任务选 ReAct；长计划任务选 P&E；复杂任务可混合</td>
+          </tr>
+          <tr>
+            <td><span class="tag orange">Agent</span></td>
+            <td>Agent 如何防止无限循环？</td>
+            <td>max_iterations 上限 + 工具调用计数 + 相似状态检测</td>
+          </tr>
+          <tr>
+            <td><span class="tag pink">FC</span></td>
+            <td>Parallel Tool Calling 实现要点？</td>
+            <td>单次返回多个 tool_call，并发执行，tool_result 按 id 对应回传</td>
+          </tr>
+          <tr>
+            <td><span class="tag blue">MCP</span></td>
+            <td>MCP 和 Function Calling 关系？</td>
+            <td>MCP 是标准化协议层，底层仍用 Tool Use；解决工具复用和跨模型问题</td>
+          </tr>
+          <tr>
+            <td><span class="tag green">Skill</span></td>
+            <td>Skill 和 Tool 的核心区别？</td>
+            <td>Tool 是纯代码函数；Skill 封装了 LLM + Prompt + 工具的完整工作流</td>
+          </tr>
+          <tr>
+            <td><span class="tag blue">Prompt</span></td>
+            <td>Indirect Prompt Injection 如何发生？</td>
+            <td>RAG 检索到含恶意指令的文档，文档内容注入上下文覆盖系统指令</td>
+          </tr>
+          <tr>
+            <td><span class="tag orange">Agent</span></td>
+            <td>Few-shot 示例选取策略？</td>
+            <td>随机选 vs 相似度检索（kNN）；相似度检索效果更好，特别是长尾情况</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="wide-card" style="margin-top:16px;">
+    <h3>🗺️ 模块关系全景图</h3>
+    <div class="diagram-container">
+      <div style="display:flex; flex-direction:column; gap:12px; align-items:center;">
+        <div style="display:flex; gap:12px; flex-wrap:wrap; justify-content:center;">
+          <div class="flow-node blue" style="padding:12px 20px;">Prompt 工程<br><span style="font-size:10px; color:var(--text3)">输入质量</span></div>
+          <div class="flow-node purple" style="padding:12px 20px;">上下文工程<br><span style="font-size:10px; color:var(--text3)">窗口管理</span></div>
+          <div class="flow-node green" style="padding:12px 20px;">Harness<br><span style="font-size:10px; color:var(--text3)">工程可靠性</span></div>
+        </div>
+        <div class="flow-arrow" style="font-size:24px;">↓ 组合支撑</div>
+        <div style="display:flex; gap:12px; flex-wrap:wrap; justify-content:center;">
+          <div class="flow-node orange" style="padding:12px 20px;">Agent 框架<br><span style="font-size:10px; color:var(--text3)">自主规划</span></div>
+          <div class="flow-arrow" style="align-self:center;">↔</div>
+          <div class="flow-node pink" style="padding:12px 20px;">Function Calling<br><span style="font-size:10px; color:var(--text3)">工具执行</span></div>
+        </div>
+        <div class="flow-arrow" style="font-size:24px;">↑ 标准化封装</div>
+        <div style="display:flex; gap:12px; flex-wrap:wrap; justify-content:center;">
+          <div class="flow-node blue" style="padding:12px 20px;">MCP<br><span style="font-size:10px; color:var(--text3)">工具协议</span></div>
+          <div class="flow-node green" style="padding:12px 20px;">Skill<br><span style="font-size:10px; color:var(--text3)">能力单元</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+</div><!-- end page-wrap -->
+
+<footer class="footer">
+  LLM APPLICATION ENGINEERING · INTERVIEW KNOWLEDGE MAP · 2025<br>
+  <span style="opacity:0.5; margin-top:6px; display:block;">PROMPT · CONTEXT · HARNESS · AGENT · FUNCTION CALLING · MCP · SKILL</span>
+</footer>
+
+<script>
+  // 渐入动画：仅在 IntersectionObserver 可用时启用，
+  // 否则保持 CSS animation 兜底，确保 Obsidian 等环境正常显示
+  if ('IntersectionObserver' in window) {
+    const sections = document.querySelectorAll('.section');
+    // 先标记为隐藏，交由 Observer 控制
+    sections.forEach(s => s.classList.add('js-hidden'));
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.06 });
+
+    sections.forEach(s => observer.observe(s));
+  }
+
+  // Active nav
+  const navItems = document.querySelectorAll('.nav-item');
+  const sectionEls = document.querySelectorAll('section[id]');
+
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sectionEls.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 160) current = s.id;
+    });
+    navItems.forEach(item => {
+      item.classList.toggle('active', item.getAttribute('href') === '#' + current);
+    });
+  });
+</script>
+</body>
+</html>

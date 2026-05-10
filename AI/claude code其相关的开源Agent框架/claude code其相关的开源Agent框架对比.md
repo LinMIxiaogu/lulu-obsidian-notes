@@ -13,15 +13,15 @@
 
 ## Agent Loop：最核心的区别
 
-|   |   |   |   |   |
-|---|---|---|---|---|
-|维度|Claude Code|OpenCode|DeepAgent|OpenClaw|
-|Loop 基础|专有单线程（`nO`）|Vercel AI SDK `streamText`|LangGraph StateGraph|Pi `agentLoop`|
-|工具执行|并行 + BatchTool|并行（事件总线）|顺序（Middleware）|顺序（Pi 设计）|
-|循环控制|模型 + `h2A` 侧信道|模型 + 事件驱动|图节点转移|模型决定 + 外层重试|
-|上下文注入|CLAUDE.md 每次重注入|运行时读取 Markdown|Middleware 动态拼装|每次 attempt 动态构建|
-|压缩策略|自动摘要旧历史|自动摘要|SummarizationMiddleware|压缩前先提取事实到 MEMORY.md|
-|停止条件|模型无工具调用|模型无工具调用|图终止节点|模型无工具调用|
+|         |                 |                            |                         |                     |
+| ------- | --------------- | -------------------------- | ----------------------- | ------------------- |
+| 维度      | Claude Code     | OpenCode                   | DeepAgent               | OpenClaw            |
+| Loop 基础 | 专有单线程（`nO`）     | Vercel AI SDK `streamText` | LangGraph StateGraph    | Pi `agentLoop`      |
+| 工具执行    | 并行 + BatchTool  | 并行（事件总线）                   | 顺序（Middleware）          | 顺序（Pi 设计）           |
+| 循环控制    | 模型 + `h2A` 侧信道  | 模型 + 事件驱动                  | 图节点转移                   | 模型决定 + 外层重试         |
+| 上下文注入   | CLAUDE.md 每次重注入 | 运行时读取 Markdown             | Middleware 动态拼装         | 每次 attempt 动态构建     |
+| 压缩策略    | 自动摘要旧历史         | 自动摘要                       | SummarizationMiddleware | 压缩前先提取事实到 MEMORY.md |
+| 停止条件    | 模型无工具调用         | 模型无工具调用                    | 图终止节点                   | 模型无工具调用             |
 
   
 

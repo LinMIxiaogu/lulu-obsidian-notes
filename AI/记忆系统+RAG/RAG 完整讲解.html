@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RAG 完整讲解 — 从 Naive 到 Advanced</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:          #faf7f2;
+    --bg2:         #f4f0e8;
+    --bg3:         #ede8dc;
+    --border:      #d8d0c4;
+    --border2:     #b8b0a4;
+    --text:        #1a1612;
+    --text2:       #3d3830;
+    --text3:       #6b6356;
+    --teal:        #1a7a6a;
+    --teal-dim:    rgba(26,122,106,0.08);
+    --purple:      #6b35a8;
+    --purple-dim:  rgba(107,53,168,0.08);
+    --amber:       #b06000;
+    --amber-dim:   rgba(176,96,0,0.08);
+    --coral:       #c0392b;
+    --coral-dim:   rgba(192,57,43,0.08);
+    --blue:        #1a5fa8;
+    --blue-dim:    rgba(26,95,168,0.08);
+    --green:       #1a7a4a;
+    --green-dim:   rgba(26,122,74,0.08);
+    --accent:      #1a7a6a;
+    --mono: 'JetBrains Mono', monospace;
+    --serif: 'Noto Serif SC', serif;
+    --sans: 'Noto Sans SC', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.8;
+    font-weight: 400;
+  }
+  body::before {
+    content:'';
+    position:fixed; inset:0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.022'/%3E%3C/svg%3E");
+    pointer-events:none; z-index:0;
+  }
+
+  /* ── Header ── */
+  header {
+    background: var(--text);
+    border-bottom: 2px solid var(--text);
+    padding: 60px 0 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255,255,255,0.04) 40px),
+      repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(255,255,255,0.04) 40px),
+      radial-gradient(ellipse 60% 40% at 50% 0%, rgba(180,120,60,0.18) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: rgba(255,255,255,0.45);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  h1 {
+    font-family: var(--serif);
+    font-size: clamp(28px, 5vw, 48px);
+    font-weight: 700;
+    line-height: 1.2;
+    color: #faf7f2;
+    margin-bottom: 16px;
+  }
+  h1 span { color: #d4a86a; }
+  .subtitle {
+    color: rgba(255,255,255,0.48);
+    font-size: 15px;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  /* ── Layout ── */
+  .page-layout {
+    display: flex;
+    align-items: flex-start;
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* ── Sidebar TOC ── */
+  nav.toc {
+    position: sticky;
+    top: 32px;
+    width: 220px;
+    flex-shrink: 0;
+    margin-right: 48px;
+    padding: 20px 0;
+  }
+  nav.toc .toc-title {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    color: var(--text3);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    padding-left: 12px;
+  }
+  nav.toc ol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  nav.toc li { margin: 2px 0; }
+  nav.toc a {
+    display: block;
+    color: var(--text3);
+    text-decoration: none;
+    font-size: 13px;
+    line-height: 1.5;
+    padding: 6px 12px;
+    border-left: 2px solid transparent;
+    border-radius: 0 6px 6px 0;
+    transition: color 0.2s, border-color 0.2s, background 0.2s;
+  }
+  nav.toc a:hover { color: var(--text); background: var(--bg2); }
+  nav.toc a.active {
+    color: var(--teal);
+    border-left-color: var(--teal);
+    background: var(--teal-dim);
+  }
+  nav.toc .toc-star {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--teal);
+    opacity: 0.7;
+    margin-left: 4px;
+  }
+
+  /* ── Main content ── */
+  .main-content {
+    flex: 1;
+    min-width: 0;
+    padding-top: 8px;
+  }
+
+  /* ── Container (header only now) ── */
+  .container { max-width: 1140px; margin: 0 auto; padding: 0 24px; }
+
+  /* ── Sections ── */
+  section { margin: 72px 0; }
+  .section-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text3);
+    letter-spacing: 0.15em;
+    margin-bottom: 10px;
+  }
+  h2 {
+    font-family: var(--serif);
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 8px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--text);
+  }
+  h3 {
+    font-family: var(--serif);
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text);
+    margin: 32px 0 12px;
+  }
+  p { color: var(--text2); margin-bottom: 14px; }
+  strong { color: var(--text); font-weight: 500; }
+
+  /* ── Callout ── */
+  .callout {
+    border-left: 3px solid var(--teal);
+    background: var(--teal-dim);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 20px 0;
+    font-size: 14px;
+    color: var(--text2);
+  }
+  .callout.purple { border-color: var(--purple); background: var(--purple-dim); }
+  .callout.amber { border-color: var(--amber); background: var(--amber-dim); }
+
+  /* ── Diagram wrapper ── */
+  .diagram-wrap {
+    background: var(--bg2);
+    border: 1.5px solid var(--border);
+    border-radius: 4px;
+    padding: 24px;
+    margin: 28px 0;
+    overflow-x: auto;
+  }
+  .diagram-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text3);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  /* ── SVG text styles ── */
+  .dsvg text { font-family: var(--sans); }
+  .dsvg .th { font-size: 13px; font-weight: 500; fill: var(--text); }
+  .dsvg .ts { font-size: 11px; font-weight: 300; fill: var(--text2); }
+  .dsvg .arr { stroke: var(--border2); fill: none; stroke-width: 1.2; }
+
+  /* ── Tag grid ── */
+  .tag-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 12px;
+    margin: 20px 0;
+  }
+  .tag-card {
+    background: #fff;
+    border: 1.5px solid var(--border);
+    border-radius: 4px;
+    padding: 16px;
+    transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+  }
+  .tag-card:hover { border-color: var(--text); box-shadow: 3px 3px 0 var(--text); transform: translate(-1px,-1px); }
+  .tag-card .tag-name {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--teal);
+    margin-bottom: 6px;
+  }
+  .tag-card .tag-name.purple { color: var(--purple); }
+  .tag-card .tag-name.amber { color: var(--amber); }
+  .tag-card p { font-size: 13px; color: var(--text2); margin: 0; line-height: 1.6; }
+
+  /* ── Table ── */
+  .table-wrap { overflow-x: auto; margin: 20px 0; border: 1.5px solid var(--border); border-radius: 4px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th {
+    background: var(--text);
+    color: var(--bg);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 500;
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: none;
+  }
+  td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--bg2);
+    color: var(--text2);
+    vertical-align: middle;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:nth-child(even) td { background: var(--bg2); }
+  tr:hover td { background: #eef4f2; }
+  .yes { color: var(--green); }
+  .no { color: var(--coral); }
+  .mid { color: var(--amber); }
+  .badge {
+    display: inline-block;
+    font-size: 10px;
+    font-family: var(--mono);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 500;
+  }
+  .badge.rec { background: var(--green-dim); color: var(--green); border: 1px solid rgba(26,122,74,0.3); }
+  .badge.warn { background: var(--amber-dim); color: var(--amber); border: 1px solid rgba(176,96,0,0.3); }
+
+  /* ── Interview Q&A ── */
+  .qa-list { margin: 20px 0; }
+  details {
+    background: #fff;
+    border: 1.5px solid var(--border);
+    border-radius: 4px;
+    margin-bottom: 10px;
+    overflow: hidden;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  details[open] { border-color: var(--text); box-shadow: 3px 3px 0 var(--text); }
+  summary {
+    padding: 16px 20px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    user-select: none;
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary::before {
+    content: 'Q';
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--bg);
+    background: var(--teal);
+    padding: 2px 6px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+  summary::after {
+    content: '+';
+    margin-left: auto;
+    color: var(--text3);
+    font-size: 18px;
+    font-weight: 300;
+    transition: transform 0.2s;
+  }
+  details[open] summary::after { transform: rotate(45deg); }
+  .qa-body {
+    padding: 0 20px 18px;
+    font-size: 14px;
+    color: var(--text2);
+    line-height: 1.75;
+    border-top: 1px solid var(--border);
+    margin-top: 0;
+    padding-top: 14px;
+    background: var(--bg2);
+  }
+
+  /* ── Footer ── */
+  footer {
+    border-top: 2px solid var(--text);
+    padding: 32px 0;
+    text-align: center;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text3);
+    letter-spacing: 0.1em;
+    margin-top: 80px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <p class="eyebrow">面试 · 技术讲解</p>
+    <h1>RAG <span>完整讲解</span></h1>
+    <p class="subtitle">从 Naive RAG 到 Advanced RAG，再到向量数据库选型</p>
+  </div>
+</header>
+
+<div class="page-layout">
+
+  <nav class="toc">
+    <div class="toc-title">目录</div>
+    <ol>
+      <li><a href="#naive" class="active">一、Naive RAG</a></li>
+      <li><a href="#advanced">二、Advanced RAG</a></li>
+      <li><a href="#chunking">三、文本分块技术<span class="toc-star">★</span></a></li>
+      <li><a href="#pre">四、前处理优化</a></li>
+      <li><a href="#routing">五、查询路由<span class="toc-star">★</span></a></li>
+      <li><a href="#post">六、后处理优化</a></li>
+      <li><a href="#crag">七、Corrective RAG<span class="toc-star">★</span></a></li>
+      <li><a href="#vectordb">八、向量数据库选型</a></li>
+      <li><a href="#interview">九、面试高频问题</a></li>
+    </ol>
+  </nav>
+
+  <div class="main-content">
+
+  <!-- ════════════════════════════════════════ -->
+  <section id="naive">
+    <p class="section-num">// 01</p>
+    <h2>Naive RAG — 基础流程</h2>
+
+    <p>原始 RAG 分两个阶段：<strong>离线索引（Indexing）</strong>和<strong>在线检索生成（Retrieval + Generation）</strong>。</p>
+
+    <div class="diagram-wrap">
+      <div class="diagram-label">Pipeline Overview</div>
+      <svg class="dsvg" width="100%" viewBox="0 0 780 340" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="arr1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M2 1L8 5L2 9" fill="none" stroke="#8a8278" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </marker>
+          <marker id="arr-teal" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M2 1L8 5L2 9" fill="none" stroke="#1a7a6a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </marker>
+        </defs>
+
+        <!-- 分割线 -->
+        <line x1="390" y1="10" x2="390" y2="330" stroke="#d8d0c4" stroke-width="1" stroke-dasharray="5 4"/>
+        <text x="195" y="22" text-anchor="middle" style="font-family:'JetBrains Mono',monospace;font-size:10px;fill:#3a3a45;letter-spacing:0.12em;text-transform:uppercase">离线索引阶段</text>
+        <text x="585" y="22" text-anchor="middle" style="font-family:'JetBrains Mono',monospace;font-size:10px;fill:#3a3a45;letter-spacing:0.12em;text-transform:uppercase">在线检索生成阶段</text>
+
+        <!-- LEFT: Indexing -->
+        <!-- 原始文档 -->
+        <rect x="100" y="40" width="190" height="46" rx="8" fill="#f4f0e8" stroke="#d8d0c4" stroke-width="1"/>
+        <text class="th" x="195" y="60" text-anchor="middle" dominant-baseline="central">原始文档</text>
+        <text class="ts" x="195" y="77" text-anchor="middle" dominant-baseline="central">PDF / TXT / HTML</text>
+
+        <line x1="195" y1="86" x2="195" y2="116" stroke="#b8b0a4" stroke-width="1" marker-end="url(#arr1)"/>
+
+        <!-- 文档切分 -->
+        <rect x="100" y="116" width="190" height="46" rx="8" fill="#eef8f4" stroke="#1a7a6a" stroke-width="1" stroke-opacity="0.4"/>
+        <text class="th" x="195" y="136" text-anchor="middle" dominant-baseline="central" style="fill:#2dd4bf">文档切分</text>
+        <text class="ts" x="195" y="153" text-anchor="middle" dominant-baseline="central">Chunking</text>
+
+        <line x1="195" y1="162" x2="195" y2="192" stroke="#b8b0a4" stroke-width="1" marker-end="url(#arr1)"/>
+
+        <!-- Embedding -->
+        <rect x="100" y="192" width="190" height="46" rx="8" fill="#f4eefb" stroke="#a78bfa" stroke-width="1" stroke-opacity="0.4"/>
+        <text class="th" x="195" y="212" text-anchor="middle" dominant-baseline="central" style="fill:#a78bfa">向量化</text>
+        <text class="ts" x="195" y="229" text-anchor="middle" dominant-baseline="central">Embedding Model</text>
+
+        <line x1="195" y1="238" x2="195" y2="268" stroke="#b8b0a4" stroke-width="1" marker-end="url(#arr1)"/>
+
+        <!-- 向量数据库 -->
+        <rect x="100" y="268" width="190" height="46" rx="8" fill="#eef4fc" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.4"/>
+        <text class="th" x="195" y="288" text-anchor="middle" dominant-baseline="central" style="fill:#60a5fa">向量数据库</text>
+        <text class="ts" x="195" y="305" text-anchor="middle" dominant-baseline="central">Vector DB</text>
+
+        <!-- RIGHT: Retrieval + Generation -->
+        <!-- 用户提问 -->
+        <rect x="490" y="40" width="190" height="46" rx="8" fill="#fdf6e8" stroke="#fbbf24" stroke-width="1" stroke-opacity="0.4"/>
+        <text class="th" x="585" y="60" text-anchor="middle" dominant-baseline="central" style="fill:#fbbf24">用户提问</text>
+        <text class="ts" x="585" y="77" text-anchor="middle" dominant-baseline="central">User Query</text>
+
+        <line x1="585" y1="86" x2="585" y2="116" stroke="#b8b0a4" stroke-width="1" marker-end="url(#arr1)"/>
+
+        <!-- Query Embedding -->
+        <rect x="490" y="116" width="190" height="46" rx="8" fill="#f4eefb" stroke="#a78bfa" stroke-width="1" stroke-opacity="0.4"/>
+        <text class="th" x="585" y="136" text-anchor="middle" dominant-baseline="central" style="fill:#a78bfa">Query 向量化</text>
+        <text class="ts" x="585" y="153" text-anchor="middle" dominant-baseline="central">同一个 Embedding 模型</text>
+
+        <line x1="585" y1="162" x2="585" y2="192" stroke="#b8b0a4" stroke-width="1" marker-end="url(#arr1)"/>
+
+        <!-- ANN检索 -->
+        <rect x="490" y="192" width="190" height="46" rx="8" fill="#eef4fc" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.4"/>
+        <text class="th" x="585" y="212" text-anchor="middle" dominant-baseline="central" style="fill:#60a5fa">ANN 检索</text>
+        <text class="ts" x="585" y="229" text-anchor="middle" dominant-baseline="central">Top-K 召回</text>
+
+        <!-- 向量DB → ANN 虚线 -->
+        <path d="M290 291 Q390 291 390 215 Q390 215 490 215" fill="none" stroke="#1a7a6a" stroke-width="1" stroke-dasharray="4 3" stroke-opacity="0.5" marker-end="url(#arr-teal)"/>
+        <text x="390" y="248" text-anchor="middle" style="font-size:10px;fill:#2a5a54;font-family:'Noto Sans SC',sans-serif">检索</text>
+
+        <line x1="585" y1="238" x2="585" y2="268" stroke="#b8b0a4" stroke-width="1" marker-end="url(#arr1)"/>
+
+        <!-- 构造Prompt -->
+        <rect x="490" y="268" width="190" height="46" rx="8" fill="#eef8f4" stroke="#1a7a6a" stroke-width="1" stroke-opacity="0.4"/>
+        <text class="th" x="585" y="288" text-anchor="middle" dominant-baseline="central" style="fill:#2dd4bf">构造 Prompt</text>
+        <text class="ts" x="585" y="305" text-anchor="middle" dominant-baseline="central">Query + Context 拼接</text>
+
+        <!-- LLM生成在右边外部 -->
+        <!-- 在下方添加 LLM -->
+      </svg>
+    </div>
+
+    <div class="callout">
+      <strong>核心痛点：</strong>Chunking 边界粗暴切断语义 · 纯向量检索漏掉关键词精确匹配 · Top-K 噪声 Chunk 直接喂给 LLM · 没有利用文档层级结构
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════ -->
+  <section id="advanced">
+    <p class="section-num">// 02</p>
+    <h2>Advanced RAG — 三层优化框架</h2>
+    <p>Advanced RAG 在 Naive RAG 的基础上，在<strong>检索前</strong>和<strong>检索后</strong>都增加了处理步骤，形成三层结构。</p>
+
+    <div class="diagram-wrap">
+      <div class="diagram-label">Advanced RAG Overview</div>
+      <svg class="dsvg" width="100%" viewBox="0 0 780 100" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="arr2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M2 1L8 5L2 9" fill="none" stroke="#8a8278" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </marker>
+        </defs>
+        <rect x="20" y="20" width="200" height="60" rx="10" fill="#eef8f4" stroke="#1a7a6a" stroke-width="1" stroke-opacity="0.5"/>
+        <text style="font-size:13px;font-weight:500;fill:#2dd4bf;font-family:'Noto Sans SC',sans-serif" x="120" y="47" text-anchor="middle" dominant-baseline="central">前处理优化</text>
+        <text style="font-size:11px;fill:#5c7a76;font-family:'JetBrains Mono',monospace" x="120" y="65" text-anchor="middle" dominant-baseline="central">Pre-Retrieval</text>
+        <line x1="220" y1="50" x2="270" y2="50" stroke="#b8b0a4" stroke-width="1" marker-end="url(#arr2)"/>
+        <rect x="270" y="20" width="240" height="60" rx="10" fill="#fdf6e8" stroke="#fbbf24" stroke-width="1" stroke-opacity="0.5"/>
+        <text style="font-size:13px;font-weight:500;fill:#fbbf24;font-family:'Noto Sans SC',sans-serif" x="390" y="47" text-anchor="middle" dominant-baseline="central">向量检索核心</text>
+        <text style="font-size:11px;fill:#6a5a30;font-family:'JetBrains Mono',monospace" x="390" y="65" text-anchor="middle" dominant-baseline="central">ANN · BM25 · Hybrid</text>
+        <line x1="510" y1="50" x2="560" y2="50" stroke="#b8b0a4" stroke-width="1" marker-end="url(#arr2)"/>
+        <rect x="560" y="20" width="200" height="60" rx="10" fill="#f4eefb" stroke="#a78bfa" stroke-width="1" stroke-opacity="0.5"/>
+        <text style="font-size:13px;font-weight:500;fill:#a78bfa;font-family:'Noto Sans SC',sans-serif" x="660" y="47" text-anchor="middle" dominant-baseline="central">后处理优化</text>
+        <text style="font-size:11px;fill:#5a4a7a;font-family:'JetBrains Mono',monospace" x="660" y="65" text-anchor="middle" dominant-baseline="central">Post-Retrieval</text>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════ -->
+  <section id="chunking">
+    <p class="section-num">// 03 ★ 面试高频</p>
+    <h2>文本分块技术</h2>
+    <p>分块是 RAG 最基础也最容易被忽视的环节。面试常问：<strong>"你们的 Chunk 策略是什么？为什么这样选？"</strong></p>
+
+    <h3>为什么不能直接固定字数切？</h3>
+    <p>固定字数切割会在句子中间截断，导致单个 Chunk 语义不完整，向量化后语义稀释，检索命中率下降。更严重的是会把同一个知识点切成两半，两个 Chunk 都召回不到完整信息。</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>分块方法</th><th>核心原理</th><th>优点</th><th>缺点</th><th>推荐场景</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>固定字符</strong><br><span style="font-size:11px;color:var(--text3)">CharacterTextSplitter</span></td>
+            <td>按字数硬切，加 overlap 缓解</td>
+            <td class="yes">实现最简单</td>
+            <td class="no">容易截断语义</td>
+            <td>快速验证原型</td>
+          </tr>
+          <tr>
+            <td><strong>递归字符</strong><br><span style="font-size:11px;color:var(--text3)">RecursiveCharacterTextSplitter</span></td>
+            <td>按段落→句子→词依次尝试切割，优先保持完整性</td>
+            <td class="yes">通用性强，语义完整</td>
+            <td>需调 chunk_size 参数</td>
+            <td><span class="badge rec">默认首选</span></td>
+          </tr>
+          <tr>
+            <td><strong>语义分块</strong><br><span style="font-size:11px;color:var(--text3)">SemanticSplitter</span></td>
+            <td>用 Embedding 计算相邻句相似度，相似度骤降处切割</td>
+            <td class="yes">每块一个完整主题</td>
+            <td class="no">速度慢，需调阈值</td>
+            <td>文档主题边界清晰时</td>
+          </tr>
+          <tr>
+            <td><strong>Agentic 分块</strong><br><span style="font-size:11px;color:var(--text3)">LLM-Based</span></td>
+            <td>让 LLM 理解内容后判断最佳切割边界</td>
+            <td class="yes">质量最高，最像人类</td>
+            <td class="no">成本最高，速度最慢</td>
+            <td>高价值文档离线处理</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>父子文档索引 — 面试必考</h3>
+    <p>这是目前生产环境最推荐的策略，解决了"检索精度"和"上下文完整性"的矛盾。</p>
+
+    <div class="diagram-wrap">
+      <div class="diagram-label">Parent-Child Index Strategy</div>
+      <svg class="dsvg" width="100%" viewBox="0 0 780 200" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="arr-pc" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M2 1L8 5L2 9" fill="none" stroke="#8a8278" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </marker>
+          <marker id="arr-green" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M2 1L8 5L2 9" fill="none" stroke="#1a7a4a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </marker>
+        </defs>
+
+        <!-- 父文档 -->
+        <rect x="20" y="20" width="200" height="160" rx="10" fill="#fdf6e8" stroke="#1a7a4a" stroke-width="1" stroke-opacity="0.4"/>
+        <text style="font-size:12px;font-weight:500;fill:#4ade80;font-family:'Noto Sans SC',sans-serif" x="120" y="44" text-anchor="middle">父文档（大 Chunk）</text>
+        <text style="font-size:10px;fill:#5c7a56;font-family:'JetBrains Mono',monospace" x="120" y="60" text-anchor="middle">512 tokens</text>
+        <!-- 子块示意 -->
+        <rect x="36" y="72" width="168" height="28" rx="5" fill="#eef8f4" stroke="#1a7a4a" stroke-width="0.5" stroke-opacity="0.3"/>
+        <text style="font-size:11px;fill:#6a9a66;font-family:'Noto Sans SC',sans-serif" x="120" y="90" text-anchor="middle">子块 A（128 tokens）</text>
+        <rect x="36" y="106" width="168" height="28" rx="5" fill="#eef8f4" stroke="#1a7a4a" stroke-width="0.5" stroke-opacity="0.3"/>
+        <text style="font-size:11px;fill:#6a9a66;font-family:'Noto Sans SC',sans-serif" x="120" y="124" text-anchor="middle">子块 B（128 tokens）</text>
+        <rect x="36" y="140" width="168" height="28" rx="5" fill="#eef8f4" stroke="#1a7a4a" stroke-width="0.5" stroke-opacity="0.3"/>
+        <text style="font-size:11px;fill:#6a9a66;font-family:'Noto Sans SC',sans-serif" x="120" y="158" text-anchor="middle">子块 C（128 tokens）</text>
+
+        <!-- 步骤1 -->
+        <text style="font-size:11px;fill:#fbbf24;font-family:'JetBrains Mono',monospace" x="260" y="80" text-anchor="middle">① 检索阶段</text>
+        <text style="font-size:11px;fill:#9a9891;font-family:'Noto Sans SC',sans-serif" x="260" y="98" text-anchor="middle">用小子块向量检索</text>
+        <text style="font-size:11px;fill:#9a9891;font-family:'Noto Sans SC',sans-serif" x="260" y="114" text-anchor="middle">特征鲜明，命中精准</text>
+
+        <line x1="220" y1="120" x2="350" y2="120" stroke="#fbbf24" stroke-width="1" stroke-opacity="0.6" marker-end="url(#arr-pc)"/>
+
+        <!-- 向量库 -->
+        <rect x="350" y="96" width="130" height="48" rx="8" fill="#fdf6e8" stroke="#fbbf24" stroke-width="1" stroke-opacity="0.4"/>
+        <text style="font-size:12px;font-weight:500;fill:#fbbf24;font-family:'Noto Sans SC',sans-serif" x="415" y="116" text-anchor="middle">向量库</text>
+        <text style="font-size:10px;fill:#6a5a30;font-family:'JetBrains Mono',monospace" x="415" y="134" text-anchor="middle">子块向量索引</text>
+
+        <!-- 步骤2 -->
+        <line x1="480" y1="120" x2="540" y2="120" stroke="#1a7a4a" stroke-width="1" stroke-opacity="0.6" marker-end="url(#arr-green)"/>
+        <text style="font-size:11px;fill:#4ade80;font-family:'JetBrains Mono',monospace" x="510" y="112" text-anchor="middle">② 回溯</text>
+
+        <!-- LLM输入 -->
+        <rect x="540" y="60" width="200" height="120" rx="10" fill="#eef8f4" stroke="#1a7a6a" stroke-width="1" stroke-opacity="0.4"/>
+        <text style="font-size:12px;font-weight:500;fill:#2dd4bf;font-family:'Noto Sans SC',sans-serif" x="640" y="86" text-anchor="middle">送给 LLM</text>
+        <text style="font-size:10px;fill:#5c7a76;font-family:'JetBrains Mono',monospace" x="640" y="104" text-anchor="middle">返回完整父文档</text>
+        <text style="font-size:11px;fill:#9a9891;font-family:'Noto Sans SC',sans-serif" x="640" y="128" text-anchor="middle">上下文完整</text>
+        <text style="font-size:11px;fill:#9a9891;font-family:'Noto Sans SC',sans-serif" x="640" y="148" text-anchor="middle">逻辑连贯</text>
+      </svg>
+    </div>
+
+    <div class="callout">
+      <strong>一句话记住：</strong>用小 Chunk（128 token）做向量检索保证精准，命中后自动回溯返回父 Chunk（512 token）给 LLM 保证完整。检索粒度和生成粒度解耦。
+    </div>
+
+    <h3>索引策略对比</h3>
+    <div class="tag-grid">
+      <div class="tag-card">
+        <div class="tag-name">滑动窗口索引</div>
+        <p>每个 Chunk 与前后 Chunk 有重叠（overlap），防止跨句代词（"它"、"这个"）丢失指代对象。解决语义断裂问题。</p>
+      </div>
+      <div class="tag-card">
+        <div class="tag-name">元数据过滤索引</div>
+        <p>Chunk 附带文件名、页码、时间等元数据。检索时先用元数据硬过滤（如"只看2024年财报"），缩小候选范围后再做向量搜索。</p>
+      </div>
+      <div class="tag-card">
+        <div class="tag-name">层级摘要索引</div>
+        <p>先生成章节摘要作为上层节点，具体文本块挂在下层。检索时先匹配摘要定位章节，再深入检索细节。适合大规模文档集。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════ -->
+  <section id="pre">
+    <p class="section-num">// 04</p>
+    <h2>前处理优化（Pre-Retrieval）</h2>
+    <p>目标是让<strong>送进检索系统的 Query</strong> 和<strong>存进向量库的内容</strong>质量更高。</p>
+
+    <div class="tag-grid">
+      <div class="tag-card">
+        <div class="tag-name">① 分块策略 Chunking</div>
+        <p>固定大小 + 重叠滑窗（chunk_size=512，overlap=50）防止语义截断；语义分块按句子/段落边界切割；<strong>Small-to-Big</strong>：检索用小 Chunk，喂 LLM 时返回父节点大 Chunk。</p>
+      </div>
+      <div class="tag-card">
+        <div class="tag-name">② Query 改写 Rewriting</div>
+        <p><strong>Multi-Query</strong>：一个问题改写成 3-5 个不同表述，分别检索后合并去重。<strong>Step-back Prompting</strong>：把具体问题抽象成上位问题，先检索背景知识。</p>
+      </div>
+      <div class="tag-card">
+        <div class="tag-name">③ HyDE 假设文档</div>
+        <p>先让 LLM 基于 Query 生成一段"假设性答案文档"，用假文档向量去做检索，而不是用原始 Query。假文档向量分布比 Query 向量更接近真实答案。<strong>面试必考。</strong></p>
+      </div>
+      <div class="tag-card">
+        <div class="tag-name">④ 元数据 + 层级索引</div>
+        <p>给 Chunk 附元数据（文档来源、章节、时间），检索时先硬过滤缩小范围，再做向量排序。层级索引（父文档→子 Chunk）让召回更灵活。</p>
+      </div>
+      <div class="tag-card">
+        <div class="tag-name">⑤ 混合检索 Hybrid Search</div>
+        <p>稠密向量检索（ANN，语义相似）+ 稀疏检索（BM25，关键词精确）并行，用 <strong>RRF（Reciprocal Rank Fusion）</strong>融合排序。目前工业界最主流方案。</p>
+      </div>
+    </div>
+
+    <div class="callout amber">
+      <strong>HyDE 核心思路：</strong>用户 Query "Python 如何处理并发？" → LLM 生成假设答案："Python 处理并发主要通过 asyncio…" → 用这段假文档向量检索，命中率远高于直接用 Query 检索。
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════ -->
+  <section id="routing">
+    <p class="section-num">// 05 ★ 面试高频</p>
+    <h2>查询路由（Query Routing）</h2>
+    <p>面试常问："如果系统里同时有向量库、关系型数据库、图数据库，Query 进来怎么决定去哪查？"这就是查询路由，分两种思路。</p>
+
+    <div class="diagram-wrap">
+      <div class="diagram-label">逻辑路由 vs 语义路由</div>
+      <svg class="dsvg" width="100%" viewBox="0 0 780 220" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="arr-r" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M2 1L8 5L2 9" fill="none" stroke="#8a8278" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </marker>
+          <marker id="arr-purple" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M2 1L8 5L2 9" fill="none" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </marker>
+          <marker id="arr-amber2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M2 1L8 5L2 9" fill="none" stroke="#fbbf24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </marker>
+        </defs>
+
+        <!-- 分割线 -->
+        <line x1="390" y1="10" x2="390" y2="210" stroke="#d8d0c4" stroke-width="1" stroke-dasharray="4 4"/>
+
+        <!-- LEFT: 逻辑路由 -->
+        <text style="font-size:12px;font-weight:500;fill:#fbbf24;font-family:'Noto Sans SC',sans-serif" x="195" y="24" text-anchor="middle">逻辑路由（Logical Routing）</text>
+        <text style="font-size:10px;fill:#6a5a30;font-family:'JetBrains Mono',monospace" x="195" y="38" text-anchor="middle">LLM 理解意图 → 选数据源</text>
+
+        <!-- Query -->
+        <rect x="20" y="56" width="80" height="36" rx="6" fill="#fdf6e8" stroke="#fbbf24" stroke-width="0.8" stroke-opacity="0.5"/>
+        <text style="font-size:11px;fill:#fbbf24;font-family:'Noto Sans SC',sans-serif" x="60" y="78" text-anchor="middle">用户 Query</text>
+
+        <!-- LLM分类 -->
+        <rect x="130" y="56" width="100" height="36" rx="6" fill="#f4eefb" stroke="#a78bfa" stroke-width="0.8" stroke-opacity="0.5"/>
+        <text style="font-size:11px;fill:#a78bfa;font-family:'Noto Sans SC',sans-serif" x="180" y="70" text-anchor="middle">LLM 分类</text>
+        <text style="font-size:9px;fill:#5a4a7a;font-family:'JetBrains Mono',monospace" x="180" y="84" text-anchor="middle">structured output</text>
+
+        <line x1="100" y1="74" x2="128" y2="74" stroke="#fbbf24" stroke-width="1" stroke-opacity="0.6" marker-end="url(#arr-r)"/>
+
+        <!-- 三个目标 -->
+        <rect x="260" y="40" width="110" height="28" rx="5" fill="#eef4fc" stroke="#60a5fa" stroke-width="0.8" stroke-opacity="0.4"/>
+        <text style="font-size:11px;fill:#60a5fa;font-family:'Noto Sans SC',sans-serif" x="315" y="58" text-anchor="middle">向量库</text>
+
+        <rect x="260" y="76" width="110" height="28" rx="5" fill="#eef8f4" stroke="#1a7a6a" stroke-width="0.8" stroke-opacity="0.4"/>
+        <text style="font-size:11px;fill:#2dd4bf;font-family:'Noto Sans SC',sans-serif" x="315" y="94" text-anchor="middle">关系型 DB (SQL)</text>
+
+        <rect x="260" y="112" width="110" height="28" rx="5" fill="#fdf0f5" stroke="#fb7185" stroke-width="0.8" stroke-opacity="0.4"/>
+        <text style="font-size:11px;fill:#fb7185;font-family:'Noto Sans SC',sans-serif" x="315" y="130" text-anchor="middle">图数据库</text>
+
+        <line x1="230" y1="70" x2="258" y2="54" stroke="#a78bfa" stroke-width="0.8" stroke-opacity="0.5" marker-end="url(#arr-r)"/>
+        <line x1="230" y1="74" x2="258" y2="90" stroke="#a78bfa" stroke-width="0.8" stroke-opacity="0.5" marker-end="url(#arr-r)"/>
+        <line x1="230" y1="78" x2="258" y2="126" stroke="#a78bfa" stroke-width="0.8" stroke-opacity="0.5" marker-end="url(#arr-r)"/>
+
+        <text style="font-size:10px;fill:#5c5a56;font-family:'Noto Sans SC',sans-serif" x="195" y="170" text-anchor="middle">适合：数据源差异大、需要推理判断的场景</text>
+        <text style="font-size:10px;fill:#5c5a56;font-family:'Noto Sans SC',sans-serif" x="195" y="186" text-anchor="middle">缺点：多一次 LLM 调用，有延迟</text>
+
+        <!-- RIGHT: 语义路由 -->
+        <text style="font-size:12px;font-weight:500;fill:#2dd4bf;font-family:'Noto Sans SC',sans-serif" x="585" y="24" text-anchor="middle">语义路由（Semantic Routing）</text>
+        <text style="font-size:10px;fill:#3a7a76;font-family:'JetBrains Mono',monospace" x="585" y="38" text-anchor="middle">向量相似度 → 匹配最近 Prompt 模板</text>
+
+        <!-- Query -->
+        <rect x="410" y="56" width="80" height="36" rx="6" fill="#fdf6e8" stroke="#fbbf24" stroke-width="0.8" stroke-opacity="0.5"/>
+        <text style="font-size:11px;fill:#fbbf24;font-family:'Noto Sans SC',sans-serif" x="450" y="78" text-anchor="middle">用户 Query</text>
+
+        <!-- Embed -->
+        <rect x="516" y="56" width="80" height="36" rx="6" fill="#f4eefb" stroke="#a78bfa" stroke-width="0.8" stroke-opacity="0.5"/>
+        <text style="font-size:11px;fill:#a78bfa;font-family:'Noto Sans SC',sans-serif" x="556" y="78" text-anchor="middle">向量化</text>
+
+        <line x1="490" y1="74" x2="514" y2="74" stroke="#fbbf24" stroke-width="1" stroke-opacity="0.6" marker-end="url(#arr-r)"/>
+
+        <!-- 相似度匹配 -->
+        <rect x="620" y="40" width="130" height="28" rx="5" fill="#eef8f4" stroke="#1a7a6a" stroke-width="0.8" stroke-opacity="0.4"/>
+        <text style="font-size:11px;fill:#2dd4bf;font-family:'Noto Sans SC',sans-serif" x="685" y="58" text-anchor="middle">Prompt 模板 A</text>
+
+        <rect x="620" y="76" width="130" height="28" rx="5" fill="#fdf6e8" stroke="#1a7a4a" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text style="font-size:11px;fill:#4ade80;font-family:'Noto Sans SC',sans-serif" x="685" y="94" text-anchor="middle">Prompt 模板 B ✓</text>
+
+        <rect x="620" y="112" width="130" height="28" rx="5" fill="#eef8f4" stroke="#1a7a6a" stroke-width="0.8" stroke-opacity="0.4"/>
+        <text style="font-size:11px;fill:#2dd4bf;font-family:'Noto Sans SC',sans-serif" x="685" y="130" text-anchor="middle">Prompt 模板 C</text>
+
+        <line x1="596" y1="68" x2="618" y2="54" stroke="#a78bfa" stroke-width="0.8" stroke-opacity="0.5" marker-end="url(#arr-r)"/>
+        <line x1="596" y1="74" x2="618" y2="90" stroke="#1a7a4a" stroke-width="1.2" stroke-opacity="0.8" marker-end="url(#arr-r)"/>
+        <line x1="596" y1="80" x2="618" y2="126" stroke="#a78bfa" stroke-width="0.8" stroke-opacity="0.5" marker-end="url(#arr-r)"/>
+
+        <text style="font-size:10px;fill:#5c5a56;font-family:'Noto Sans SC',sans-serif" x="585" y="170" text-anchor="middle">适合：问题类型固定、延迟敏感的场景</text>
+        <text style="font-size:10px;fill:#5c5a56;font-family:'Noto Sans SC',sans-serif" x="585" y="186" text-anchor="middle">缺点：需要预先设计好 Prompt 模板库</text>
+      </svg>
+    </div>
+
+    <div class="tag-grid" style="grid-template-columns:1fr 1fr">
+      <div class="tag-card">
+        <div class="tag-name amber">逻辑路由</div>
+        <p>让 LLM 分析 Query 意图，输出结构化指令（如 JSON）指定查询哪个数据源。灵活但有额外 LLM 调用开销。<br><br>典型场景：同一个问题可能走 SQL（查订单数据）或向量库（查政策文档）。</p>
+      </div>
+      <div class="tag-card">
+        <div class="tag-name">语义路由</div>
+        <p>预先准备多套 Prompt 模板并向量化，Query 进来后直接算与各模板的相似度，选最近的模板路径。无需 LLM 推理，速度快。<br><br>典型场景：客服系统区分"退款咨询"vs"技术支持"vs"产品查询"。</p>
+      </div>
+    </div>
+
+    <div class="callout purple">
+      <strong>面试回答套路：</strong>先说"路由解决的是多数据源分发问题"，再对比两种方案的 trade-off——逻辑路由灵活但慢，语义路由快但需要预设模板。根据延迟要求和场景复杂度选择。
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════ -->
+  <section id="post">
+    <p class="section-num">// 06</p>
+    <h2>后处理优化（Post-Retrieval）</h2>
+    <p>目标是<strong>过滤召回的噪声</strong>，让真正相关的内容以最佳方式送给 LLM。</p>
+
+    <div class="tag-grid">
+      <div class="tag-card">
+        <div class="tag-name purple">① 重排序 Reranking</div>
+        <p>召回 Top-K 后用 <strong>Cross-Encoder</strong>（BGE-Reranker、Cohere Rerank）精排。Bi-Encoder 速度快但粗糙；Cross-Encoder 把 Query+Chunk 拼一起算相关性，精度高但慢，只用于精排阶段。</p>
+      </div>
+      <div class="tag-card">
+        <div class="tag-name purple">② 上下文压缩</div>
+        <p>Chunk 中只有部分内容和 Query 相关，用小模型把无关内容压缩掉，降低 LLM 输入长度，减少噪声干扰，节省 Token 成本。</p>
+      </div>
+      <div class="tag-card">
+        <div class="tag-name purple">③ Lost in the Middle</div>
+        <p>研究表明 LLM 对 Prompt 中间部分遗忘率高。最相关的 Chunk 应放在<strong>开头和结尾</strong>，而不是顺序堆叠。</p>
+      </div>
+      <div class="tag-card">
+        <div class="tag-name purple">④ Self-RAG</div>
+        <p>LLM 在生成时自我反思：这段 Context 是否和 Query 相关？生成的答案有没有幻觉？通过特殊 Token 控制是否需要继续检索。</p>
+      </div>
+      <div class="tag-card">
+        <div class="tag-name purple">⑤ Corrective RAG</div>
+        <p>检索质量低于阈值时自动回退，触发 Web Search 或扩展检索策略，保证 LLM 有足够好的 Context。</p>
+      </div>
+      <div class="tag-card">
+        <div class="tag-name purple">⑥ 引用溯源 Citation</div>
+        <p>生成答案时同时输出每句话对应的 Chunk 来源，便于用户核实，减少幻觉信任风险。Grounding 是 RAG 生产化的必选项。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════ -->
+  <section id="crag">
+    <p class="section-num">// 07 ★ 面试高频</p>
+    <h2>Corrective RAG 详解</h2>
+    <p>原版 HTML 里 Corrective RAG 只有一句话。面试如果问到"当检索结果质量很差时你怎么处理？"，能说清楚这三条路径会非常加分。</p>
+
+    <h3>核心思路：先评估，再分路径</h3>
+    <p>在把检索到的文档送给 LLM 之前，先用一个<strong>轻量级评估器</strong>判断文档质量，然后根据质量结果走不同处理路径。</p>
+
+    <div class="diagram-wrap">
+      <div class="diagram-label">Corrective RAG — 三路径流程</div>
+      <svg class="dsvg" width="100%" viewBox="0 0 780 280" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="arr-crag" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M2 1L8 5L2 9" fill="none" stroke="#8a8278" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </marker>
+          <marker id="arr-green2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M2 1L8 5L2 9" fill="none" stroke="#1a7a4a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </marker>
+          <marker id="arr-amber3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M2 1L8 5L2 9" fill="none" stroke="#fbbf24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </marker>
+          <marker id="arr-red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M2 1L8 5L2 9" fill="none" stroke="#fb7185" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </marker>
+        </defs>
+
+        <!-- 检索结果 -->
+        <rect x="20" y="110" width="120" height="50" rx="8" fill="#f4f0e8" stroke="#b8b0a4" stroke-width="1"/>
+        <text style="font-size:12px;font-weight:500;fill:#e8e6e0;font-family:'Noto Sans SC',sans-serif" x="80" y="131" text-anchor="middle">检索文档</text>
+        <text style="font-size:10px;fill:#5c5a56;font-family:'JetBrains Mono',monospace" x="80" y="149" text-anchor="middle">Top-K chunks</text>
+
+        <line x1="140" y1="135" x2="175" y2="135" stroke="#b8b0a4" stroke-width="1" marker-end="url(#arr-crag)"/>
+
+        <!-- 评估器 -->
+        <rect x="175" y="110" width="120" height="50" rx="8" fill="#f4eefb" stroke="#a78bfa" stroke-width="1" stroke-opacity="0.6"/>
+        <text style="font-size:12px;font-weight:500;fill:#a78bfa;font-family:'Noto Sans SC',sans-serif" x="235" y="131" text-anchor="middle">质量评估器</text>
+        <text style="font-size:10px;fill:#5a4a7a;font-family:'JetBrains Mono',monospace" x="235" y="149" text-anchor="middle">Retrieval Evaluator</text>
+
+        <!-- 三条分支线 -->
+        <line x1="295" y1="120" x2="360" y2="60" stroke="#1a7a4a" stroke-width="1" stroke-opacity="0.7" marker-end="url(#arr-green2)"/>
+        <line x1="295" y1="135" x2="360" y2="135" stroke="#fbbf24" stroke-width="1" stroke-opacity="0.7" marker-end="url(#arr-amber3)"/>
+        <line x1="295" y1="150" x2="360" y2="210" stroke="#fb7185" stroke-width="1" stroke-opacity="0.7" marker-end="url(#arr-red)"/>
+
+        <!-- Correct 路径 -->
+        <rect x="360" y="36" width="130" height="46" rx="8" fill="#fdf6e8" stroke="#1a7a4a" stroke-width="1" stroke-opacity="0.6"/>
+        <text style="font-size:11px;font-weight:500;fill:#4ade80;font-family:'Noto Sans SC',sans-serif" x="425" y="54" text-anchor="middle">✓ Correct</text>
+        <text style="font-size:10px;fill:#5c7a56;font-family:'Noto Sans SC',sans-serif" x="425" y="72" text-anchor="middle">提纯：过滤噪声句子</text>
+        <text style="font-size:9px;fill:#3a5a36;font-family:'JetBrains Mono',monospace" x="425" y="86" text-anchor="middle">保留核心知识 k_in</text>
+
+        <!-- Ambiguous 路径 -->
+        <rect x="360" y="110" width="130" height="50" rx="8" fill="#fdf6e8" stroke="#fbbf24" stroke-width="1" stroke-opacity="0.6"/>
+        <text style="font-size:11px;font-weight:500;fill:#fbbf24;font-family:'Noto Sans SC',sans-serif" x="425" y="130" text-anchor="middle">~ Ambiguous</text>
+        <text style="font-size:10px;fill:#6a5a30;font-family:'Noto Sans SC',sans-serif" x="425" y="148" text-anchor="middle">提纯 + 补充网络搜索</text>
+
+        <!-- Incorrect 路径 -->
+        <rect x="360" y="186" width="130" height="50" rx="8" fill="#fdf0f5" stroke="#fb7185" stroke-width="1" stroke-opacity="0.6"/>
+        <text style="font-size:11px;font-weight:500;fill:#fb7185;font-family:'Noto Sans SC',sans-serif" x="425" y="206" text-anchor="middle">✗ Incorrect</text>
+        <text style="font-size:10px;fill:#6a3a46;font-family:'Noto Sans SC',sans-serif" x="425" y="224" text-anchor="middle">丢弃，重写 Query</text>
+        <text style="font-size:9px;fill:#4a2a36;font-family:'JetBrains Mono',monospace" x="425" y="238" text-anchor="middle">转 Web Search → k_ex</text>
+
+        <!-- 箭头到LLM -->
+        <line x1="490" y1="59" x2="560" y2="120" stroke="#1a7a4a" stroke-width="1" stroke-opacity="0.5" marker-end="url(#arr-crag)"/>
+        <line x1="490" y1="135" x2="560" y2="135" stroke="#fbbf24" stroke-width="1" stroke-opacity="0.5" marker-end="url(#arr-crag)"/>
+        <line x1="490" y1="211" x2="560" y2="150" stroke="#fb7185" stroke-width="1" stroke-opacity="0.5" marker-end="url(#arr-crag)"/>
+
+        <!-- LLM生成 -->
+        <rect x="560" y="100" width="110" height="70" rx="10" fill="#fdf6e8" stroke="#fbbf24" stroke-width="1" stroke-opacity="0.5"/>
+        <text style="font-size:13px;font-weight:500;fill:#fbbf24;font-family:'Noto Sans SC',sans-serif" x="615" y="128" text-anchor="middle">LLM</text>
+        <text style="font-size:10px;fill:#6a5a30;font-family:'Noto Sans SC',sans-serif" x="615" y="148" text-anchor="middle">生成最终答案</text>
+
+        <!-- 标注 -->
+        <text style="font-size:10px;fill:#3a5a36;font-family:'Noto Sans SC',sans-serif" x="316" y="44" text-anchor="middle">高质量</text>
+        <text style="font-size:10px;fill:#6a5a30;font-family:'Noto Sans SC',sans-serif" x="318" y="130" text-anchor="middle">不确定</text>
+        <text style="font-size:10px;fill:#6a3a46;font-family:'Noto Sans SC',sans-serif" x="310" y="200" text-anchor="middle">低质量</text>
+      </svg>
+    </div>
+
+    <div class="tag-grid">
+      <div class="tag-card">
+        <div class="tag-name" style="color:var(--green)">路径一：Correct（文档质量高）</div>
+        <p>文档相关，但可能有噪声。把文档拆成句子级别，过滤掉与 Query 无关的句子，重新组合成精炼的内部知识 k_in，送给 LLM。</p>
+      </div>
+      <div class="tag-card">
+        <div class="tag-name">路径二：Ambiguous（文档质量模糊）</div>
+        <p>文档沾边但不够好。两条腿走路：对现有文档做提纯得到 k_in，同时触发 Web Search 补充外部知识 k_ex，两者合并送 LLM。</p>
+      </div>
+      <div class="tag-card">
+        <div class="tag-name" style="color:var(--coral)">路径三：Incorrect（文档完全不相关）</div>
+        <p>直接丢弃检索结果，把原始 Query 重写成更适合搜索引擎的格式，触发 Web Search 获取外部知识 k_ex，用外部知识回答。</p>
+      </div>
+    </div>
+
+    <div class="callout">
+      <strong>面试一句话：</strong>Corrective RAG 的本质是"给检索结果加一道质量门控"，根据质量高低走不同的知识补充策略，而不是无论如何都把召回结果直接喂给 LLM。
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════ -->
+  <section id="vectordb">
+    <p class="section-num">// 08</p>
+    <h2>向量数据库选型</h2>
+    <p>核心选型维度：数据规模、是否需要 Hybrid Search、运维能力、是否要与关系型数据混合查询。</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>数据库</th>
+            <th>Hybrid Search</th>
+            <th>规模上限</th>
+            <th>运维难度</th>
+            <th>适用场景</th>
+            <th>推荐度</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Qdrant</strong><br><span style="font-size:11px;color:var(--text3)">Rust 实现</span></td>
+            <td class="yes">✓ 原生支持</td>
+            <td>亿级</td>
+            <td class="yes">低</td>
+            <td>生产级 RAG</td>
+            <td><span class="badge rec">首选</span></td>
+          </tr>
+          <tr>
+            <td><strong>Weaviate</strong><br><span style="font-size:11px;color:var(--text3)">多模态友好</span></td>
+            <td class="yes">✓ 内置 BM25</td>
+            <td>亿级</td>
+            <td>中</td>
+            <td>多模态 / 图文混合</td>
+            <td><span class="badge rec">推荐</span></td>
+          </tr>
+          <tr>
+            <td><strong>Milvus</strong><br><span style="font-size:11px;color:var(--text3)">分布式架构</span></td>
+            <td class="yes">✓ 支持</td>
+            <td class="yes">十亿级+</td>
+            <td class="no">高</td>
+            <td>超大规模离线场景</td>
+            <td><span class="badge warn">大厂</span></td>
+          </tr>
+          <tr>
+            <td><strong>pgvector</strong><br><span style="font-size:11px;color:var(--text3)">PG 扩展</span></td>
+            <td class="mid">部分支持</td>
+            <td>千万级</td>
+            <td class="yes">极低</td>
+            <td>已有 PostgreSQL 栈</td>
+            <td><span class="badge rec">推荐</span></td>
+          </tr>
+          <tr>
+            <td><strong>Chroma</strong><br><span style="font-size:11px;color:var(--text3)">Python 原生</span></td>
+            <td class="no">不支持</td>
+            <td>百万级</td>
+            <td class="yes">极低</td>
+            <td>Demo / 快速原型</td>
+            <td><span class="badge warn">原型</span></td>
+          </tr>
+          <tr>
+            <td><strong>Pinecone</strong><br><span style="font-size:11px;color:var(--text3)">全托管 SaaS</span></td>
+            <td class="yes">✓ 支持</td>
+            <td>亿级</td>
+            <td class="yes">零运维</td>
+            <td>快速上线 SaaS 产品</td>
+            <td><span class="badge warn">付费</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout">
+      <strong>选型口诀：</strong>快速原型 → Chroma &nbsp;|&nbsp; 已有 PostgreSQL → pgvector &nbsp;|&nbsp; 生产 RAG → Qdrant / Weaviate &nbsp;|&nbsp; 超大规模 → Milvus &nbsp;|&nbsp; 零运维 → Pinecone
+    </div>
+
+    <h3>ANN 索引算法对比</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>算法</th><th>代表实现</th><th>优点</th><th>缺点</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>HNSW</strong></td>
+            <td>Qdrant, Weaviate</td>
+            <td class="yes">查询速度快，精度高</td>
+            <td>内存占用大</td>
+          </tr>
+          <tr>
+            <td><strong>IVF-PQ</strong></td>
+            <td>Milvus, FAISS</td>
+            <td class="yes">内存效率高，适合超大规模</td>
+            <td>精度略低于 HNSW</td>
+          </tr>
+          <tr>
+            <td><strong>DiskANN</strong></td>
+            <td>Azure Cognitive Search</td>
+            <td class="yes">磁盘存储，成本低</td>
+            <td>延迟高于纯内存</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════ -->
+  <section id="interview">
+    <p class="section-num">// 09</p>
+    <h2>面试高频问题</h2>
+
+    <div class="qa-list">
+      <details>
+        <summary>文本分块策略怎么选？生产环境推荐哪种？</summary>
+        <div class="qa-body">
+          四种方法从简单到复杂：固定字符切割（不推荐生产）→ 递归字符分割（默认选择，LangChain RecursiveCharacterTextSplitter）→ 语义分块（主题边界清晰时）→ Agentic 分块（高价值文档，成本允许时）。<br><br>
+          生产环境最推荐的是<strong>父子文档索引</strong>：子块（128 token）用于向量检索保证精准，命中后自动回溯返回父块（512 token）给 LLM 保证上下文完整性。这个策略解决了"精度与完整性的矛盾"，面试说出来很加分。<br><br>
+          参数调优：没有银弹，用 Recall@K 和 MRR 跑评估集来验证，不要凭感觉定 chunk_size。
+        </div>
+      </details>
+
+      <details>
+        <summary>查询路由是什么？逻辑路由和语义路由怎么选？</summary>
+        <div class="qa-body">
+          查询路由解决的是"同一个系统里有多个数据源，Query 该去哪查"的问题。<br><br>
+          <strong>逻辑路由</strong>：让 LLM 分析 Query 意图，输出结构化指令（JSON）指定查询目标。灵活，适合数据源差异大、需要推理判断的场景。缺点是多一次 LLM 调用，增加延迟和成本。<br><br>
+          <strong>语义路由</strong>：预先准备好 N 套 Prompt 模板并向量化，Query 进来后算与模板的余弦相似度，选最近的路径。速度快，无 LLM 调用开销。适合问题类型固定、延迟敏感的场景（如客服分类）。<br><br>
+          选型原则：场景复杂、数据源类型差异大 → 逻辑路由；场景固定、追求低延迟 → 语义路由。
+        </div>
+      </details>
+
+      <details>
+        <summary>Corrective RAG 和普通 RAG 的区别？什么时候用？</summary>
+        <div class="qa-body">
+          普通 RAG 不管检索质量好不好，都把 Top-K 结果直接拼进 Prompt 送给 LLM，导致低质量文档污染生成结果。<br><br>
+          <strong>Corrective RAG</strong> 在检索后加一道质量评估，根据结果走三条路径：文档质量高 → 提纯后使用；文档不确定 → 提纯 + Web Search 补充；文档完全错误 → 丢弃，重写 Query 后 Web Search。<br><br>
+          适用场景：知识库覆盖不全（用户可能问到库里没有的内容）、对答案准确性要求高、允许引入网络搜索的场景。代价是增加了评估器的调用和潜在的网络搜索延迟。
+        </div>
+      </details>
+
+
+      <details>
+        <summary>Chunk size 怎么选？有什么方法论？</summary>
+        <div class="qa-body">
+          没有银弹。通常先从 512 token 开始，用 Recall@K 和 MRR 跑评估集来调参。太小：语义不完整，召回片段无法独立成意；太大：引入噪声，Token 成本上升。<br><br>
+          实际工程里常用 <strong>Small-to-Big 策略</strong>：检索时用小 Chunk（128 token）保证精准，但喂给 LLM 时扩展到父 Chunk（512 token）保证上下文完整性。这个策略在面试中非常加分。
+        </div>
+      </details>
+
+      <details>
+        <summary>HyDE 和 Multi-Query 分别适合什么场景？能叠加吗？</summary>
+        <div class="qa-body">
+          <strong>HyDE</strong> 适合用户 Query 非常简短或模糊的场景（比如单词搜索、专业术语查询），因为单词向量离文档向量语义空间差距大，假文档能桥接这个 gap。<br><br>
+          <strong>Multi-Query</strong> 适合用户有明确意图但表述不规范，比如口语化问法。通过多角度改写扩大召回覆盖。<br><br>
+          两者可以叠加：先用 Multi-Query 生成多个 Query，再对每个 Query 用 HyDE 生成假文档，检索结果做 RRF 合并。代价是 LLM 调用次数增加。
+        </div>
+      </details>
+
+      <details>
+        <summary>Reranking 用什么模型？Bi-Encoder 和 Cross-Encoder 有什么区别？</summary>
+        <div class="qa-body">
+          <strong>Bi-Encoder</strong>（向量检索阶段）：Query 和 Document 分别编码成向量，用余弦相似度比较。速度快（O(1) 查询），但精度低，因为 Query 和 Doc 没有交互。<br><br>
+          <strong>Cross-Encoder</strong>（Reranking 阶段）：把 Query + Doc 拼接成一个输入，模型同时看到两者计算相关性。精度高，但无法预计算，只能对 Top-K 做精排。<br><br>
+          开源首选 <strong>BGE-Reranker</strong>（BAAI 出品，中文效果好），商用首选 <strong>Cohere Rerank API</strong>。一般对 Top-50 做 Reranking，最终取 Top-5 送 LLM。
+        </div>
+      </details>
+
+      <details>
+        <summary>如何评估 RAG 系统质量？</summary>
+        <div class="qa-body">
+          两条评估链路：<br><br>
+          <strong>检索质量：</strong>Recall@K（前 K 个里有多少命中真实答案）、MRR（第一个正确答案的排名倒数）、NDCG（考虑排名权重的综合指标）。<br><br>
+          <strong>生成质量：</strong>Faithfulness（答案是否基于检索到的 Context，不幻觉）、Answer Relevancy（答案是否回答了问题）、Context Precision / Recall（Context 和答案的双向匹配）。<br><br>
+          工具层面可以用 <strong>RAGAS 框架</strong>自动评测，它能在没有人工标注的情况下用 LLM 自动打分。
+        </div>
+      </details>
+
+      <details>
+        <summary>向量数据库为什么用 ANN 而不是精确 KNN？</summary>
+        <div class="qa-body">
+          百万量级向量做精确 KNN 是 O(N) 的，每次查询都要和所有向量计算距离，延迟不可接受（秒级甚至分钟级）。<br><br>
+          <strong>HNSW</strong>（Qdrant/Weaviate 默认）和 <strong>IVF-PQ</strong>（Milvus/FAISS）都是以小幅精度损失换取 O(log N) 甚至 O(1) 的查询延迟，实际查询时间在 10ms 以内。HNSW 的 Recall@10 通常能达到 95%+，生产上完全够用。
+        </div>
+      </details>
+
+      <details>
+        <summary>Hybrid Search 的 RRF 融合是怎么做的？</summary>
+        <div class="qa-body">
+          RRF（Reciprocal Rank Fusion）公式：每个文档的最终得分 = Σ(1 / (k + rank_i))，其中 k 通常取 60，rank_i 是该文档在第 i 路检索结果中的排名。<br><br>
+          举例：一篇文档在向量检索里排第 2，在 BM25 里排第 5，则 RRF 得分 = 1/(60+2) + 1/(60+5) ≈ 0.0161 + 0.0154 = 0.0315。<br><br>
+          RRF 的优点是不需要对不同检索系统的分数做归一化，因为它只用排名，对异常值鲁棒。
+        </div>
+      </details>
+
+      <details>
+        <summary>Self-RAG 和普通 RAG 的核心区别是什么？</summary>
+        <div class="qa-body">
+          普通 RAG 是固定流程：检索 → 拼 Prompt → 生成，不管检索质量如何都会生成。<br><br>
+          <strong>Self-RAG</strong> 让 LLM 动态决策：先判断这个问题是否需要检索；检索后判断每个 Chunk 是否真的相关；生成后判断答案是否基于 Context（是否幻觉）；如果不满足则触发重新检索或拒答。<br><br>
+          通过训练特殊的 reflection token（如 [Retrieve]、[IsRel]、[IsSup]、[IsUse]）来实现，需要专门训练或微调模型。
+        </div>
+      </details>
+    </div>
+  </section>
+
+  </div><!-- end main-content -->
+</div><!-- end page-layout -->
+
+<script>
+  const sections = document.querySelectorAll('section[id]');
+  const links = document.querySelectorAll('nav.toc a');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        links.forEach(l => l.classList.remove('active'));
+        const active = document.querySelector('nav.toc a[href="#' + entry.target.id + '"]');
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  sections.forEach(s => observer.observe(s));
+</script>
+
+
+  RAG Complete Guide &nbsp;·&nbsp; Generated by Claude &nbsp;·&nbsp; 面试技术讲解
+</footer>
+
+</body>
+</html>
