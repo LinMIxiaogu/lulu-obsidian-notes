@@ -4,25 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "0102c01a0e5963bd",
+        "id": "93bf03f0db6408be",
         "type": "tabs",
         "children": [
           {
-            "id": "858f119f29cf24b9",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "AI账号购买/gemini咸鱼购买一年.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "gemini咸鱼购买一年"
-            }
-          },
-          {
-            "id": "e86d162308a0bbc7",
+            "id": "a5a8193edc2364c8",
             "type": "leaf",
             "state": {
               "type": "split-diff-view",
@@ -35,8 +21,7 @@
               "title": "Diff: workspace.json  (Working Tree)"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -93,7 +78,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 320.51103591918945
+    "width": 200
   },
   "right": {
     "id": "5c9bf151e9696823",
@@ -152,42 +137,21 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "项目/专辑封面生成/专辑封面生成.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "专辑封面生成 的大纲"
+              "title": "大纲"
             }
           },
           {
-            "id": "887fa00387b6a4bd",
-            "type": "leaf",
-            "state": {
-              "type": "git-view",
-              "state": {},
-              "icon": "git-pull-request",
-              "title": "Source Control"
-            }
-          },
-          {
-            "id": "500c1ea8c37540a2",
-            "type": "leaf",
-            "state": {
-              "type": "advanced-tables-toolbar",
-              "state": {},
-              "icon": "lucide-ghost",
-              "title": "advanced-tables-toolbar"
-            }
-          },
-          {
-            "id": "0c1de96d111d7bba",
+            "id": "1e8854edc559b081",
             "type": "leaf",
             "state": {
               "type": "backlink",
               "state": {
-                "file": "项目/Agent.md",
+                "file": "高频考点/AI Agent-03.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -197,15 +161,25 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Agent 的反向链接列表"
+              "title": "AI Agent-03 的反向链接列表"
+            }
+          },
+          {
+            "id": "d0ae1eb5710585d5",
+            "type": "leaf",
+            "state": {
+              "type": "git-view",
+              "state": {},
+              "icon": "git-pull-request",
+              "title": "Source Control"
             }
           }
         ],
-        "currentTab": 4
+        "currentTab": 5
       }
     ],
     "direction": "horizontal",
-    "width": 564.5
+    "width": 308.5
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -220,8 +194,25 @@
       "obsidian-excalidraw-plugin:New drawing": false
     }
   },
-  "active": "887fa00387b6a4bd",
+  "active": "a5a8193edc2364c8",
   "lastOpenFiles": [
+    "简历/我的简历 (2).pdf",
+    "高频考点/AI Agent-01.md",
+    "高频考点/目录索引.md",
+    "高频考点/AI Agent-02.md",
+    "LLM学习/02_Prompt工程.md",
+    "LLM学习/01_LLM基础原理.md",
+    "高频考点/问题索引.md",
+    "高频考点/大模型基础-01.md",
+    "高频考点/酒店比价助手-面试模拟.md",
+    "项目/tomo酒店比价-GUI Agent/项目细节.md",
+    "项目/tomo酒店比价-GUI Agent/项目描述.md",
+    "高频考点/AI Agent-04.md",
+    "简历",
+    "高频考点/AI Agent-03.md",
+    "未命名.md",
+    "高频考点",
+    "AI账号购买/gemini咸鱼购买一年.md",
     "conflict-files-obsidian-git.md",
     "算法/JAVA中算法外高频手撕/生产者消费者.md",
     "算法/JAVA中算法外高频手撕/多线程打印.md",
@@ -239,31 +230,13 @@
     "工作零散",
     "openclaw、Hermes/Hermes skills自进化/横纵分析-DSPy-GEPA-Hermes.pdf",
     "openclaw、Hermes/Hermes skills自进化/DSPy、GEPA、Hermes Agent 三层链路分析.md",
-    "openclaw、Hermes/OpenClaw_前置篇_小白入门.html",
-    "openclaw、Hermes/Hermes skills自进化",
-    "openclaw、Hermes",
     "claude code/learn-claude-code/s12-worktree-task-isolation.md",
     "claude code/learn-claude-code/s11-autonomous-agents.md",
-    "claude code/learn-claude-code/s10-team-protocols.md",
-    "claude code/learn-claude-code/s09-agent-teams.md",
-    "claude code/learn-claude-code/s08-background-tasks.md",
-    "claude code/learn-claude-code/s07-task-system.md",
-    "claude code/learn-claude-code/s05-skill-loading.md",
-    "claude code/learn-claude-code/s06-context-compact.md",
-    "claude code/learn-claude-code/s04-subagent.md",
-    "claude code/learn-claude-code/s03-todo-write.md",
-    "claude code/learn-claude-code/s02-tool-use.md",
-    "claude code/learn-claude-code/s01-agent-loop.md",
-    "claude code/learn-claude-code/README-zh.md",
     "AI/附件/Pasted image 20260420202005.png",
     "AI/附件/Pasted image 20260420201307.png",
     "AI/附件/Pasted image 20260420194827.png",
     "AI/附件/Pasted image 20260420194341.png",
     "AI/附件/Pasted image 20260420194309.png",
-    "项目/专辑封面生成/专辑封面生成.md",
-    "开发语言/JAVA/集合框架.md",
-    "开发语言/JAVA/Redis与中间件.md",
-    "开发语言/JAVA/MySQL深入.md",
     "项目/images/Pasted image 20260406141306.png",
     "未命名.canvas",
     "数据库/images/Pasted image 20260406132054.png",
