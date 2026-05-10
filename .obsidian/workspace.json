@@ -25,12 +25,15 @@
             "id": "e86d162308a0bbc7",
             "type": "leaf",
             "state": {
-              "type": "pdf",
+              "type": "split-diff-view",
               "state": {
-                "file": "简历/个人简历.pdf"
+                "aFile": "算法/刷题记录leetcode100-round2.md",
+                "bFile": "算法/刷题记录leetcode100-round2.md",
+                "aRef": "HEAD",
+                "bRef": ""
               },
-              "icon": "lucide-file-text",
-              "title": "个人简历"
+              "icon": "diff",
+              "title": "Diff: 刷题记录leetcode100-round2  (Index)"
             }
           }
         ],
