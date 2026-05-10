@@ -25,14 +25,12 @@
             "id": "e86d162308a0bbc7",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "pdf",
               "state": {
-                "file": "项目/专辑封面生成/专辑封面生成.md",
-                "mode": "source",
-                "source": false
+                "file": "简历/个人简历.pdf"
               },
-              "icon": "lucide-file",
-              "title": "专辑封面生成"
+              "icon": "lucide-file-text",
+              "title": "个人简历"
             }
           }
         ],
@@ -93,7 +91,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 320.51103591918945
+    "width": 256.5
   },
   "right": {
     "id": "5c9bf151e9696823",
@@ -177,8 +175,8 @@
             "state": {
               "type": "advanced-tables-toolbar",
               "state": {},
-              "icon": "spreadsheet",
-              "title": "Advanced Tables"
+              "icon": "lucide-ghost",
+              "title": "advanced-tables-toolbar"
             }
           },
           {
@@ -205,7 +203,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 564.5
+    "width": 200
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -217,12 +215,18 @@
       "command-palette:打开命令面板": false,
       "bases:新建数据库": false,
       "obsidian-git:Open Git source control": false,
-      "obsidian-excalidraw-plugin:New drawing": false,
-      "table-editor-obsidian:Advanced Tables Toolbar": false
+      "obsidian-excalidraw-plugin:New drawing": false
     }
   },
   "active": "e86d162308a0bbc7",
   "lastOpenFiles": [
+    "简历/个人简历.pdf",
+    "算法/刷题记录leetcode100-round2.md",
+    "项目/行程规划/01-项目描述.md",
+    "项目/行程规划/行程规划项目细节.md",
+    "项目/tomo酒店比价-GUI Agent/项目描述.md",
+    "项目/专辑封面生成/专辑封面生成.md",
+    "简历/未命名.md",
     "开发语言/JAVA/集合框架.md",
     "开发语言/JAVA/Redis与中间件.md",
     "开发语言/JAVA/MySQL深入.md",
@@ -246,20 +250,12 @@
     "项目/TOMO酒店比价-GUI Agent/技术架构图.md",
     "项目/TOMO酒店比价-GUI Agent/豆包手机助手功能及影响分析( 来源：cg老板发言).md",
     "项目/images/Pasted image 20260406141306.png",
-    "项目/专辑封面生成/专辑封面生成.md",
-    "项目/行程规划/01-项目描述.md",
     "项目/行程规划/00-项目概览.md",
-    "项目/行程规划/06-面试介绍说辞与追问.md",
-    "项目/行程规划/07-高频追问深度解析.md",
-    "项目/行程规划/02-核心功能模块.md",
-    "项目/行程规划/04-关键技术点.md",
-    "项目/行程规划/05-面试重点问答.md",
     "开发语言/JAVA/分布式与微服务.md.tmp.40752.1776408985007",
     "开发语言/JAVA/操作系统.md.tmp.40752.1776408488572",
     "开发语言/JAVA/计算机网络.md.tmp.40752.1776401672093",
     "开发语言/JAVA/MySQL深入.md.tmp.40752.1776401240246",
     "开发语言/JAVA/Redis与中间件.md.tmp.35228.1776397688084",
-    "开发语言/JAVA/Spring框架.md.tmp.35228.1776394332614",
     "未命名.canvas",
     "数据库/images/Pasted image 20260406132054.png",
     "LLM学习/svg/10_q7_demo_to_prod.svg",
