@@ -1,0 +1,269 @@
+{
+  "main": {
+    "id": "e71f130b25867f82",
+    "type": "split",
+    "children": [
+      {
+        "id": "93bf03f0db6408be",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "a5a8193edc2364c8",
+            "type": "leaf",
+            "state": {
+              "type": "split-diff-view",
+              "state": {
+                "aFile": ".obsidian/workspace.json",
+                "bFile": ".obsidian/workspace.json",
+                "aRef": ""
+              },
+              "icon": "diff",
+              "title": "Diff: workspace.json  (Working Tree)"
+            }
+          },
+          {
+            "id": "fd70de173d5c9dd2",
+            "type": "leaf",
+            "state": {
+              "type": "split-diff-view",
+              "state": {
+                "aFile": "算法/刷题记录leetcode100-round2.md",
+                "bFile": "算法/刷题记录leetcode100-round2.md",
+                "aRef": "HEAD",
+                "bRef": ""
+              },
+              "icon": "diff",
+              "title": "Diff: 刷题记录leetcode100-round2  (Index)"
+            }
+          }
+        ],
+        "currentTab": 1
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "5b3a171bbd86f6d2",
+    "type": "split",
+    "children": [
+      {
+        "id": "10533d420e22e45d",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "67f910b07907ac17",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": true
+              },
+              "icon": "lucide-folder-closed",
+              "title": "文件列表"
+            }
+          },
+          {
+            "id": "891bbb681b7cba39",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "搜索"
+            }
+          },
+          {
+            "id": "fcaf20f2961d28be",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "书签"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 200
+  },
+  "right": {
+    "id": "5c9bf151e9696823",
+    "type": "split",
+    "children": [
+      {
+        "id": "67ae9051ea3a3a11",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "c0728fb23eca765f",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "LLM学习/01_LLM基础原理.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "01_LLM基础原理 的出链列表"
+            }
+          },
+          {
+            "id": "dbf920fae16220dc",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "标签"
+            }
+          },
+          {
+            "id": "4b054e737b3e807c",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "添加笔记属性"
+            }
+          },
+          {
+            "id": "793c6dab69101007",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "大纲"
+            }
+          },
+          {
+            "id": "1e8854edc559b081",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "高频考点/AI Agent-03.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "AI Agent-03 的反向链接列表"
+            }
+          },
+          {
+            "id": "d0ae1eb5710585d5",
+            "type": "leaf",
+            "state": {
+              "type": "git-view",
+              "state": {},
+              "icon": "git-pull-request",
+              "title": "Source Control"
+            }
+          }
+        ],
+        "currentTab": 5
+      }
+    ],
+    "direction": "horizontal",
+    "width": 308.5
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:打开快速切换": false,
+      "graph:查看关系图谱": false,
+      "canvas:新建白板": false,
+      "daily-notes:打开/创建今天的日记": false,
+      "templates:插入模板": false,
+      "command-palette:打开命令面板": false,
+      "bases:新建数据库": false,
+      "obsidian-git:Open Git source control": false,
+      "obsidian-excalidraw-plugin:New drawing": false
+    }
+  },
+  "active": "d0ae1eb5710585d5",
+  "lastOpenFiles": [
+    "conflict-files-obsidian-git.md",
+    "未命名.md",
+    "算法/刷题记录leetcode100-round2.md",
+    "简历/个人简历.pdf",
+    "简历/个人简历.docx",
+    "简历/我的简历 (2).pdf",
+    "高频考点/AI Agent-01.md",
+    "高频考点/目录索引.md",
+    "高频考点/AI Agent-02.md",
+    "LLM学习/02_Prompt工程.md",
+    "LLM学习/01_LLM基础原理.md",
+    "高频考点/问题索引.md",
+    "高频考点/大模型基础-01.md",
+    "高频考点/酒店比价助手-面试模拟.md",
+    "项目/tomo酒店比价-GUI Agent/项目细节.md",
+    "项目/tomo酒店比价-GUI Agent/项目描述.md",
+    "高频考点/AI Agent-04.md",
+    "简历",
+    "高频考点/AI Agent-03.md",
+    "高频考点",
+    "AI账号购买/gemini咸鱼购买一年.md",
+    "算法/JAVA中算法外高频手撕/生产者消费者.md",
+    "算法/JAVA中算法外高频手撕/多线程打印.md",
+    "算法/JAVA中算法外高频手撕/单例模式.md",
+    "算法/JAVA中算法外高频手撕",
+    "模型训练、微调/bert意图识别/bad-case.txt",
+    "模型训练、微调/bert意图识别/bad-case.md",
+    "模型训练、微调/bert意图识别/bad-case 1.txt",
+    "工作零散/附件、images/Pasted image 20260420203046.png",
+    "工作零散/MCP/MCP核心原理.md",
+    "工作零散/MCP/MCP服务封装公司机票接口.md",
+    "工作零散/附件、images",
+    "工作零散/一键登录-服务接入.md",
+    "工作零散/MCP",
+    "openclaw、Hermes/Hermes skills自进化/DSPy、GEPA、Hermes Agent 三层链路分析.md",
+    "claude code/learn-claude-code/s12-worktree-task-isolation.md",
+    "claude code/learn-claude-code/s11-autonomous-agents.md",
+    "AI/附件/Pasted image 20260420202005.png",
+    "AI/附件/Pasted image 20260420201307.png",
+    "AI/附件/Pasted image 20260420194827.png",
+    "AI/附件/Pasted image 20260420194341.png",
+    "AI/附件/Pasted image 20260420194309.png",
+    "项目/images/Pasted image 20260406141306.png",
+    "未命名.canvas",
+    "数据库/images/Pasted image 20260406132054.png",
+    "LLM学习/svg/10_q7_demo_to_prod.svg",
+    "LLM学习/svg/10_q6_agent_platform.svg",
+    "未命名 4.canvas",
+    "未命名 1.canvas",
+    "未命名 3.canvas",
+    "未命名 2.canvas",
+    "tomo酒店比价-GUI Agent/未命名.canvas",
+    "test.md.canvas"
+  ]
+}
