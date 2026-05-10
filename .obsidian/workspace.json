@@ -20,8 +20,24 @@
               "icon": "diff",
               "title": "Diff: workspace.json  (Working Tree)"
             }
+          },
+          {
+            "id": "fd70de173d5c9dd2",
+            "type": "leaf",
+            "state": {
+              "type": "split-diff-view",
+              "state": {
+                "aFile": "算法/刷题记录leetcode100-round2.md",
+                "bFile": "算法/刷题记录leetcode100-round2.md",
+                "aRef": "HEAD",
+                "bRef": ""
+              },
+              "icon": "diff",
+              "title": "Diff: 刷题记录leetcode100-round2  (Index)"
+            }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -194,8 +210,13 @@
       "obsidian-excalidraw-plugin:New drawing": false
     }
   },
-  "active": "a5a8193edc2364c8",
+  "active": "d0ae1eb5710585d5",
   "lastOpenFiles": [
+    "conflict-files-obsidian-git.md",
+    "未命名.md",
+    "算法/刷题记录leetcode100-round2.md",
+    "简历/个人简历.pdf",
+    "简历/个人简历.docx",
     "简历/我的简历 (2).pdf",
     "高频考点/AI Agent-01.md",
     "高频考点/目录索引.md",
@@ -210,10 +231,8 @@
     "高频考点/AI Agent-04.md",
     "简历",
     "高频考点/AI Agent-03.md",
-    "未命名.md",
     "高频考点",
     "AI账号购买/gemini咸鱼购买一年.md",
-    "conflict-files-obsidian-git.md",
     "算法/JAVA中算法外高频手撕/生产者消费者.md",
     "算法/JAVA中算法外高频手撕/多线程打印.md",
     "算法/JAVA中算法外高频手撕/单例模式.md",
@@ -227,8 +246,6 @@
     "工作零散/附件、images",
     "工作零散/一键登录-服务接入.md",
     "工作零散/MCP",
-    "工作零散",
-    "openclaw、Hermes/Hermes skills自进化/横纵分析-DSPy-GEPA-Hermes.pdf",
     "openclaw、Hermes/Hermes skills自进化/DSPy、GEPA、Hermes Agent 三层链路分析.md",
     "claude code/learn-claude-code/s12-worktree-task-isolation.md",
     "claude code/learn-claude-code/s11-autonomous-agents.md",
